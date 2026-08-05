@@ -25,8 +25,8 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
           'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
         );
         if (!nodes.length) return;
-        const first = nodes[0];
-        const last = nodes[nodes.length - 1];
+        const first = nodes[0]!;
+        const last = nodes[nodes.length - 1]!;
         if (e.shiftKey && document.activeElement === first) {
           e.preventDefault();
           last.focus();
