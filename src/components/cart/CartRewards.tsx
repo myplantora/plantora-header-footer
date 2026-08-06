@@ -1,203 +1,125 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
+import { useMemo } from "react";
 import { formatMoney } from "@/lib/money";
-import { REWARD_CODES, resolveRewardState, type RewardTier } from "@/lib/rewards";
+import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
-const LOCK_GIF =
-  "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Lock.gif?v=1786051899";
-const UNLOCK_GIF =
+// NOTE: GIF mapping is intentionally inverted vs. the file names — the artwork
+// in Lock.gif shows the open state and vice versa.
+const LOCKED_GIF =
   "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Unlock.gif?v=1786051900";
+const UNLOCKED_GIF =
+  "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Lock.gif?v=1786051899";
 
-type CardProps = {
-  tier: RewardTier & { unlocked: boolean };
-  applied: boolean;
-  busy: boolean;
-  onApply: (tier: RewardTier) => void;
-};
-
-const RewardCard = memo(function RewardCard({ tier, applied, busy, onApply }: CardProps) {
-  const showApply = tier.type === "percentage" && tier.unlocked;
-
-  return (
-    <li
-      className={`flex flex-col gap-3 rounded-[24px] bg-card p-4 shadow-soft transition-all duration-300 ease-in-out motion-reduce:transition-none ${
-        tier.unlocked ? "opacity-100 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0" : "opacity-60"
-      }`}
-    >
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="truncate font-button text-sm font-semibold tracking-wide text-primary">
-            {tier.label}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Min. order {formatMoney(tier.threshold)}
-            {tier.code ? ` · Code ${tier.code}` : ""}
-          </p>
-        </div>
-
-        <div className="flex shrink-0 flex-col items-center gap-1">
-          <img
-            src={tier.unlocked ? UNLOCK_GIF : LOCK_GIF}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-            width={28}
-            height={28}
-            className="size-7 animate-scale-in object-contain motion-reduce:animate-none"
-            key={tier.unlocked ? "unlocked" : "locked"}
-          />
-          <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-            {tier.unlocked ? "Unlocked" : "Locked"}
-          </span>
-        </div>
-      </div>
-
-      {tier.type === "shipping" && tier.unlocked ? (
-        <p className="rounded-full bg-secondary px-3 py-2 text-center font-button text-xs font-semibold text-[--reward-success]">
-          FREE SHIPPING UNLOCKED
-        </p>
-      ) : null}
-
-      {showApply ? (
-        <button
-          type="button"
-          disabled={applied || busy}
-          onClick={() => onApply(tier)}
-          aria-label={applied ? `${tier.code} applied` : `Apply discount ${tier.code}`}
-          className="inline-flex h-10 w-full items-center justify-center rounded-full bg-[--reward-gold] px-4 font-button text-xs font-semibold text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-        >
-          {applied ? "Applied ✓" : busy ? "Applying…" : "Apply Discount"}
-        </button>
-      ) : null}
-    </li>
-  );
-});
+/** Appends the best earned coupon to the Shopify checkout URL. */
+export function buildCheckoutUrl(checkoutUrl: string | null, code: string | null) {
+  if (!checkoutUrl) return "#";
+  try {
+    const url = new URL(checkoutUrl);
+    url.searchParams.set("channel", "online_store");
+    if (code) url.searchParams.set("discount", code);
+    return url.toString();
+  } catch {
+    return checkoutUrl;
+  }
+}
 
 export function CartRewards() {
   const subtotal = useCartStore((s) => s.subtotal);
-  const discountCodes = useCartStore((s) => s.discountCodes);
-  const setDiscountCodes = useCartStore((s) => s.setDiscountCodes);
-  const isDiscountLoading = useCartStore((s) => s.isDiscountLoading);
-  const isLoading = useCartStore((s) => s.isLoading);
-
-  const [pending, setPending] = useState<string | null>(null);
-  const autoSyncedFor = useRef<string | null>(null);
+  const checkoutUrl = useCartStore((s) => s.checkoutUrl);
 
   const amount = subtotal?.amount ?? 0;
   const state = useMemo(() => resolveRewardState(amount), [amount]);
 
-  // Codes the shopper added themselves are preserved on every update.
-  const manualCodes = useMemo(
-    () => discountCodes.filter((d) => !REWARD_CODES.includes(d.code)).map((d) => d.code),
-    [discountCodes],
+  const activeIndex = state.tiers.reduce(
+    (acc, tier, i) => (tier.unlocked ? i : acc),
+    -1,
   );
-  const activeRewardCode = useMemo(
-    () => discountCodes.find((d) => REWARD_CODES.includes(d.code))?.code ?? null,
-    [discountCodes],
+  const highlightIndex = activeIndex >= 0 ? activeIndex : 0;
+
+  const message = state.nextTier ? (
+    <>
+      You are <span className="font-semibold text-[--reward-gold]">{formatMoney(state.remaining)}</span>{" "}
+      away from <span className="font-semibold">{state.nextTier.label}</span> on orders above{" "}
+      {formatMoney(state.nextTier.threshold)}
+    </>
+  ) : (
+    <>
+      You&apos;ve unlocked <span className="font-semibold">{state.currentTier?.label}</span> — the best
+      reward available.
+    </>
   );
 
-  // Upgrade to the best eligible reward, and drop it again if the subtotal falls.
-  useEffect(() => {
-    if (!activeRewardCode) return;
-    if (activeRewardCode === state.bestCode) return;
-    const key = `${activeRewardCode}->${state.bestCode ?? "none"}`;
-    if (autoSyncedFor.current === key) return;
-    autoSyncedFor.current = key;
-
-    const next = state.bestCode ? [...manualCodes, state.bestCode] : manualCodes;
-    void setDiscountCodes(next).then((ok) => {
-      if (!ok && state.bestCode) return;
-      toast.success(
-        state.bestCode ? `Upgraded to ${state.bestCode}` : "Reward removed — subtotal dropped",
-      );
-    });
-  }, [activeRewardCode, state.bestCode, manualCodes, setDiscountCodes]);
-
-  const handleApply = async (tier: RewardTier) => {
-    if (!tier.code) return;
-    setPending(tier.code);
-    try {
-      const ok = await setDiscountCodes([...manualCodes, tier.code]);
-      if (ok) toast.success(`${tier.code} applied — ${tier.label}`);
-      else toast.error(`${tier.code} couldn't be applied to this cart`);
-    } finally {
-      setPending(null);
-    }
-  };
-
-  const message = state.nextTier
-    ? state.currentTier
-      ? `You've unlocked ${state.currentTier.label}. You're only ${formatMoney(state.remaining)} away from ${state.nextTier.label}.`
-      : `Spend ${formatMoney(state.remaining)} more to unlock ${state.nextTier.label}`
-    : "Congratulations! You've unlocked every reward.";
-
-  const busy = isDiscountLoading || isLoading;
+  const activeCode = state.bestCode;
 
   return (
     <section aria-label="Cart rewards" className="space-y-4">
-      <p
-        aria-live="polite"
-        className={`text-center text-sm text-primary transition-opacity duration-300 motion-reduce:transition-none ${
-          busy ? "opacity-60" : "opacity-100"
-        }`}
-      >
+      <p aria-live="polite" className="text-center text-sm text-primary">
         {message}
       </p>
 
-      <div className="relative pt-1">
-        <div
-          className="h-2.5 w-full overflow-hidden rounded-full bg-secondary"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(state.fillPercent)}
-          aria-label="Progress toward cart rewards"
-        >
+      <div>
+        <div className="relative flex items-center justify-between">
+          {/* track */}
+          <div className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-secondary" />
           <div
-            className="h-full rounded-full bg-[linear-gradient(90deg,var(--reward-grad-start),var(--reward-grad-mid),var(--reward-grad-end))] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
-            style={{ width: `${state.fillPercent}%` }}
+            className="absolute left-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-[--reward-success] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
+            style={{
+              width:
+                activeIndex < 0
+                  ? "0%"
+                  : `${((highlightIndex + 0.5) / state.tiers.length) * 100}%`,
+            }}
           />
-        </div>
 
-        <div aria-hidden="true" className="relative mt-1 h-4">
-          {state.tiers.map((tier) => (
-            <span
-              key={tier.id}
-              style={{ left: `${tier.position}%` }}
-              className={`absolute -translate-x-1/2 text-[10px] font-medium transition-colors duration-300 motion-reduce:transition-none ${
-                tier.unlocked ? "text-[--reward-success]" : "text-muted-foreground"
-              }`}
-            >
-              {formatMoney(tier.threshold)}
-            </span>
+          {state.tiers.map((tier, i) => (
+            <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center gap-1">
+              <span
+                className={`flex size-9 items-center justify-center rounded-full transition-colors duration-300 motion-reduce:transition-none ${
+                  i === highlightIndex && tier.unlocked
+                    ? "bg-[--reward-success] ring-4 ring-background"
+                    : "bg-secondary ring-4 ring-background"
+                }`}
+              >
+                <img
+                  src={tier.unlocked ? UNLOCKED_GIF : LOCKED_GIF}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  width={18}
+                  height={18}
+                  className="size-[18px] object-contain"
+                />
+              </span>
+              <span
+                className={`text-center text-xs font-medium ${
+                  tier.unlocked ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                {tier.label}
+              </span>
+              <span className="sr-only">{tier.unlocked ? "Unlocked" : "Locked"}</span>
+            </div>
           ))}
         </div>
+
+        {activeCode ? (
+          <div className="mt-2 flex justify-start">
+            <span className="rounded-full border border-[--reward-gold] px-3 py-1 font-button text-xs font-semibold tracking-wide text-[--reward-gold]">
+              {activeCode}
+            </span>
+          </div>
+        ) : null}
       </div>
 
-      {isLoading && !subtotal ? (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {state.tiers.map((tier) => (
-            <li
-              key={tier.id}
-              className="h-24 animate-pulse rounded-[24px] bg-secondary motion-reduce:animate-none"
-            />
-          ))}
-        </ul>
-      ) : (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {state.tiers.map((tier) => (
-            <RewardCard
-              key={tier.id}
-              tier={tier}
-              applied={activeRewardCode === tier.code}
-              busy={busy || pending === tier.code}
-              onApply={handleApply}
-            />
-          ))}
-        </ul>
-      )}
+      <a
+        href={buildCheckoutUrl(checkoutUrl, activeCode)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[--reward-gold] px-4 font-button text-base font-medium text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      >
+        Apply discounts at the checkout
+      </a>
     </section>
   );
 }
