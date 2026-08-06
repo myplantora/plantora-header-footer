@@ -25,19 +25,21 @@ Wire up Shopify analytics using `@shopify/hydrogen-react`'s `sendShopifyAnalytic
 3. **Create `src/services/shopify/analytics.ts`**
    - Build a `sendShopifyPageView(payloadExtras)` helper.
    - Merge `getClientBrowserParameters()` with static shop data and consent flags.
-   - Call `sendShopifyAnalytics({ eventName: AnalyticsEventName.PAGE_VIEW, payload }, shopDomain)`.
+   - Static shop data included in every payload: `shopId: 'gid://shopify/Shop/101462671653'`, `storefrontId: '9e366b4208cebbaad6a5996c768455e3'`, `hydrogenSubchannelId: '9e366b4208cebbaad6a5996c768455e3'`, `shopifySalesChannel: 'headless'`, `currency: 'USD'`, `acceptedLanguage: 'en'`.
+   - Consent flags merged in: `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed` — all derived from a single `const hasUserConsent = true`.
+   - Call `sendShopifyAnalytics({ eventName: AnalyticsEventName.PAGE_VIEW, payload }, 'checkout.myplantora.com')`.
    - Guard all browser-only APIs behind `typeof window !== 'undefined'` so SSR does not crash.
 
 4. **Create `src/hooks/useShopifyPageView.ts`**
    - Use TanStack Router's `useRouter` / `useMatches` to detect the current route.
-   - Map routes to Shopify `pageType`:
-     - `/` → `home`
-     - `/product/$handle` → `product`
-     - `/collections/$handle` → `collection`
-     - `/collections/` → `listCollections`
+   - Map routes to `AnalyticsPageType` values exactly as Shopify defines them:
+     - `/` → `'index'`
+     - `/product/$handle` → `'product'`
+     - `/collections/$handle` → `'collection'`
+     - `/collections/` → `'list-collections'`
+   - Prefer referencing the `AnalyticsPageType` enum (e.g. `AnalyticsPageType.home` resolves to `"index"`) rather than raw strings, so values stay valid.
    - For product routes: include `resourceId` (product GID) and a `products` array with the viewed product.
    - For collection routes: include `collectionHandle`, `collectionId`, and `resourceId`.
-   - For list-collections: use `pageType: 'listCollections'`.
    - Fire on initial render and on every route change.
 
 5. **Integrate globally in `src/routes/__root.tsx`**
