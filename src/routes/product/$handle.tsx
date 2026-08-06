@@ -205,25 +205,46 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             {boughtCount}+ bought in last week
           </div>
 
-          {product.variants.length > 1 ? (
-            <div className="flex flex-wrap gap-2">
-              {product.variants.map((v) => (
-                <button
-                  key={v.id}
-                  type="button"
-                  disabled={!v.available}
-                  aria-pressed={variantId === v.id}
-                  onClick={() => setVariantId(v.id)}
-                  className={cn(
-                    "rounded-md border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                    variantId === v.id
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border text-primary hover:border-primary",
-                  )}
-                >
-                  {v.title}
-                </button>
-              ))}
+          {product.options.length > 0 && product.variants.length > 1 ? (
+            <div className="flex flex-col gap-4">
+              {product.options.map((option) => {
+                const currentValue = variant?.selectedOptions.find((o) => o.name === option.name)?.value;
+                return (
+                  <div key={option.name} className="flex flex-col gap-2">
+                    <span className="text-sm font-medium text-primary">
+                      Select {option.name}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {option.values.map((value) => {
+                        const active = currentValue === value;
+                        const matchingVariant = product.variants.find((v) =>
+                          v.selectedOptions.every((so) => {
+                            if (so.name === option.name) return so.value === value;
+                            return so.value === variant?.selectedOptions.find((o) => o.name === so.name)?.value;
+                          }),
+                        );
+                        return (
+                          <button
+                            key={value}
+                            type="button"
+                            disabled={!matchingVariant?.available}
+                            aria-pressed={active}
+                            onClick={() => matchingVariant && setVariantId(matchingVariant.id)}
+                            className={cn(
+                              "rounded-md border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border text-primary hover:border-primary",
+                            )}
+                          >
+                            {value}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : null}
 
