@@ -8,8 +8,9 @@ Wire up Shopify analytics using `@shopify/hydrogen-react`'s `sendShopifyAnalytic
 - **Events**: Page views only for now (`PAGE_VIEW`). Add-to-cart can be added later.
 - **shopDomain**: `checkout.myplantora.com`.
 - **storefrontId**: hardcoded as `9e366b4208cebbaad6a5996c768455e3` in `config/globalconf.json`.
-- **Consent**: hardcoded `true` for `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed`.
+- **Consent**: hardcoded `true` for `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed` (real consent wiring required before production).
 - **Shop ID**: `gid://shopify/Shop/101462671653` (provided by user).
+- **Sales channel**: `shopifySalesChannel: 'headless'`, with `storefrontId` and `hydrogenSubchannelId` both set to `9e366b4208cebbaad6a5996c768455e3`.
 
 ## Implementation steps
 
@@ -24,24 +25,26 @@ Wire up Shopify analytics using `@shopify/hydrogen-react`'s `sendShopifyAnalytic
 3. **Create `src/services/shopify/analytics.ts`**
    - Build a `sendShopifyPageView(payloadExtras)` helper.
    - Merge `getClientBrowserParameters()` with static shop data and consent flags.
-   - Call `sendShopifyAnalytics({ eventName: AnalyticsEventName.PAGE_VIEW, payload }, shopDomain)`.
+   - Static shop data included in every payload: `shopId: 'gid://shopify/Shop/101462671653'`, `storefrontId: '9e366b4208cebbaad6a5996c768455e3'`, `hydrogenSubchannelId: '9e366b4208cebbaad6a5996c768455e3'`, `shopifySalesChannel: 'headless'`, `currency: 'USD'`, `acceptedLanguage: 'en'`.
+   - Consent flags merged in: `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed` — all derived from a single `const hasUserConsent = true`.
+   - Call `sendShopifyAnalytics({ eventName: AnalyticsEventName.PAGE_VIEW, payload }, 'checkout.myplantora.com')`.
    - Guard all browser-only APIs behind `typeof window !== 'undefined'` so SSR does not crash.
 
 4. **Create `src/hooks/useShopifyPageView.ts`**
    - Use TanStack Router's `useRouter` / `useMatches` to detect the current route.
-   - Map routes to Shopify `pageType`:
-     - `/` → `home`
-     - `/product/$handle` → `product`
-     - `/collections/$handle` → `collection`
-     - `/collections/` → `listCollections`
+   - Map routes to `AnalyticsPageType` values exactly as Shopify defines them:
+     - `/` → `'index'`
+     - `/product/$handle` → `'product'`
+     - `/collections/$handle` → `'collection'`
+     - `/collections/` → `'list-collections'`
+   - Prefer referencing the `AnalyticsPageType` enum (e.g. `AnalyticsPageType.home` resolves to `"index"`) rather than raw strings, so values stay valid.
    - For product routes: include `resourceId` (product GID) and a `products` array with the viewed product.
    - For collection routes: include `collectionHandle`, `collectionId`, and `resourceId`.
-   - For list-collections: use `pageType: 'listCollections'`.
    - Fire on initial render and on every route change.
 
 5. **Integrate globally in `src/routes/__root.tsx`**
    - Render `<ShopifyAnalyticsProvider />` (or call `useShopifyPageView` directly) inside `RootComponent` so it wraps every route.
-   - Optionally call `useShopifyCookies()` from `@shopify/hydrogen-react` to set Shopify's `_shopify_y` / `_shopify_s` cookies for consistent session attribution.
+   - Call `useShopifyCookies()` from `@shopify/hydrogen-react` once at the app root so Shopify's `_shopify_y` / `_shopify_s` cookies are set and managed for consistent session attribution.
 
 6. **Handle missing search route**
    - The app currently has no search route. Search `PAGE_VIEW` support will be added when a search page is built, or we can prepare the helper to accept `searchString` and leave it unused for now.
