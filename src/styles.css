@@ -174,7 +174,16 @@
   }
 }
 
+@utility bg-teal-glow {
+  background-image: radial-gradient(
+    120% 90% at 50% -10%,
+    var(--teal-glow) 0%,
+    transparent 65%
+  );
+}
+
 @utility nav-link {
+
   position: relative;
   &::after {
     content: "";

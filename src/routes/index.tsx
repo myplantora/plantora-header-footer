@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -85,7 +86,10 @@ function Index() {
             ))}
           </div>
         </section>
+        <SelfWateringSection />
         <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-6 lg:px-10 lg:py-28">
+
+
 
           <div className="grid gap-6 sm:grid-cols-3">
             {[
