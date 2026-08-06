@@ -83,7 +83,7 @@ export function Header() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
