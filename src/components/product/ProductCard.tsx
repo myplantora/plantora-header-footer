@@ -97,12 +97,12 @@ export function ProductCard({
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col px-2.5 pb-2.5">
+      <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-3">
         {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <h3
           className={cn(
-            "min-w-0 pb-1 font-serif text-[14px] leading-[22.4px]",
+            "min-w-0 font-serif text-[14px] leading-[22.4px]",
             berry ? "text-berry-foreground" : "text-[#1C6644]",
           )}
         >
@@ -115,7 +115,7 @@ export function ProductCard({
           </Link>
         </h3>
 
-        <div className="flex flex-wrap items-baseline gap-2 pt-1 text-[13.125px]">
+        <div className="flex flex-wrap items-baseline gap-2 text-[13.125px]">
           <span
             className={cn(
               "font-medium",
@@ -147,13 +147,13 @@ export function ProductCard({
         </div>
 
         {product.badges.length > 0 ? (
-          <div className="mt-3">
+          <div>
             <ProductBadges badges={product.badges} tone={tone} />
           </div>
         ) : null}
 
         {sizeOption ? (
-          <div className="mt-3 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <span
               className={cn(
                 "text-xs font-medium",
@@ -208,7 +208,7 @@ export function ProductCard({
           onClick={handleAdd}
           disabled={soldOut || isLoading || !product.defaultVariantId}
           className={cn(
-            "mt-1.5 inline-flex h-10 w-full items-center justify-center rounded-full px-4 font-button text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+            "inline-flex h-10 w-full items-center justify-center rounded-full px-4 font-button text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
             berry
               ? "bg-berry-muted text-berry-foreground"
               : "bg-primary text-primary-foreground",
