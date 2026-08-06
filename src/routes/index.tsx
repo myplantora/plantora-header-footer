@@ -4,6 +4,9 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
+
+const HOME_COLLECTION_ID = "659339542821";
 
 export const Route = createFileRoute("/")({
   head: () => ({
