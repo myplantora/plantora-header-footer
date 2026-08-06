@@ -197,7 +197,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          <div className="inline-flex items-center gap-2 self-start rounded-md bg-secondary px-3 py-2 text-sm font-medium text-primary">
+          <div className="inline-flex items-center gap-2 self-start rounded-md bg-[#8CD4DC] px-3 py-2 text-sm font-medium text-primary">
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
               alt=""
