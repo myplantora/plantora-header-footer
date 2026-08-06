@@ -105,13 +105,13 @@ export function ProductCard({
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
+      <div className="flex flex-1 flex-col px-2.5 pb-2.5">
         {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <h3
           className={cn(
-            "min-w-0 font-serif text-lg leading-snug",
-            berry ? "text-berry-foreground" : "text-primary",
+            "min-w-0 pb-1 font-serif text-[14px] leading-[22.4px]",
+            berry ? "text-berry-foreground" : "text-[#1C6644]",
           )}
         >
           <Link
