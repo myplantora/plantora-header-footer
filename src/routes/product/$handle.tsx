@@ -130,20 +130,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             {product.title}
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-baseline gap-3">
-            <span className="text-2xl text-primary">{formatMoney(price.amount, price.currency)}</span>
-            {compareAt ? (
-              <span className="text-base text-muted-foreground line-through">
-                {formatMoney(compareAt.amount, compareAt.currency)}
-              </span>
-            ) : null}
-          </div>
-
-          <div className="mt-4">
-            <ProductBadges badges={product.badges} />
-          </div>
-
-          <div className="mt-6 flex items-center justify-end">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <span className="text-2xl text-primary">{formatMoney(price.amount, price.currency)}</span>
+              {compareAt ? (
+                <span className="text-base text-muted-foreground line-through">
+                  {formatMoney(compareAt.amount, compareAt.currency)}
+                </span>
+              ) : null}
+            </div>
             <button
               type="button"
               onClick={() => setChartOpen(true)}
@@ -157,6 +152,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 className="h-5 w-5 object-contain"
               />
             </button>
+          </div>
+
+          <div className="mt-4">
+            <ProductBadges badges={product.badges} />
           </div>
 
           {product.variants.length > 1 ? (
