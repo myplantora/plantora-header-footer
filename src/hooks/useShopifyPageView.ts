@@ -41,8 +41,8 @@ export function useShopifyPageView() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const search = useRouterState({ select: (s) => s.location.searchStr });
   const routeId = useRouterState({
-    select: (s) => s.matches[s.matches.length - 1]?.routeId ?? "",
-  });
+    select: (s) => String(s.matches[s.matches.length - 1]?.routeId ?? ""),
+  }) as string;
   const handle = useRouterState({
     select: (s) => {
       const p = (s.matches[s.matches.length - 1]?.params ?? {}) as Record<string, string>;
