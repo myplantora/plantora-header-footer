@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Heart, Menu, Search, ShoppingBag, User } from "lucide-react";
+import { ChevronDown, Menu, Search, ShoppingBag, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
@@ -27,7 +27,7 @@ function CartButton() {
       type="button"
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
-        "relative grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
         bounce && "animate-cart-bounce",
       )}
     >
@@ -69,8 +69,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
+          ? "border-b border-border bg-background"
+          : "bg-background",
       )}
       onKeyDown={(e) => {
         if (e.key === "Escape") setOpenMenu(null);
@@ -83,7 +83,7 @@ export function Header() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -108,7 +108,7 @@ export function Header() {
                     onFocus={() => (item.mega ? open(item.label) : setOpenMenu(null))}
                     aria-haspopup={item.mega ? "true" : undefined}
                     aria-expanded={item.mega ? isOpen : undefined}
-                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {item.label}
                     {item.mega ? (
@@ -140,7 +140,7 @@ export function Header() {
                                   <Link
                                     to={link.href}
                                     onBlur={scheduleClose}
-                                    className="block rounded-xl px-3 py-2 text-[15px] text-primary transition-colors duration-200 hover:bg-secondary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                                    className="block rounded-xl px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                                   >
                                     {link.label}
                                   </Link>
@@ -162,21 +162,14 @@ export function Header() {
           <button
             type="button"
             aria-label="Search"
-            className="grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <Search className="h-5 w-5" aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Wishlist"
-            className="hidden h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:grid"
-          >
-            <Heart className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
             aria-label="Account"
-            className="grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <User className="h-5 w-5" aria-hidden="true" />
           </button>

@@ -9,7 +9,7 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
       aria-label="Plantora — home"
       className={cn(
         "group inline-flex items-center gap-2 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
-        tone === "light" ? "text-primary-foreground" : "text-primary",
+        tone === "light" ? "text-primary-foreground" : "text-black",
         className,
       )}
     >
