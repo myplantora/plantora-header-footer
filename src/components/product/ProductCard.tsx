@@ -51,6 +51,7 @@ export function ProductCard({
         className,
       )}
     >
+      <ProductBadges badges={product.badges} tone={tone} />
       <Link
         to="/product/$handle"
         params={{ handle: product.handle }}
