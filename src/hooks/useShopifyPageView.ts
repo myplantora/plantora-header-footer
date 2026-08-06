@@ -23,6 +23,7 @@ function analyticsProduct(product: PlantoraProduct): ShopifyAnalyticsProduct {
   return {
     productGid: toProductGid(product.id),
     name: product.title,
+    brand: "Plantora",
     price: String(variant?.price.amount ?? product.price.amount),
     ...(variant?.id ? { variantGid: variant.id } : {}),
     ...(variant?.title ? { variantName: variant.title } : {}),
