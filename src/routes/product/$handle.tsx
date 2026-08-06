@@ -343,6 +343,47 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
         </div>
       ) : null}
+
+      {guaranteeOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Replacement guarantee details"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
+          onClick={() => setGuaranteeOpen(false)}
+        >
+          <div
+            className="relative w-[90vw] max-w-md rounded-[5px] bg-background p-6 shadow-soft"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label="Close replacement guarantee details"
+              onClick={() => setGuaranteeOpen(false)}
+              className="absolute top-3 right-3 grid size-8 place-items-center rounded-full bg-accent text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+            >
+              <X className="size-4" />
+            </button>
+            <div className="flex flex-col gap-3 pr-8">
+              <span className="font-button text-lg font-bold text-primary">
+                10-Day Damage Replacement Guarantee
+              </span>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Oops! Did your plants or planters arrive damaged? No worries at all—we&apos;ve got your back! Here&apos;s how we can help:
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Simply share a few photos with us, and we&apos;ll send you a replacement, free of charge, right away.
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Quick &amp; Easy! Your replacement will be on its way within just 2 days of raising a ticket. 🌟
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                We&apos;re Here to Help! Plus, get free care tips with your order.
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
 
   );
