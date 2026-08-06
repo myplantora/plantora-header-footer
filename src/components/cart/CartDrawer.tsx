@@ -111,7 +111,12 @@ export function CartDrawer() {
               </span>
             </div>
             <a
-              href={checkoutUrl ?? "#"}
+              href={buildCheckoutUrl(
+                checkoutUrl,
+                resolveRewardState(subtotal?.amount ?? 0).bestCode,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-4 inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               Checkout
