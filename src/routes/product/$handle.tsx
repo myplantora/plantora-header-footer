@@ -67,6 +67,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const isLoading = useCartStore((s) => s.isLoading);
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
+  const [chartOpen, setChartOpen] = useState(false);
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0] ?? null;
   const price = variant?.price ?? product.price;
@@ -141,8 +142,24 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             <ProductBadges badges={product.badges} />
           </div>
 
+          <div className="mt-6 flex items-center justify-end">
+            <button
+              type="button"
+              onClick={() => setChartOpen(true)}
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Size Chart
+              <img
+                src="https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Mask_group_12.gif?v=1736833818"
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5 object-contain"
+              />
+            </button>
+          </div>
+
           {product.variants.length > 1 ? (
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {product.variants.map((v) => (
                 <button
                   key={v.id}
