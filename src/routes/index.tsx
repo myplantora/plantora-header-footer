@@ -67,6 +67,7 @@ function Index() {
       <AnnouncementBar />
       <Header />
       <main>
+        <BannerSection />
         <Hero />
         <CollectionScroller collectionId="659339542821" />
         <section className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-6 lg:px-10 lg:pt-28">
