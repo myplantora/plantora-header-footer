@@ -108,7 +108,7 @@ export function Header() {
                     onFocus={() => (item.mega ? open(item.label) : setOpenMenu(null))}
                     aria-haspopup={item.mega ? "true" : undefined}
                     aria-expanded={item.mega ? isOpen : undefined}
-                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {item.label}
                     {item.mega ? (
@@ -140,7 +140,7 @@ export function Header() {
                                   <Link
                                     to={link.href}
                                     onBlur={scheduleClose}
-                                    className="block rounded-xl px-3 py-2 text-[15px] text-primary transition-colors duration-200 hover:bg-secondary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                                    className="block rounded-xl px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                                   >
                                     {link.label}
                                   </Link>
