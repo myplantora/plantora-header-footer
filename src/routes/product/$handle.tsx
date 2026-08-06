@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
@@ -67,6 +68,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const isLoading = useCartStore((s) => s.isLoading);
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
+  const [chartOpen, setChartOpen] = useState(false);
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0] ?? null;
   const price = variant?.price ?? product.price;
@@ -141,8 +143,24 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             <ProductBadges badges={product.badges} />
           </div>
 
+          <div className="mt-6 flex items-center justify-end">
+            <button
+              type="button"
+              onClick={() => setChartOpen(true)}
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              Size Chart
+              <img
+                src="https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Mask_group_12.gif?v=1736833818"
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5 object-contain"
+              />
+            </button>
+          </div>
+
           {product.variants.length > 1 ? (
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {product.variants.map((v) => (
                 <button
                   key={v.id}
@@ -180,6 +198,33 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
       </div>
+
+      {chartOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Size chart"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
+          onClick={() => setChartOpen(false)}
+        >
+          <div className="relative w-[75vw] max-w-[900px]" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              aria-label="Close size chart"
+              onClick={() => setChartOpen(false)}
+              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-background text-primary shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <X className="size-5" />
+            </button>
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Chart.svg?v=1786030200"
+              alt="Size chart"
+              className="max-h-[85vh] w-full rounded-md bg-background object-contain"
+            />
+          </div>
+        </div>
+      ) : null}
     </main>
+
   );
 }
