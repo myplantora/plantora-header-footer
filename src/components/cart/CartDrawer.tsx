@@ -38,7 +38,7 @@ export function CartDrawer() {
 
         {lines.length > 0 ? (
           <div className="border-b border-border px-5 py-4">
-            <FreeShippingProgress subtotal={subtotal} />
+            <CartRewards />
           </div>
         ) : null}
 
