@@ -70,6 +70,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
 
+  useEffect(() => {
+    if (chartOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [chartOpen]);
+
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0] ?? null;
   const price = variant?.price ?? product.price;
   const compareAt = variant?.compareAtPrice ?? product.compareAtPrice;
