@@ -92,13 +92,13 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     const average = readNumber(map, reviewConf["average"]!.namespace, reviewConf["average"]!.key);
     const total = readNumber(map, reviewConf["total"]!.namespace, reviewConf["total"]!.key);
     const percent = readNumber(map, reviewConf["percent"]!.namespace, reviewConf["percent"]!.key);
-    if (average !== null || total !== null) {
-      reviews = {
-        average: average ?? 0,
-        total: total ?? 0,
-        percent: percent ?? (average !== null ? Math.round((average / 5) * 100) : 0),
-      };
-    }
+    const fallback = fallbackReviews(node?.id ?? node?.handle ?? node?.title ?? "");
+    reviews = {
+      average: average ?? fallback.average,
+      total: total ?? fallback.total,
+      percent: percent ?? Math.round(((average ?? fallback.average) / 5) * 100),
+    };
+
   }
 
   const rawOptions: { name: string; values: string[] }[] = node?.options ?? [];
