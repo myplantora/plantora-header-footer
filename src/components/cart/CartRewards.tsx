@@ -94,7 +94,7 @@ export function CartRewards() {
       <div className="relative flex items-start justify-between">
         <div className="absolute inset-x-0 top-4 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
         <div
-          className="absolute left-0 top-4 h-1.5 -translate-y-1/2 rounded-full bg-[--reward-success] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
+          className="absolute left-0 top-4 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
           style={{ width: `${fill}%` }}
         />
 
@@ -102,7 +102,7 @@ export function CartRewards() {
           <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
             <span
               className={`grid size-8 place-items-center rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
-                tier.unlocked ? "bg-[--reward-success]" : "bg-secondary"
+                tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
               }`}
             >
               <img
@@ -133,7 +133,7 @@ export function CartRewards() {
         href={buildCheckoutUrl(checkoutUrl, activeCode)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[--reward-gold] px-4 font-button text-base font-medium text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--reward-gold)] px-4 font-button text-base font-medium text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
       >
         Apply discounts at the checkout
       </a>
