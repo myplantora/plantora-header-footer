@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { X, Minus, Plus } from "lucide-react";
 import { formatMoney } from "@/lib/money";
-import { CartRewards } from "@/components/cart/CartRewards";
+import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
+import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
 export function CartDrawer() {
