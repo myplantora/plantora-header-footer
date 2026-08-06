@@ -283,6 +283,32 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
+          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 sm:p-4">
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Replacement.png?v=1786037056"
+              alt="10-Day Damage Replacement Guarantee"
+              width={56}
+              height={56}
+              className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+            />
+            <div className="flex flex-1 flex-col gap-0.5">
+              <span className="font-button text-sm font-bold text-[#1D4D44] sm:text-base">
+                10-Day Damage Replacement Guarantee
+              </span>
+              <span className="text-xs text-[#1D4D44]/80 sm:text-sm">
+                Damaged or Lifeless? We’ll replace it for free!
+              </span>
+            </div>
+            <button
+              type="button"
+              aria-label="Learn more about replacement guarantee"
+              onClick={() => setGuaranteeOpen(true)}
+              className="grid size-8 shrink-0 place-items-center rounded-full bg-[#B87B4E] text-white transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Info className="size-4" />
+            </button>
+          </div>
+
           {product.descriptionHtml ? (
             <div
               className="text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
