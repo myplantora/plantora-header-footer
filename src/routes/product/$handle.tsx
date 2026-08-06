@@ -192,7 +192,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
 
           {product.variants.length > 1 ? (
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {product.variants.map((v) => (
                 <button
                   key={v.id}
@@ -217,14 +217,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             type="button"
             onClick={handleAdd}
             disabled={soldOut || isLoading}
-            className="mt-8 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
+            className="inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
           >
             {soldOut ? "Sold out" : "Add to basket"}
           </button>
 
           {product.descriptionHtml ? (
             <div
-              className="mt-8 text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
+              className="text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
               dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
             />
           ) : null}
