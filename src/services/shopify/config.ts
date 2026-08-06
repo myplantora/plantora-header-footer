@@ -1,6 +1,7 @@
 import globalconf from "../../../config/globalconf.json";
 
 export const shopifyConfig = globalconf.shopify;
+export const analyticsConfig = globalconf.analytics;
 export const paginationConfig = globalconf.pagination;
 export const featureFlags = globalconf.features;
 export const metafieldConfig = globalconf.metafields;
