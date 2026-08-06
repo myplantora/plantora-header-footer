@@ -172,7 +172,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="font-sans text-2xl font-bold text-[#C3754C]">{formatMoney(price.amount, price.currency)}</span>
+              <span className="font-sans text-2xl font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
                 <span className="text-2xl text-muted-foreground line-through">
                   {formatMoney(compareAt.amount, compareAt.currency)}
