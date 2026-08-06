@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, X } from "lucide-react";
+import { Check, X, Minus, Plus } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
@@ -78,6 +78,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
   useEffect(() => {
@@ -97,7 +98,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   async function handleAdd() {
     if (!variantId || soldOut) return;
     try {
-      await addLine(variantId, 1);
+      await addLine(variantId, quantity);
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate(80);
       }
@@ -107,6 +108,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
+  }
+
+  function decreaseQty() {
+    setQuantity((q) => Math.max(1, q - 1));
+  }
+
+  function increaseQty() {
+    setQuantity((q) => q + 1);
   }
 
   return (
@@ -218,14 +227,39 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </div>
           ) : null}
 
-          <button
-            type="button"
-            onClick={handleAdd}
-            disabled={soldOut || isLoading}
-            className="inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
-          >
-            {soldOut ? "Sold out" : "Add to basket"}
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center overflow-hidden rounded-md border border-border bg-background">
+              <button
+                type="button"
+                aria-label="Decrease quantity"
+                onClick={decreaseQty}
+                disabled={quantity <= 1 || soldOut}
+                className="grid h-12 w-12 place-items-center text-primary transition-colors hover:bg-secondary disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Minus className="size-4" />
+              </button>
+              <span className="grid h-12 w-12 place-items-center text-sm font-semibold text-primary">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                aria-label="Increase quantity"
+                onClick={increaseQty}
+                disabled={soldOut}
+                className="grid h-12 w-12 place-items-center text-primary transition-colors hover:bg-secondary disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Plus className="size-4" />
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={soldOut || isLoading}
+              className="inline-flex h-12 flex-1 items-center justify-center rounded-md bg-primary px-6 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
+            >
+              {soldOut ? "Sold out" : "Add to basket"}
+            </button>
+          </div>
 
           {product.descriptionHtml ? (
             <div
