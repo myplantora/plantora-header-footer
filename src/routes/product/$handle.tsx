@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
@@ -197,6 +198,33 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
       </div>
+
+      {chartOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Size chart"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
+          onClick={() => setChartOpen(false)}
+        >
+          <div className="relative w-[75vw] max-w-[900px]" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              aria-label="Close size chart"
+              onClick={() => setChartOpen(false)}
+              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-background text-primary shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <X className="size-5" />
+            </button>
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Chart.svg?v=1786030200"
+              alt="Size chart"
+              className="max-h-[85vh] w-full rounded-md bg-background object-contain"
+            />
+          </div>
+        </div>
+      ) : null}
     </main>
+
   );
 }
