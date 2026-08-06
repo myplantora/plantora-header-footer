@@ -77,15 +77,15 @@
 :root {
   --radius: 5px;
   --background: oklch(0.977 0 0);
-  --foreground: oklch(0.371 0.049 176.2);
+  --foreground: oklch(0.3928 0.2242 173.91);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.371 0.049 176.2);
+  --card-foreground: oklch(0.3928 0.2242 173.91);
   --popover: oklch(0.977 0 0);
-  --popover-foreground: oklch(0.371 0.049 176.2);
-  --primary: oklch(0.371 0.049 176.2);
+  --popover-foreground: oklch(0.3928 0.2242 173.91);
+  --primary: oklch(0.3928 0.2242 173.91);
   --primary-foreground: oklch(0.977 0 0);
   --secondary: oklch(0.958 0.004 106.4);
-  --secondary-foreground: oklch(0.371 0.049 176.2);
+  --secondary-foreground: oklch(0.3928 0.2242 173.91);
   --muted: oklch(0.958 0.004 106.4);
   --muted-foreground: oklch(0.53 0.025 176.2);
   --accent: oklch(0.669 0.142 133.2);
