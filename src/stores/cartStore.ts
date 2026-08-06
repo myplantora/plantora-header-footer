@@ -13,19 +13,24 @@ export type CartLine = {
   currency: string;
 };
 
+export type CartDiscountCode = { code: string; applicable: boolean };
+
 type CartState = {
   cartId: string | null;
   checkoutUrl: string | null;
   lines: CartLine[];
   totalQuantity: number;
   subtotal: { amount: number; currency: string } | null;
+  discountCodes: CartDiscountCode[];
   isOpen: boolean;
   isLoading: boolean;
+  isDiscountLoading: boolean;
   openCart: () => void;
   closeCart: () => void;
   addLine: (merchandiseId: string, quantity?: number) => Promise<void>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
+  setDiscountCodes: (codes: string[]) => Promise<boolean>;
 };
 
 const CART_FRAGMENT = `
@@ -34,6 +39,7 @@ const CART_FRAGMENT = `
     checkoutUrl
     totalQuantity
     cost { subtotalAmount { amount currencyCode } }
+    discountCodes { code applicable }
     lines(first: 50) {
       edges {
         node {
@@ -53,6 +59,7 @@ const CART_FRAGMENT = `
     }
   }
 `;
+
 
 const CART_CREATE = `${CART_FRAGMENT}
   mutation CartCreate($lines: [CartLineInput!]) {
