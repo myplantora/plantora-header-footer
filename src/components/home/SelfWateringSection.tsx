@@ -28,19 +28,20 @@ export function SelfWateringSection() {
           width={1200}
           height={1000}
           loading="lazy"
-          className="w-full rounded-3xl object-cover"
+          className="h-auto w-full rounded-lg object-contain"
         />
 
         <div className="text-center lg:text-left">
-          <h2 className="font-serif text-3xl leading-tight sm:text-4xl lg:text-5xl">
+          <h2 className="font-serif text-3xl leading-tight sm:text-4xl">
             About Self-Watering Planters
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed opacity-85 sm:text-[17px] lg:mx-0">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed opacity-85 lg:mx-0">
             Self-watering planters provide consistent moisture, prevent overwatering, and simplify
             care for healthy plant growth.
           </p>
 
           <h3 className="mt-10 font-serif text-2xl sm:text-3xl">How it works</h3>
+
 
           <ol className="mt-8 grid grid-cols-3 gap-3 sm:gap-6">
             {STEPS.map((step, i) => (
@@ -55,12 +56,14 @@ export function SelfWateringSection() {
                     width={512}
                     height={430}
                     loading="lazy"
-                    className="aspect-[512/430] w-full rounded-2xl object-cover"
+                    className="h-auto w-full rounded-lg object-contain"
                   />
+
                 </div>
-                <p className="mt-3 text-center text-[13px] leading-snug opacity-90 sm:text-[15px]">
+                <p className="mt-3 text-center text-sm leading-snug opacity-90">
                   {step.caption}
                 </p>
+
               </li>
             ))}
           </ol>
