@@ -78,6 +78,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
+  const [guaranteeOpen, setGuaranteeOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
