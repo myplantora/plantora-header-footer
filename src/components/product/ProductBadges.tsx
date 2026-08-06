@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import type { PlantoraBadge } from "@/services/shopify/types";
 
+const TAG_BACKGROUNDS = ["#F0D2D2", "#EEE9D1", "#C2E8E8", "#E2E2F3"];
+
 export function ProductBadges({
   badges,
   tone = "default",
@@ -11,14 +13,18 @@ export function ProductBadges({
   if (badges.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-1.5">
-      {badges.slice(0, 2).map((badge) => (
+      {badges.slice(0, 2).map((badge, index) => (
         <li
           key={badge.key}
+          style={{
+            backgroundColor:
+              tone === "default" ? TAG_BACKGROUNDS[index % TAG_BACKGROUNDS.length] : undefined,
+          }}
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium",
             tone === "berry"
               ? "bg-berry-foreground/15 text-berry-foreground"
-              : "bg-secondary text-primary",
+              : "text-primary",
           )}
         >
           {badge.iconUrl ? (
