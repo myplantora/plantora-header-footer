@@ -47,3 +47,25 @@ export async function getProductCards(params: {
     },
   };
 }
+
+/** Fetch a collection by numeric or full Shopify GID. */
+export async function getCollectionById(params: {
+  id: string;
+  limit?: number;
+  after?: string | null;
+}): Promise<PlantoraCollection | null> {
+  const gid = params.id.startsWith("gid://")
+    ? params.id
+    : `gid://shopify/Collection/${params.id.split("/").pop()}`;
+  const data = await storefrontApiRequest<{ data?: { collection?: unknown } }>(
+    COLLECTION_BY_ID_QUERY,
+    {
+      id: gid,
+      productLimit: params.limit ?? paginationConfig.collectionPageSize,
+      after: params.after ?? null,
+    },
+  );
+  const node = data?.data?.collection;
+  if (!node) return null;
+  return normalizeCollection(node);
+}
