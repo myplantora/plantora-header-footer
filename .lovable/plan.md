@@ -8,8 +8,9 @@ Wire up Shopify analytics using `@shopify/hydrogen-react`'s `sendShopifyAnalytic
 - **Events**: Page views only for now (`PAGE_VIEW`). Add-to-cart can be added later.
 - **shopDomain**: `checkout.myplantora.com`.
 - **storefrontId**: hardcoded as `9e366b4208cebbaad6a5996c768455e3` in `config/globalconf.json`.
-- **Consent**: hardcoded `true` for `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed`.
+- **Consent**: hardcoded `true` for `hasUserConsent`, `analyticsAllowed`, `marketingAllowed`, `saleOfDataAllowed` (real consent wiring required before production).
 - **Shop ID**: `gid://shopify/Shop/101462671653` (provided by user).
+- **Sales channel**: `shopifySalesChannel: 'headless'`, with `storefrontId` and `hydrogenSubchannelId` both set to `9e366b4208cebbaad6a5996c768455e3`.
 
 ## Implementation steps
 
