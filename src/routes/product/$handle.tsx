@@ -10,6 +10,7 @@ import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ProductBadges } from "@/components/product/ProductBadges";
 import { ProductRating } from "@/components/product/ProductRating";
+import { DeliveryEstimator } from "@/components/product/DeliveryEstimator";
 import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/services/shopify/product.service";
@@ -282,6 +283,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
           </div>
+
+          <DeliveryEstimator />
 
           <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 sm:p-4">
             <img
