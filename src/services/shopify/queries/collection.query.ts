@@ -19,7 +19,6 @@ const PRODUCT_CARD_FRAGMENT = `
           title
           sku
           availableForSale
-          quantityAvailable
           price { amount currencyCode }
           compareAtPrice { amount currencyCode }
           selectedOptions { name value }
