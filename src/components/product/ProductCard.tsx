@@ -51,14 +51,6 @@ export function ProductCard({
         className,
       )}
     >
-      <div className="absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
-        <ProductBadges badges={product.badges} tone={tone} />
-        {product.discountPercent ? (
-          <span className="rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground">
-            {product.discountPercent}% off
-          </span>
-        ) : null}
-      </div>
       <Link
         to="/product/$handle"
         params={{ handle: product.handle }}
@@ -154,8 +146,14 @@ export function ProductCard({
           ) : null}
         </div>
 
+        {product.badges.length > 0 ? (
+          <div className="mt-3">
+            <ProductBadges badges={product.badges} tone={tone} />
+          </div>
+        ) : null}
+
         {sizeOption ? (
-          <div className="flex flex-col gap-2">
+          <div className="mt-3 flex flex-col gap-2">
             <span
               className={cn(
                 "text-xs font-medium",
