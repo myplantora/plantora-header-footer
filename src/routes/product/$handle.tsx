@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, X, Minus, Plus } from "lucide-react";
+import { Check, X, Minus, Plus, Info } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
@@ -78,6 +78,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
+  const [guaranteeOpen, setGuaranteeOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
@@ -282,6 +283,32 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
+          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 sm:p-4">
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Replacement.png?v=1786037056"
+              alt="10-Day Damage Replacement Guarantee"
+              width={56}
+              height={56}
+              className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+            />
+            <div className="flex flex-1 flex-col gap-0.5">
+              <span className="font-button text-sm font-bold text-[#1D4D44] sm:text-base">
+                10-Day Damage Replacement Guarantee
+              </span>
+              <span className="text-xs text-[#1D4D44]/80 sm:text-sm">
+                Damaged or Lifeless? We’ll replace it for free!
+              </span>
+            </div>
+            <button
+              type="button"
+              aria-label="Learn more about replacement guarantee"
+              onClick={() => setGuaranteeOpen(true)}
+              className="grid size-8 shrink-0 place-items-center rounded-full bg-[#B87B4E] text-white transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Info className="size-4" />
+            </button>
+          </div>
+
           {product.descriptionHtml ? (
             <div
               className="text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
@@ -313,6 +340,47 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               alt="Size chart"
               className="max-h-[95vh] w-full rounded-md bg-background object-contain"
             />
+          </div>
+        </div>
+      ) : null}
+
+      {guaranteeOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Replacement guarantee details"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
+          onClick={() => setGuaranteeOpen(false)}
+        >
+          <div
+            className="relative w-[90vw] max-w-md rounded-[5px] bg-background p-6 shadow-soft"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label="Close replacement guarantee details"
+              onClick={() => setGuaranteeOpen(false)}
+              className="absolute top-3 right-3 grid size-8 place-items-center rounded-full bg-accent text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+            >
+              <X className="size-4" />
+            </button>
+            <div className="flex flex-col gap-3 pr-8">
+              <span className="font-button text-lg font-bold text-primary">
+                10-Day Damage Replacement Guarantee
+              </span>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Oops! Did your plants or planters arrive damaged? No worries at all—we&apos;ve got your back! Here&apos;s how we can help:
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Simply share a few photos with us, and we&apos;ll send you a replacement, free of charge, right away.
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Quick &amp; Easy! Your replacement will be on its way within just 2 days of raising a ticket. 🌟
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                We&apos;re Here to Help! Plus, get free care tips with your order.
+              </p>
+            </div>
           </div>
         </div>
       ) : null}
