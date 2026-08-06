@@ -154,8 +154,6 @@ export function ProductCard({
           ) : null}
         </div>
 
-        <ProductBadges badges={product.badges} tone={tone} />
-
         {sizeOption ? (
           <div className="flex flex-col gap-2">
             <span
