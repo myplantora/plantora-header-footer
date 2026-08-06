@@ -11,16 +11,24 @@ import { ProductRating } from "./ProductRating";
 type ProductCardProps = {
   product: PlantoraProductCard;
   priority?: boolean;
+  /** "berry" renders the highlighted #B3393F card, "default" the white card. */
+  tone?: "default" | "berry";
   className?: string;
 };
 
-export function ProductCard({ product, priority = false, className }: ProductCardProps) {
+export function ProductCard({
+  product,
+  priority = false,
+  tone = "default",
+  className,
+}: ProductCardProps) {
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const [selected, setSelected] = useState<Record<string, string>>(() =>
     Object.fromEntries(product.options.map((o) => [o.name, o.values[0] ?? ""])),
   );
 
+  const berry = tone === "berry";
   const soldOut = product.availability === "out_of_stock";
 
   async function handleAdd() {
@@ -33,10 +41,13 @@ export function ProductCard({ product, priority = false, className }: ProductCar
     }
   }
 
+  const sizeOption = product.options[0];
+
   return (
     <article
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-md border border-border bg-background transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
+        "group flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
+        berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
         className,
       )}
     >
@@ -77,7 +88,7 @@ export function ProductCard({ product, priority = false, className }: ProductCar
         </div>
 
         {product.discountPercent ? (
-          <span className="absolute left-3 top-3 rounded-md bg-primary px-2 py-1 text-[11px] font-medium text-primary-foreground">
+          <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground">
             {product.discountPercent}% off
           </span>
         ) : null}
@@ -89,17 +100,17 @@ export function ProductCard({ product, priority = false, className }: ProductCar
             className="absolute right-3 top-3 h-9 w-auto"
           />
         ) : null}
-        {soldOut ? (
-          <span className="absolute bottom-3 left-3 rounded-md bg-background/95 px-2 py-1 text-[11px] font-medium text-primary">
-            Sold out
-          </span>
-        ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
-        {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
+        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
-        <h3 className="min-w-0 font-serif text-lg leading-snug text-primary">
+        <h3
+          className={cn(
+            "min-w-0 font-serif text-lg leading-snug",
+            berry ? "text-berry-foreground" : "text-primary",
+          )}
+        >
           <Link
             to="/product/$handle"
             params={{ handle: product.handle }}
@@ -109,50 +120,86 @@ export function ProductCard({ product, priority = false, className }: ProductCar
           </Link>
         </h3>
 
-        <ProductBadges badges={product.badges} />
-
         <div className="flex flex-wrap items-baseline gap-2">
-          <span className="text-base font-medium text-primary">
+          <span
+            className={cn(
+              "text-base font-medium",
+              berry ? "text-berry-foreground" : "text-primary",
+            )}
+          >
             {formatMoney(product.price.amount, product.price.currency)}
           </span>
           {product.compareAtPrice ? (
-            <span className="text-sm text-muted-foreground line-through">
+            <span
+              className={cn(
+                "text-sm line-through",
+                berry ? "text-berry-foreground/70" : "text-muted-foreground",
+              )}
+            >
               {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
             </span>
           ) : null}
           {product.availability === "limited" ? (
-            <span className="text-xs font-medium text-accent">Only a few left</span>
+            <span
+              className={cn(
+                "text-xs font-medium",
+                berry ? "text-berry-foreground" : "text-accent",
+              )}
+            >
+              Only a few left
+            </span>
           ) : null}
         </div>
 
-        {product.options.length > 0 ? (
+        <ProductBadges badges={product.badges} tone={tone} />
+
+        {sizeOption ? (
           <div className="flex flex-col gap-2">
-            {product.options.map((option) => (
-              <div key={option.name} className="flex flex-wrap items-center gap-1.5">
-                <span className="sr-only">{option.name}</span>
-                {option.values.map((value) => (
+            <span
+              className={cn(
+                "text-xs font-medium",
+                berry ? "text-berry-foreground/80" : "text-muted-foreground",
+              )}
+            >
+              Select {sizeOption.name}
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {sizeOption.values.map((value) => {
+                const active = selected[sizeOption.name] === value;
+                return (
                   <button
                     key={value}
                     type="button"
-                    aria-pressed={selected[option.name] === value}
-                    onClick={() => setSelected((prev) => ({ ...prev, [option.name]: value }))}
+                    aria-pressed={active}
+                    onClick={() =>
+                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }))
+                    }
                     className={cn(
-                      "rounded-md border px-2.5 py-1 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                      selected[option.name] === value
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border text-primary hover:border-primary",
+                      "grid size-9 shrink-0 place-items-center rounded-full border px-1 text-[11px] leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                      berry
+                        ? active
+                          ? "border-berry-foreground bg-berry-foreground/25 text-berry-foreground"
+                          : "border-berry-foreground/40 text-berry-foreground/90 hover:border-berry-foreground"
+                        : active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-primary hover:border-primary",
                     )}
                   >
-                    {value}
+                    {value.replace(/\s*pot\s*/i, "")}
                   </button>
-                ))}
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
         ) : null}
 
         {product.promoLabel ? (
-          <p className="rounded-md bg-secondary px-2.5 py-1.5 text-xs font-medium text-primary">
+          <p
+            className={cn(
+              "rounded-full px-2.5 py-1.5 text-xs font-medium",
+              berry ? "bg-berry-foreground/15 text-berry-foreground" : "bg-secondary text-primary",
+            )}
+          >
             {product.promoLabel}
           </p>
         ) : null}
@@ -161,9 +208,14 @@ export function ProductCard({ product, priority = false, className }: ProductCar
           type="button"
           onClick={handleAdd}
           disabled={soldOut || isLoading || !product.defaultVariantId}
-          className="mt-auto inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className={cn(
+            "mt-auto inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 font-button text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+            berry
+              ? "bg-berry-muted text-berry-foreground"
+              : "bg-primary text-primary-foreground",
+          )}
         >
-          {soldOut ? "Sold out" : "Add to basket"}
+          {soldOut ? "Sold out" : "Add to Basket"}
         </button>
       </div>
     </article>

@@ -17,12 +17,12 @@
   },
   "metafields": {
     "badges": [
-      { "namespace": "custom", "key": "fast_growing", "label": "Fast Growing" },
-      { "namespace": "custom", "key": "low_maintenance", "label": "Low Maintenance" },
-      { "namespace": "custom", "key": "indoor_plant", "label": "Indoor Plant" },
+      { "namespace": "custom", "key": "fast_growing", "label": "Fast Growing", "gifUrl": "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Leaf.gif?v=1786024829" },
+      { "namespace": "custom", "key": "low_maintenance", "label": "Low Maintenance", "gifUrl": "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Fast.gif?v=1786024827" },
+      { "namespace": "custom", "key": "indoor_plant", "label": "Indoor Plant", "gifUrl": "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Home.gif?v=1786024828" },
       { "namespace": "custom", "key": "air_purifying", "label": "Air Purifying" },
-      { "namespace": "custom", "key": "pet_safe", "label": "Pet Safe" },
-      { "namespace": "custom", "key": "perfect_gift", "label": "Perfect Gift" }
+      { "namespace": "custom", "key": "pet_safe", "label": "Pet Safe", "gifUrl": "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Pet.gif?v=1786024828" },
+      { "namespace": "custom", "key": "perfect_gift", "label": "Perfect Gift", "gifUrl": "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gift.gif?v=1786024829" }
     ],
     "reviews": {
       "average": { "namespace": "reviews", "key": "rating" },

@@ -1,7 +1,14 @@
 import { Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { PlantoraReviews } from "@/services/shopify/types";
 
-export function ProductRating({ reviews }: { reviews: PlantoraReviews }) {
+export function ProductRating({
+  reviews,
+  tone = "default",
+}: {
+  reviews: PlantoraReviews;
+  tone?: "default" | "berry";
+}) {
   const rounded = Math.round(reviews.average * 10) / 10;
   return (
     <div
@@ -12,15 +19,23 @@ export function ProductRating({ reviews }: { reviews: PlantoraReviews }) {
         {[0, 1, 2, 3, 4].map((i) => (
           <Star
             key={i}
-            className={
+            className={cn(
+              "size-3.5",
               i < Math.round(reviews.average)
-                ? "size-3.5 fill-accent text-accent"
-                : "size-3.5 text-border"
-            }
+                ? "fill-accent text-accent"
+                : tone === "berry"
+                  ? "text-berry-foreground/40"
+                  : "text-border",
+            )}
           />
         ))}
       </span>
-      <span className="text-xs text-muted-foreground">
+      <span
+        className={cn(
+          "text-xs",
+          tone === "berry" ? "text-berry-foreground/80" : "text-muted-foreground",
+        )}
+      >
         {rounded.toFixed(1)}
         {reviews.total > 0 ? ` (${reviews.total})` : ""}
       </span>

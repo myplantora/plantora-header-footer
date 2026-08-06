@@ -64,7 +64,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     ? metafieldConfig.badges
         .filter((badge) => readBoolean(map, badge.namespace, badge.key))
         .map((badge) => {
-          const iconUrl = badgeIcon?.url;
+          const iconUrl = (badge as { gifUrl?: string }).gifUrl ?? badgeIcon?.url;
           return iconUrl ? { key: badge.key, label: badge.label, iconUrl } : { key: badge.key, label: badge.label };
         })
     : [];
