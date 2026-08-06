@@ -11,6 +11,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ProductBadges } from "@/components/product/ProductBadges";
 import { ProductRating } from "@/components/product/ProductRating";
 import { DeliveryEstimator } from "@/components/product/DeliveryEstimator";
+import { ProductRecommendations } from "@/components/product/ProductRecommendations";
 import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/services/shopify/product.service";
@@ -58,6 +59,7 @@ function ProductPage() {
       <AnnouncementBar />
       <Header />
       <ProductView product={data.product} />
+      <ProductRecommendations currentProductHandle={handle} />
       <Footer />
       <CartDrawer />
     </CartProvider>

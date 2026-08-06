@@ -106,6 +106,21 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     (o) => o.name.toLowerCase() !== "title" && !(o.values.length === 1 && o.values[0] === "Default Title"),
   );
 
+  const variants: PlantoraVariant[] = (node?.variants?.edges ?? []).map((edge: any) => {
+    const v = edge.node;
+    return {
+      id: v.id,
+      title: v.title,
+      sku: v.sku ?? null,
+      available: Boolean(v.availableForSale),
+      quantityAvailable: typeof v.quantityAvailable === "number" ? v.quantityAvailable : null,
+      price: money(v.price) ?? price,
+      compareAtPrice: money(v.compareAtPrice),
+      selectedOptions: v.selectedOptions ?? [],
+      image: image(v.image, node?.title ?? ""),
+    };
+  });
+
   return {
     id: node?.id ?? "",
     title: node?.title ?? "",
@@ -127,6 +142,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     promoLabel: readText(map, media["promoLabel"]!.namespace, media["promoLabel"]!.key),
     reviews,
     options: featureFlags.variantSelectors ? options : [],
+    variants,
     defaultVariantId: firstVariant?.id ?? null,
   };
 }

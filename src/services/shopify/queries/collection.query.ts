@@ -12,13 +12,17 @@ const PRODUCT_CARD_FRAGMENT = `
     featuredImage { url altText width height }
     images(first: 2) { edges { node { url altText width height } } }
     options { name values }
-    variants(first: 1) {
+    variants(first: 10) {
       edges {
         node {
           id
+          title
+          sku
           availableForSale
           price { amount currencyCode }
           compareAtPrice { amount currencyCode }
+          selectedOptions { name value }
+          image { url altText width height }
         }
       }
     }

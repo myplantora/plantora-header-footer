@@ -50,6 +50,7 @@ export type PlantoraProductCard = {
   promoLabel: string | null;
   reviews: PlantoraReviews | null;
   options: PlantoraOption[];
+  variants: PlantoraVariant[];
   defaultVariantId: string | null;
 };
 
