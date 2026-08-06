@@ -46,11 +46,14 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
+        "group relative flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
         berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
         className,
       )}
     >
+      <div className="absolute left-3 top-3 z-10">
+        <ProductBadges badges={product.badges} tone={tone} />
+      </div>
       <Link
         to="/product/$handle"
         params={{ handle: product.handle }}
@@ -102,13 +105,13 @@ export function ProductCard({
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
+      <div className="flex flex-1 flex-col px-2.5 pb-2.5">
         {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <h3
           className={cn(
-            "min-w-0 font-serif text-lg leading-snug",
-            berry ? "text-berry-foreground" : "text-primary",
+            "min-w-0 pb-1 font-serif text-[14px] leading-[22.4px]",
+            berry ? "text-berry-foreground" : "text-[#1C6644]",
           )}
         >
           <Link
@@ -120,11 +123,11 @@ export function ProductCard({
           </Link>
         </h3>
 
-        <div className="flex flex-wrap items-baseline gap-2">
+        <div className="flex flex-wrap items-baseline gap-2 pt-1 text-[13.125px]">
           <span
             className={cn(
-              "text-base font-medium",
-              berry ? "text-berry-foreground" : "text-primary",
+              "font-medium",
+              berry ? "text-berry-foreground" : "text-black",
             )}
           >
             {formatMoney(product.price.amount, product.price.currency)}
@@ -132,7 +135,7 @@ export function ProductCard({
           {product.compareAtPrice ? (
             <span
               className={cn(
-                "text-sm line-through",
+                "line-through",
                 berry ? "text-berry-foreground/70" : "text-muted-foreground",
               )}
             >
@@ -142,7 +145,7 @@ export function ProductCard({
           {product.availability === "limited" ? (
             <span
               className={cn(
-                "text-xs font-medium",
+                "font-medium",
                 berry ? "text-berry-foreground" : "text-accent",
               )}
             >
@@ -150,8 +153,6 @@ export function ProductCard({
             </span>
           ) : null}
         </div>
-
-        <ProductBadges badges={product.badges} tone={tone} />
 
         {sizeOption ? (
           <div className="flex flex-col gap-2">
@@ -209,7 +210,7 @@ export function ProductCard({
           onClick={handleAdd}
           disabled={soldOut || isLoading || !product.defaultVariantId}
           className={cn(
-            "mt-auto inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 font-button text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+            "mt-1.5 inline-flex h-10 w-full items-center justify-center rounded-full px-4 font-button text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
             berry
               ? "bg-berry-muted text-berry-foreground"
               : "bg-primary text-primary-foreground",

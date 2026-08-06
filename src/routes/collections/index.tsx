@@ -60,7 +60,7 @@ function AllProducts() {
         {data.products.length === 0 ? (
           <p className="mt-16 text-center text-muted-foreground">No products found.</p>
         ) : (
-          <ul className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+          <ul className="mt-10 grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
             {data.products.map((product, i) => (
               <li key={product.id}>
                 <ProductCard
