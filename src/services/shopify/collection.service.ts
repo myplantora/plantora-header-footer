@@ -2,7 +2,11 @@ import { storefrontApiRequest } from "./client";
 import { paginationConfig } from "./config";
 import { normalizeCollection } from "./normalize/collection";
 import { normalizeProductCard } from "./normalize/product";
-import { COLLECTION_PAGE_QUERY, PRODUCTS_QUERY } from "./queries/collection.query";
+import {
+  COLLECTION_BY_ID_QUERY,
+  COLLECTION_PAGE_QUERY,
+  PRODUCTS_QUERY,
+} from "./queries/collection.query";
 import type { PlantoraCollection, PlantoraProductCard } from "./types";
 
 export async function getCollection(params: {
