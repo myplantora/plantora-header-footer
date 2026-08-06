@@ -1,60 +1,19 @@
-import { X, Minus, Plus, Check } from "lucide-react";
+import { useEffect } from "react";
+import { X, Minus, Plus } from "lucide-react";
 import { formatMoney } from "@/lib/money";
+import { CartRewards } from "@/components/cart/CartRewards";
 import { useCartStore } from "@/stores/cartStore";
 
-const FREE_SHIPPING_THRESHOLD = 99;
-
-function FreeShippingProgress({
-  subtotal,
-}: {
-  subtotal: { amount: number; currency: string } | null;
-}) {
-  const amount = subtotal?.amount ?? 0;
-  const progress = Math.min(100, Math.round((amount / FREE_SHIPPING_THRESHOLD) * 100));
-  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - amount);
-  const unlocked = amount >= FREE_SHIPPING_THRESHOLD;
-
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2 text-sm font-medium text-primary">
-        {unlocked ? (
-          <>
-            <Check className="size-4 text-accent" aria-hidden="true" />
-            <span>You&apos;ve unlocked free shipping!</span>
-          </>
-        ) : (
-          <span>
-            You&apos;re{" "}
-            <span className="font-semibold text-accent">
-              {formatMoney(remaining)}
-            </span>{" "}
-            away from free shipping
-          </span>
-        )}
-      </div>
-
-      <div
-        className="h-2 w-full overflow-hidden rounded-full bg-secondary"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={FREE_SHIPPING_THRESHOLD}
-        aria-valuenow={Math.round(amount)}
-        aria-label="Progress toward free shipping"
-      >
-        <div
-          className="h-full rounded-full bg-accent transition-all duration-500 ease-out"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
 export function CartDrawer() {
-  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading } =
+  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
 
+  useEffect(() => {
+    if (isOpen) void hydrate();
+  }, [isOpen, hydrate]);
+
   if (!isOpen) return null;
+
 
   return (
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Shopping basket">
