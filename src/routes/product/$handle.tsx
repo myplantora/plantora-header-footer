@@ -98,7 +98,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   async function handleAdd() {
     if (!variantId || soldOut) return;
     try {
-      await addLine(variantId, 1);
+      await addLine(variantId, quantity);
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate(80);
       }
@@ -108,6 +108,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
+  }
+
+  function decreaseQty() {
+    setQuantity((q) => Math.max(1, q - 1));
+  }
+
+  function increaseQty() {
+    setQuantity((q) => q + 1);
   }
 
   return (
