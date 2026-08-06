@@ -95,11 +95,6 @@ export function ProductCard({
           ) : null}
         </div>
 
-        {product.discountPercent ? (
-          <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground">
-            {product.discountPercent}% off
-          </span>
-        ) : null}
         {product.tagMedia ? (
           <img
             src={product.tagMedia.url}
