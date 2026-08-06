@@ -69,8 +69,6 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-teal-deep: var(--teal-deep);
   --color-teal-deep-foreground: var(--teal-deep-foreground);
-  --color-badge: var(--badge);
-  --color-badge-foreground: var(--badge-foreground);
 }
 
 :root {
@@ -97,9 +95,6 @@
   --teal-deep: oklch(0.34 0.05 199);
   --teal-deep-foreground: oklch(0.98 0.005 199);
   --teal-glow: oklch(0.44 0.062 199);
-  --badge: oklch(0.63 0.093 47);
-  --badge-foreground: oklch(0.99 0.005 47);
-
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
