@@ -17,14 +17,10 @@ export function ProductBadges({
         <li
           key={badge.key}
           style={{
-            backgroundColor:
-              tone === "default" ? TAG_BACKGROUNDS[index % TAG_BACKGROUNDS.length] : undefined,
+            backgroundColor: TAG_BACKGROUNDS[index % TAG_BACKGROUNDS.length],
           }}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium",
-            tone === "berry"
-              ? "bg-berry-foreground/15 text-berry-foreground"
-              : "text-primary",
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium text-primary",
           )}
         >
           {badge.iconUrl ? (
