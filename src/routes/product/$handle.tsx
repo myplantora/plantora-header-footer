@@ -63,12 +63,22 @@ function ProductPage() {
   );
 }
 
+function boughtCountFromSeed(seed: string) {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  return 50 + (Math.abs(hash) % 101);
+}
+
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
+  const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
   useEffect(() => {
     if (chartOpen) {
@@ -138,13 +148,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0">
-          {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
-          <h1 className="mt-2 font-serif text-4xl leading-tight text-primary sm:text-5xl">
+        <div className="min-w-0 flex flex-col gap-3">
+          <ProductBadges badges={product.badges} />
+
+          <h1 className="font-serif text-4xl leading-tight text-primary sm:text-5xl">
             {product.title}
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-baseline gap-3">
               <span className="text-2xl text-primary">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
@@ -168,12 +181,18 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          <div className="mt-4">
-            <ProductBadges badges={product.badges} />
+          <div className="inline-flex items-center gap-2 self-start rounded-md bg-secondary px-3 py-2 text-sm font-medium text-primary">
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
+              alt=""
+              aria-hidden="true"
+              className="h-5 w-5 object-contain"
+            />
+            {boughtCount}+ bought in last week
           </div>
 
           {product.variants.length > 1 ? (
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {product.variants.map((v) => (
                 <button
                   key={v.id}
@@ -198,14 +217,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             type="button"
             onClick={handleAdd}
             disabled={soldOut || isLoading}
-            className="mt-8 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
+            className="inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-64"
           >
             {soldOut ? "Sold out" : "Add to basket"}
           </button>
 
           {product.descriptionHtml ? (
             <div
-              className="mt-8 text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
+              className="text-base leading-relaxed text-muted-foreground [&_a]:underline [&_li]:list-disc [&_ul]:pl-5"
               dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
             />
           ) : null}
