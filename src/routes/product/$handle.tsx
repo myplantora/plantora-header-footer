@@ -148,13 +148,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0">
-          {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
-          <h1 className="mt-2 font-serif text-4xl leading-tight text-primary sm:text-5xl">
+        <div className="min-w-0 flex flex-col gap-3">
+          <ProductBadges badges={product.badges} />
+
+          <h1 className="font-serif text-4xl leading-tight text-primary sm:text-5xl">
             {product.title}
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-baseline gap-3">
               <span className="text-2xl text-primary">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
@@ -178,8 +181,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          <div className="mt-4">
-            <ProductBadges badges={product.badges} />
+          <div className="inline-flex items-center gap-2 self-start rounded-md bg-secondary px-3 py-2 text-sm font-medium text-primary">
+            <img
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
+              alt=""
+              aria-hidden="true"
+              className="h-5 w-5 object-contain"
+            />
+            {boughtCount}+ bought in last week
           </div>
 
           {product.variants.length > 1 ? (
