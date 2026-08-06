@@ -162,21 +162,14 @@ export function Header() {
           <button
             type="button"
             aria-label="Search"
-            className="grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <Search className="h-5 w-5" aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Wishlist"
-            className="hidden h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:grid"
-          >
-            <Heart className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
             aria-label="Account"
-            className="grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <User className="h-5 w-5" aria-hidden="true" />
           </button>
