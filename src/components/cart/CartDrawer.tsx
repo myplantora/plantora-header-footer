@@ -1,4 +1,4 @@
-import { X, Minus, Plus } from "lucide-react";
+import { X, Minus, Plus, Check } from "lucide-react";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
 
