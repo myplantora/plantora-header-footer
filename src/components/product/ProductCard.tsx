@@ -46,7 +46,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
+        "group relative flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft",
         berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
         className,
       )}
