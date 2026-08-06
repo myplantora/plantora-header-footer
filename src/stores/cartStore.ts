@@ -93,6 +93,19 @@ const CART_LINES_REMOVE = `${CART_FRAGMENT}
     }
   }`;
 
+const CART_DISCOUNT_CODES_UPDATE = `${CART_FRAGMENT}
+  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart { ...CartFields }
+      userErrors { message }
+    }
+  }`;
+
+const CART_QUERY = `${CART_FRAGMENT}
+  query Cart($id: ID!) {
+    cart(id: $id) { ...CartFields }
+  }`;
+
 function mapCart(cart: any) {
   return {
     cartId: cart?.id ?? null,
@@ -104,6 +117,10 @@ function mapCart(cart: any) {
           currency: cart.cost.subtotalAmount.currencyCode,
         }
       : null,
+    discountCodes: (cart?.discountCodes ?? []).map((d: any) => ({
+      code: String(d.code),
+      applicable: Boolean(d.applicable),
+    })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => ({
       id: edge.node.id,
       quantity: edge.node.quantity,
@@ -125,10 +142,48 @@ export const useCartStore = create<CartState>()(
       lines: [],
       totalQuantity: 0,
       subtotal: null,
+      discountCodes: [],
       isOpen: false,
       isLoading: false,
+      isDiscountLoading: false,
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
+
+      hydrate: async () => {
+        const cartId = get().cartId;
+        if (!cartId || get().isLoading) return;
+        set({ isLoading: true });
+        try {
+          const data = await storefrontApiRequest<any>(CART_QUERY, { id: cartId });
+          const cart = data?.data?.cart;
+          if (cart) set(mapCart(cart));
+          else set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      setDiscountCodes: async (codes) => {
+        const cartId = get().cartId;
+        if (!cartId) return false;
+        set({ isDiscountLoading: true });
+        try {
+          const data = await storefrontApiRequest<any>(CART_DISCOUNT_CODES_UPDATE, {
+            cartId,
+            discountCodes: codes,
+          });
+          const cart = data?.data?.cartDiscountCodesUpdate?.cart;
+          if (!cart) return false;
+          set(mapCart(cart));
+          if (codes.length === 0) return true;
+          return (cart.discountCodes ?? []).some(
+            (d: any) => d.applicable && codes.includes(String(d.code)),
+          );
+        } finally {
+          set({ isDiscountLoading: false });
+        }
+      },
+
 
       addLine: async (merchandiseId, quantity = 1) => {
         set({ isLoading: true });
