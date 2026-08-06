@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,16 @@ import { useCartStore } from "@/stores/cartStore";
 import type { PlantoraProductCard } from "@/services/shopify/types";
 import { ProductBadges } from "./ProductBadges";
 import { ProductRating } from "./ProductRating";
+
+function stableRandomInRange(input: string, min: number, max: number) {
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    hash = (hash << 5) - hash + input.charCodeAt(i);
+    hash |= 0;
+  }
+  const normalized = (Math.abs(hash) % 1000) / 1000;
+  return Math.floor(min + normalized * (max - min + 1));
+}
 
 type ProductCardProps = {
   product: PlantoraProductCard;
@@ -30,6 +40,10 @@ export function ProductCard({
 
   const berry = tone === "berry";
   const soldOut = product.availability === "out_of_stock";
+  const boughtCount = useMemo(
+    () => stableRandomInRange(product.id, 50, 150),
+    [product.id],
+  );
 
   async function handleAdd() {
     if (!product.defaultVariantId || soldOut) return;
