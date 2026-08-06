@@ -60,9 +60,10 @@ export function SelfWateringSection() {
                   />
 
                 </div>
-                <p className="mt-3 text-center text-[13px] leading-snug opacity-90 sm:text-[15px]">
+                <p className="mt-3 text-center text-sm leading-snug opacity-90">
                   {step.caption}
                 </p>
+
               </li>
             ))}
           </ol>
