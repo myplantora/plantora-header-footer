@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
@@ -88,7 +88,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     try {
       await addLine(variantId, 1);
-      toast.success(`${product.title} added to basket`);
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate(80);
+      }
+      toast.success(`${product.title} added to basket`, {
+        icon: <Check className="size-4" />,
+      });
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
