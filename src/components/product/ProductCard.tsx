@@ -112,7 +112,11 @@ export function ProductCard({
       </Link>
 
       <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-3">
-        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
+        {product.badges.length > 0 ? (
+          <div>
+            <ProductBadges badges={product.badges} tone={tone} />
+          </div>
+        ) : null}
 
         <h3
           className={cn(
@@ -128,6 +132,8 @@ export function ProductCard({
             {product.title}
           </Link>
         </h3>
+
+        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <div className="flex flex-wrap items-baseline gap-2 text-[13.125px]">
           <span
@@ -160,11 +166,18 @@ export function ProductCard({
           ) : null}
         </div>
 
-        {product.badges.length > 0 ? (
-          <div>
-            <ProductBadges badges={product.badges} tone={tone} />
-          </div>
-        ) : null}
+        <div className="flex items-center gap-2 text-xs font-medium">
+          <img
+            src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="h-4 w-auto"
+          />
+          <span className={cn(berry ? "text-berry-foreground/90" : "text-muted-foreground")}>
+            {boughtCount}+ bought in last week
+          </span>
+        </div>
 
         {sizeOption ? (
           <div className="flex flex-col gap-2">
