@@ -66,7 +66,7 @@ const RewardCard = memo(function RewardCard({ tier, applied, busy, onApply }: Ca
           disabled={applied || busy}
           onClick={() => onApply(tier)}
           aria-label={applied ? `${tier.code} applied` : `Apply discount ${tier.code}`}
-          className="inline-flex h-10 w-full items-center justify-center rounded-full bg-gold px-4 font-button text-xs font-semibold text-primary-foreground transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          className="inline-flex h-10 w-full items-center justify-center rounded-full bg-[--reward-gold] px-4 font-button text-xs font-semibold text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           {applied ? "Applied ✓" : busy ? "Applying…" : "Apply Discount"}
         </button>
