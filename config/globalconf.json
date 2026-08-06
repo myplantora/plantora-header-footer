@@ -4,6 +4,14 @@
     "apiVersion": "2025-07",
     "storefrontToken": "9e366b4208cebbaad6a5996c768455e3"
   },
+  "analytics": {
+    "shopId": "gid://shopify/Shop/101462671653",
+    "storefrontId": "9e366b4208cebbaad6a5996c768455e3",
+    "shopDomain": "checkout.myplantora.com",
+    "salesChannel": "headless",
+    "currency": "USD",
+    "acceptedLanguage": "en"
+  },
   "pagination": {
     "collectionPageSize": 12,
     "searchPageSize": 24
