@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Menu, Search, ShoppingBag, User } from "lucide-react";
+import { ChevronDown, Menu, Search, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
@@ -165,13 +165,6 @@ export function Header() {
             className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <Search className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label="Account"
-            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <User className="h-5 w-5" aria-hidden="true" />
           </button>
           <CartButton />
         </div>
