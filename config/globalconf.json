@@ -1,0 +1,41 @@
+{
+  "shopify": {
+    "storeDomain": "piedzy-da.myshopify.com",
+    "apiVersion": "2025-07",
+    "storefrontToken": "ecc0be48bc46e12d5c9d2c8285d0f74c"
+  },
+  "pagination": {
+    "collectionPageSize": 12,
+    "searchPageSize": 24
+  },
+  "features": {
+    "hoverImage": true,
+    "reviews": true,
+    "badges": true,
+    "tagMedia": true,
+    "variantSelectors": true
+  },
+  "metafields": {
+    "badges": [
+      { "namespace": "custom", "key": "fast_growing", "label": "Fast Growing" },
+      { "namespace": "custom", "key": "low_maintenance", "label": "Low Maintenance" },
+      { "namespace": "custom", "key": "indoor_plant", "label": "Indoor Plant" },
+      { "namespace": "custom", "key": "air_purifying", "label": "Air Purifying" },
+      { "namespace": "custom", "key": "pet_safe", "label": "Pet Safe" },
+      { "namespace": "custom", "key": "perfect_gift", "label": "Perfect Gift" }
+    ],
+    "reviews": {
+      "average": { "namespace": "reviews", "key": "rating" },
+      "total": { "namespace": "reviews", "key": "rating_count" },
+      "percent": { "namespace": "reviews", "key": "rating_percentage" }
+    },
+    "media": {
+      "tagMedia": { "namespace": "custom", "key": "product_tag_gif" },
+      "badgeIcon": { "namespace": "custom", "key": "badge_icon" },
+      "promoLabel": { "namespace": "custom", "key": "promo_label" }
+    }
+  },
+  "metaobjects": {
+    "ids": []
+  }
+}
