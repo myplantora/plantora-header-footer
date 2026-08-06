@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -7,16 +7,6 @@ import { useCartStore } from "@/stores/cartStore";
 import type { PlantoraProductCard } from "@/services/shopify/types";
 import { ProductBadges } from "./ProductBadges";
 import { ProductRating } from "./ProductRating";
-
-function stableRandomInRange(input: string, min: number, max: number) {
-  let hash = 0;
-  for (let i = 0; i < input.length; i++) {
-    hash = (hash << 5) - hash + input.charCodeAt(i);
-    hash |= 0;
-  }
-  const normalized = (Math.abs(hash) % 1000) / 1000;
-  return Math.floor(min + normalized * (max - min + 1));
-}
 
 type ProductCardProps = {
   product: PlantoraProductCard;
@@ -40,10 +30,6 @@ export function ProductCard({
 
   const berry = tone === "berry";
   const soldOut = product.availability === "out_of_stock";
-  const boughtCount = useMemo(
-    () => stableRandomInRange(product.id, 50, 150),
-    [product.id],
-  );
 
   async function handleAdd() {
     if (!product.defaultVariantId || soldOut) return;
@@ -112,11 +98,7 @@ export function ProductCard({
       </Link>
 
       <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-3">
-        {product.badges.length > 0 ? (
-          <div>
-            <ProductBadges badges={product.badges} tone={tone} />
-          </div>
-        ) : null}
+        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <h3
           className={cn(
@@ -132,8 +114,6 @@ export function ProductCard({
             {product.title}
           </Link>
         </h3>
-
-        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
 
         <div className="flex flex-wrap items-baseline gap-2 text-[13.125px]">
           <span
@@ -166,18 +146,11 @@ export function ProductCard({
           ) : null}
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <img
-            src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="h-4 w-auto"
-          />
-          <span className={cn(berry ? "text-berry-foreground/90" : "text-muted-foreground")}>
-            {boughtCount}+ bought in last week
-          </span>
-        </div>
+        {product.badges.length > 0 ? (
+          <div>
+            <ProductBadges badges={product.badges} tone={tone} />
+          </div>
+        ) : null}
 
         {sizeOption ? (
           <div className="flex flex-col gap-2">
