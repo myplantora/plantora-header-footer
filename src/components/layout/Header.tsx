@@ -69,8 +69,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
+          ? "border-b border-border bg-background"
+          : "bg-background",
       )}
       onKeyDown={(e) => {
         if (e.key === "Escape") setOpenMenu(null);
