@@ -44,7 +44,7 @@ Wire up Shopify analytics using `@shopify/hydrogen-react`'s `sendShopifyAnalytic
 
 5. **Integrate globally in `src/routes/__root.tsx`**
    - Render `<ShopifyAnalyticsProvider />` (or call `useShopifyPageView` directly) inside `RootComponent` so it wraps every route.
-   - Optionally call `useShopifyCookies()` from `@shopify/hydrogen-react` to set Shopify's `_shopify_y` / `_shopify_s` cookies for consistent session attribution.
+   - Call `useShopifyCookies()` from `@shopify/hydrogen-react` once at the app root so Shopify's `_shopify_y` / `_shopify_s` cookies are set and managed for consistent session attribution.
 
 6. **Handle missing search route**
    - The app currently has no search route. Search `PAGE_VIEW` support will be added when a search page is built, or we can prepare the helper to accept `searchString` and leave it unused for now.
