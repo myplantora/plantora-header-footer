@@ -31,6 +31,8 @@ type CartState = {
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   setDiscountCodes: (codes: string[]) => Promise<boolean>;
+  hydrate: () => Promise<void>;
+
 };
 
 const CART_FRAGMENT = `
