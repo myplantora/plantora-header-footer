@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 
 const HOME_COLLECTION_ID = "659339542821";
@@ -94,26 +95,7 @@ function Index() {
           </div>
         </section>
         <SelfWateringSection />
-        <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-6 lg:px-10 lg:py-28">
-
-
-
-          <div className="grid gap-6 sm:grid-cols-3">
-            {[
-              { title: "Healthy Plant Guarantee", body: "Every plant arrives thriving, or we replace it." },
-              { title: "Expert Guidance", body: "Care guides and support from real plant people." },
-              { title: "Nationwide Delivery", body: "Fast, protective packaging to all 50 states." },
-            ].map((card) => (
-              <article
-                key={card.title}
-                className="rounded-3xl border border-border bg-background p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft"
-              >
-                <h2 className="font-serif text-2xl text-primary">{card.title}</h2>
-                <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{card.body}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <BannerSection />
       </main>
       <Footer />
     </CartProvider>
