@@ -43,8 +43,11 @@ export function useShopifyPageView() {
   const routeId = useRouterState({
     select: (s) => s.matches[s.matches.length - 1]?.routeId ?? "",
   });
-  const params = useRouterState({
-    select: (s) => (s.matches[s.matches.length - 1]?.params ?? {}) as Record<string, string>,
+  const handle = useRouterState({
+    select: (s) => {
+      const p = (s.matches[s.matches.length - 1]?.params ?? {}) as Record<string, string>;
+      return p["handle"] ?? "";
+    },
   });
 
   useEffect(() => {
@@ -55,7 +58,7 @@ export function useShopifyPageView() {
     if (routeId === "/product/$handle") {
       const cached = queryClient.getQueryData<{ product: PlantoraProduct } | undefined>([
         "product",
-        params.handle,
+        handle,
       ]);
       const product = cached?.product;
       extras = {
@@ -71,11 +74,11 @@ export function useShopifyPageView() {
     } else if (routeId === "/collections/$handle") {
       const collection = queryClient.getQueryData<PlantoraCollection | undefined>([
         "collection",
-        params.handle,
+        handle,
       ]);
       extras = {
         pageType: AnalyticsPageType.collection,
-        collectionHandle: params.handle ?? "",
+        collectionHandle: handle,
         ...(collection
           ? {
               collectionId: toCollectionGid(collection.id),
@@ -93,5 +96,5 @@ export function useShopifyPageView() {
 
     void sendShopifyPageView(extras);
     // Re-fire on every navigation.
-  }, [pathname, search, routeId, params.handle, queryClient]);
+  }, [pathname, search, routeId, handle, queryClient]);
 }
