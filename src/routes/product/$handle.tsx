@@ -110,7 +110,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-2.5 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-background p-2.5 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="min-w-0">
           <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
