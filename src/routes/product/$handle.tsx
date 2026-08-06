@@ -171,15 +171,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-baseline gap-3">
-              <span className="text-2xl font-bold text-primary">{formatMoney(price.amount, price.currency)}</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-sans text-2xl font-bold text-[#C3754C]">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
                 <span className="text-2xl text-muted-foreground line-through">
                   {formatMoney(compareAt.amount, compareAt.currency)}
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
+                <span className="inline-flex items-center self-center rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
                   {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
                 </span>
               ) : null}
