@@ -96,7 +96,6 @@ function Index() {
           </div>
         </section>
         <SelfWateringSection />
-        <BannerSection />
       </main>
       <Footer />
     </CartProvider>
