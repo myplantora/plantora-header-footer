@@ -81,14 +81,14 @@ export function RecommendationCard({ product, priority = false }: Props) {
         </div>
 
         {/* DOTD badge */}
-        <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-[#B87B4E] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[#B87B4E] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
           <Zap className="size-3 fill-current" />
           DOTD
         </span>
 
         {/* Discount badge */}
         {product.discountPercent ? (
-          <span className="absolute top-3 right-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">
+          <span className="absolute top-3 right-3 whitespace-nowrap rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">
             {product.discountPercent}% OFF
           </span>
         ) : null}
