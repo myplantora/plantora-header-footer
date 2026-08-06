@@ -44,26 +44,19 @@ export function SelfWateringSection() {
 
 
           <ol className="mt-8 grid grid-cols-3 gap-3 sm:gap-6">
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
               <li key={step.src} className="min-w-0">
-                <div className="relative pt-5">
-                  <span className="absolute left-1/2 top-0 z-10 grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full bg-badge text-[13px] font-medium text-badge-foreground sm:h-11 sm:w-11 sm:text-[15px]">
-                    {i + 1}
-                  </span>
-                  <img
-                    src={step.src}
-                    alt={step.alt}
-                    width={512}
-                    height={430}
-                    loading="lazy"
-                    className="h-auto w-full rounded-lg object-contain"
-                  />
-
-                </div>
+                <img
+                  src={step.src}
+                  alt={step.alt}
+                  width={512}
+                  height={430}
+                  loading="lazy"
+                  className="h-auto w-full rounded-lg object-contain"
+                />
                 <p className="mt-3 text-center text-sm leading-snug opacity-90">
                   {step.caption}
                 </p>
-
               </li>
             ))}
           </ol>
