@@ -88,7 +88,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     try {
       await addLine(variantId, 1);
-      toast.success(`${product.title} added to basket`);
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate(80);
+      }
+      toast.success(`${product.title} added to basket`, {
+        icon: <Check className="size-4" />,
+      });
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
