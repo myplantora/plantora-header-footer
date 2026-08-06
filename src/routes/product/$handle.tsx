@@ -283,6 +283,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
+          <DeliveryEstimator />
+
           <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 sm:p-4">
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Replacement.png?v=1786037056"
