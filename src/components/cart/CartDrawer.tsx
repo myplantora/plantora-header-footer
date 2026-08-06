@@ -29,6 +29,12 @@ export function CartDrawer() {
           </button>
         </header>
 
+        {lines.length > 0 ? (
+          <div className="border-b border-border px-5 py-4">
+            <FreeShippingProgress subtotal={subtotal} />
+          </div>
+        ) : null}
+
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
             <p className="text-sm text-muted-foreground">Your basket is empty.</p>
