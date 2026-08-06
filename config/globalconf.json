@@ -2,7 +2,7 @@
   "shopify": {
     "storeDomain": "piedzy-da.myshopify.com",
     "apiVersion": "2025-07",
-    "storefrontToken": "ecc0be48bc46e12d5c9d2c8285d0f74c"
+    "storefrontToken": "9e366b4208cebbaad6a5996c768455e3"
   },
   "pagination": {
     "collectionPageSize": 12,
