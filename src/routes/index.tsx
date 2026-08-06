@@ -61,6 +61,7 @@ function Index() {
       <Header />
       <main>
         <Hero />
+        <CollectionScroller collectionId="659339542821" />
         <section className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-6 lg:px-10 lg:pt-28">
           <h2 className="font-serif text-3xl text-primary sm:text-4xl">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
