@@ -123,11 +123,11 @@ export function ProductCard({
           </Link>
         </h3>
 
-        <div className="flex flex-wrap items-baseline gap-2">
+        <div className="flex flex-wrap items-baseline gap-2 pt-1 text-[13.125px]">
           <span
             className={cn(
-              "text-base font-medium",
-              berry ? "text-berry-foreground" : "text-primary",
+              "font-medium",
+              berry ? "text-berry-foreground" : "text-black",
             )}
           >
             {formatMoney(product.price.amount, product.price.currency)}
@@ -135,7 +135,7 @@ export function ProductCard({
           {product.compareAtPrice ? (
             <span
               className={cn(
-                "text-sm line-through",
+                "line-through",
                 berry ? "text-berry-foreground/70" : "text-muted-foreground",
               )}
             >
@@ -145,7 +145,7 @@ export function ProductCard({
           {product.availability === "limited" ? (
             <span
               className={cn(
-                "text-xs font-medium",
+                "font-medium",
                 berry ? "text-berry-foreground" : "text-accent",
               )}
             >
