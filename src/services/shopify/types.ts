@@ -6,8 +6,8 @@
 export type PlantoraImage = {
   url: string;
   altText: string;
-  width?: number;
-  height?: number;
+  width?: number | undefined;
+  height?: number | undefined;
 };
 
 export type PlantoraMoney = {
