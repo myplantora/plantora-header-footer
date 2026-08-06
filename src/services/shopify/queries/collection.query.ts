@@ -52,6 +52,24 @@ export const COLLECTION_PAGE_QUERY = `
   }
 `;
 
+export const COLLECTION_BY_ID_QUERY = `
+  ${PRODUCT_CARD_FRAGMENT}
+  query CollectionById($id: ID!, $productLimit: Int!, $after: String) {
+    collection(id: $id) {
+      id
+      title
+      handle
+      descriptionHtml
+      image { url altText width height }
+      seo { title description }
+      products(first: $productLimit, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        edges { node { ...ProductCardFields } }
+      }
+    }
+  }
+`;
+
 export const PRODUCTS_QUERY = `
   ${PRODUCT_CARD_FRAGMENT}
   query Products($first: Int!, $query: String, $after: String) {

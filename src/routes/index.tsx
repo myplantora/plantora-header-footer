@@ -4,8 +4,14 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
+
+const HOME_COLLECTION_ID = "659339542821";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(collectionByIdQuery(HOME_COLLECTION_ID));
+  },
   head: () => ({
     meta: [
       { title: "Plantora — Premium Indoor & Outdoor Plants Delivered in the USA" },
@@ -61,6 +67,7 @@ function Index() {
       <Header />
       <main>
         <Hero />
+        <CollectionScroller collectionId="659339542821" />
         <section className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-6 lg:px-10 lg:pt-28">
           <h2 className="font-serif text-3xl text-primary sm:text-4xl">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
