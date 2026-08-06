@@ -69,7 +69,7 @@ function CollectionPage() {
             No products in this collection yet. Please check back soon.
           </p>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
             {collection.products.map((product, i) => (
               <ProductCard key={product.id} product={product} priority={i < 4} />
             ))}
