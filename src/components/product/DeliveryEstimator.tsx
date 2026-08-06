@@ -50,7 +50,7 @@ export function DeliveryEstimator() {
   }
 
   return (
-    <div className="rounded-[5px] border border-primary/15 bg-white p-3 sm:p-4">
+    <div className="rounded-[5px] border border-primary/15 bg-[#EBEADE] p-3 sm:p-4">
       <div className="flex items-center gap-2">
         <Truck className="size-4 text-[#1D4D44]" aria-hidden="true" />
         <span className="font-button text-sm font-bold text-[#1D4D44]">Check delivery</span>
