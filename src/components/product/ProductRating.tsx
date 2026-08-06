@@ -12,7 +12,7 @@ export function ProductRating({
   const rounded = Math.round(reviews.average * 10) / 10;
   return (
     <div
-      className="flex items-center gap-1.5"
+      className="flex items-center gap-1.5 pt-0.5"
       aria-label={`Rated ${rounded} out of 5 from ${reviews.total} reviews`}
     >
       <span className="flex items-center gap-0.5" aria-hidden="true">
@@ -22,17 +22,22 @@ export function ProductRating({
             className={cn(
               "size-3.5",
               i < Math.round(reviews.average)
-                ? "fill-accent text-accent"
+                ? ""
                 : tone === "berry"
                   ? "text-berry-foreground/40"
                   : "text-border",
             )}
+            style={
+              i < Math.round(reviews.average)
+                ? { color: "#E9AD20", fill: "#E9AD20" }
+                : undefined
+            }
           />
         ))}
       </span>
       <span
         className={cn(
-          "text-xs",
+          "text-xs font-bold",
           tone === "berry" ? "text-berry-foreground/80" : "text-muted-foreground",
         )}
       >
