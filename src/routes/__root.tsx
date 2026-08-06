@@ -9,8 +9,11 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { useShopifyCookies } from "@shopify/hydrogen-react";
+
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { useShopifyPageView } from "@/hooks/useShopifyPageView";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -127,11 +130,18 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function ShopifyAnalytics() {
+  useShopifyCookies({ hasUserConsent: true });
+  useShopifyPageView();
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ShopifyAnalytics />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="bottom-right" />
