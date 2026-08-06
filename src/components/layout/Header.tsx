@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Menu, Search, ShoppingBag, User } from "lucide-react";
+import { ChevronDown, Menu, Search, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
