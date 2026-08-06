@@ -5,12 +5,18 @@ import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
-import { useCart } from "./CartContext";
+import { useCartStore } from "@/stores/cartStore";
 
 function CartButton() {
-  const { count } = useCart();
+  const count = useCartStore((s) => s.totalQuantity);
+  const openCart = useCartStore((s) => s.openCart);
+  const hydrate = useCartStore((s) => s.hydrate);
   const [bounce, setBounce] = useState(false);
   const first = useRef(true);
+
+  useEffect(() => {
+    void hydrate();
+  }, [hydrate]);
 
   useEffect(() => {
     if (first.current) {
@@ -25,6 +31,7 @@ function CartButton() {
   return (
     <button
       type="button"
+      onClick={openCart}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
         "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
@@ -34,7 +41,7 @@ function CartButton() {
       <ShoppingBag className="h-5 w-5" aria-hidden="true" />
       <span
         aria-hidden="true"
-        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-accent px-1 text-[10px] font-semibold text-white"
+        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
       >
         {count}
       </span>
