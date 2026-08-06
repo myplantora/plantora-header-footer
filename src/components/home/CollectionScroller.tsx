@@ -46,7 +46,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
       {/* Mobile: 2-column grid, 4 products only */}
       <div className="mt-8 sm:hidden">
-        <ul className="grid grid-cols-2 gap-4">
+        <ul className="grid grid-cols-2 gap-[15px]">
           {mobileProducts.map((product, i) => (
             <li key={product.id}>
               <ProductCard product={product} priority={i < 2} tone={toneFor(i)} />
@@ -55,21 +55,18 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         </ul>
         <Link
           to="/collections"
-          className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           View all products
         </Link>
       </div>
 
-      {/* Desktop: horizontal snap scroller */}
-      <div className="-mx-5 mt-8 hidden overflow-x-auto px-5 pb-2 sm:-mx-6 sm:block sm:px-6 lg:-mx-10 lg:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <ul className="flex snap-x snap-mandatory gap-4 sm:gap-5">
+      {/* Desktop: 4-column grid */}
+      <div className="mt-8 hidden sm:block">
+        <ul className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
           {collection.products.map((product, i) => (
-            <li
-              key={product.id}
-              className="w-[64vw] max-w-[280px] shrink-0 snap-start sm:w-[300px]"
-            >
-              <ProductCard product={product} priority={i < 2} tone={toneFor(i)} />
+            <li key={product.id}>
+              <ProductCard product={product} priority={i < 4} tone={toneFor(i)} />
             </li>
           ))}
         </ul>
