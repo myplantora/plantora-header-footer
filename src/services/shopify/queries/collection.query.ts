@@ -17,7 +17,6 @@ const PRODUCT_CARD_FRAGMENT = `
         node {
           id
           availableForSale
-          quantityAvailable
           price { amount currencyCode }
           compareAtPrice { amount currencyCode }
         }

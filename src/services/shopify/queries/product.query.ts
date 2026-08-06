@@ -26,7 +26,6 @@ export const PRODUCT_PAGE_QUERY = `
             title
             sku
             availableForSale
-            quantityAvailable
             price { amount currencyCode }
             compareAtPrice { amount currencyCode }
             selectedOptions { name value }
