@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -69,6 +69,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [variantId, setVariantId] = useState(product.defaultVariantId);
   const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
   const [chartOpen, setChartOpen] = useState(false);
+
+  useEffect(() => {
+    if (chartOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [chartOpen]);
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0] ?? null;
   const price = variant?.price ?? product.price;
@@ -206,19 +215,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
           onClick={() => setChartOpen(false)}
         >
-          <div className="relative w-[75vw] max-w-[900px]" onClick={(e) => e.stopPropagation()}>
+          <div className="relative w-[90vw] max-w-[1080px]" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
               aria-label="Close size chart"
               onClick={() => setChartOpen(false)}
-              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-background text-primary shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-accent text-accent-foreground shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
             >
               <X className="size-5" />
             </button>
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Chart.svg?v=1786030200"
               alt="Size chart"
-              className="max-h-[85vh] w-full rounded-md bg-background object-contain"
+              className="max-h-[95vh] w-full rounded-md bg-background object-contain"
             />
           </div>
         </div>
