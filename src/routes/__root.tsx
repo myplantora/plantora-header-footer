@@ -146,7 +146,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <ShopifyAnalytics />
-        <AnnouncementBar />
         <Header />
         <CartDrawer />
         <Outlet />
