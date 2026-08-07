@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Still the clicking on cart button does not give slider please check
+              Add bottom padding same like same size of top right and left
             </p>
           </div>
           <ul className="flex flex-col gap-1">

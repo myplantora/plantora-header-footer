@@ -119,7 +119,7 @@ export function CartDrawer() {
         </div>
 
         {lines.length > 0 ? (
-          <footer className="border-t border-border px-5 py-4">
+          <footer className="border-t border-border p-5">
             <div className="flex items-center justify-between text-sm text-primary">
               <span>Subtotal</span>
               <span className="font-medium">
