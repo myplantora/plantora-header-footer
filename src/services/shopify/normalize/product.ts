@@ -166,7 +166,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     tagMedia: featureFlags.tagMedia
       ? readImage(map, media["tagMedia"]!.namespace, media["tagMedia"]!.key)
       : null,
-    promoLabel: readText(map, media["promoLabel"]!.namespace, media["promoLabel"]!.key),
+    promoLabel: node?.tags?.includes('has-deal') ? 'has-deal' : readText(map, media["promoLabel"]!.namespace, media["promoLabel"]!.key),
     reviews,
     options: featureFlags.variantSelectors ? options : [],
     variants,
