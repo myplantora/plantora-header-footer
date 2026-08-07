@@ -158,7 +158,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0 flex flex-col gap-3">
+        <div className="min-w-0 flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-3">
             <ProductBadges badges={product.badges} />
             {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
@@ -169,7 +169,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </h1>
 
 
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="font-serif text-2xl font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
@@ -209,11 +209,11 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
 
           {product.options.length > 0 && product.variants.length > 1 ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2.5">
               {product.options.map((option) => {
                 const currentValue = variant?.selectedOptions.find((o) => o.name === option.name)?.value;
                 return (
-                  <div key={option.name} className="flex flex-col gap-2">
+                  <div key={option.name} className="flex flex-col gap-1.5">
                     <span className="text-sm font-medium text-primary">
                       {option.name}
                     </span>
@@ -258,7 +258,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </div>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 mt-1">
             <div className="inline-flex items-center overflow-hidden rounded-md border border-border bg-background">
               <button
                 type="button"
@@ -292,9 +292,11 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          <DeliveryEstimator />
+          <div className="mt-1">
+            <DeliveryEstimator />
+          </div>
 
-          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 sm:p-4">
+          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 mt-1">
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Replacement.png?v=1786037056"
               alt="10-Day Damage Replacement Guarantee"
