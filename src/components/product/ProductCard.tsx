@@ -177,10 +177,10 @@ export function ProductCard({
 
         {/* Variant Selectors */}
         <div className="mt-4 space-y-4">
-          {/* Size Section */}
+          {/* Pot Section (Formerly Size) */}
           {sizeOption && (
             <div className="space-y-2">
-              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Size</span>
+              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Pot Size</span>
               <div className="flex flex-wrap gap-2">
                 {sizeOption.values.map(val => (
                   <button
@@ -204,10 +204,10 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Color Section */}
+          {/* Color Section (Pot Type/Color) */}
           {colorOption && (
             <div className="space-y-2">
-              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Color</span>
+              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Pot</span>
               <div className="flex flex-wrap gap-3">
                 {colorOption.values.map(val => (
                   <button
