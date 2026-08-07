@@ -13,7 +13,7 @@ export function PaymentIcons() {
       {marks.map((mark) => (
         <li
           key={mark}
-          className="rounded-lg border border-primary-foreground/25 bg-primary-foreground/5 px-2.5 py-1 text-[11px] font-medium tracking-wide text-primary-foreground/80"
+          className="rounded-lg border border-white/25 bg-white/5 px-2.5 py-1 text-[11px] font-medium tracking-wide text-white/80"
         >
           {mark}
         </li>
