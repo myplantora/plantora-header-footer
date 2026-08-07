@@ -184,6 +184,9 @@ export function ProductCard({
                       e.stopPropagation();
                       setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
                     }}
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                    }}
                     style={{ touchAction: "manipulation" }}
                     className={cn(
                       "grid size-9 shrink-0 cursor-pointer select-none place-items-center rounded-full border px-1 text-[11px] leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
