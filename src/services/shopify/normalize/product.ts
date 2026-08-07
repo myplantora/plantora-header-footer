@@ -69,7 +69,7 @@ function generateFeatureChips(seed: string, productType?: string, tags: string[]
   }
   
   const pool = [
-    { key: 'vastu', label: '🏡 Vastu Approved' },
+    { key: 'vastu', label: '🪴 Indoor Plant' },
     { key: 'gift', label: '🎁 Perfect Gift' },
     { key: 'pet', label: '🐾 Pet Friendly' },
     { key: 'low-maint', label: '✨ Low Maintenance' },
