@@ -16,6 +16,7 @@ import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/services/shopify/product.service";
 import { useCartStore } from "@/stores/cartStore";
+import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 const productQuery = (handle: string) =>
   queryOptions({ queryKey: ["product", handle], queryFn: () => getProduct(handle) });
@@ -80,7 +81,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [chartOpen, setChartOpen] = useState(false);
   const [guaranteeOpen, setGuaranteeOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const { trackViewContent, trackAddToCart } = useMetaTracking();
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
+
+  useEffect(() => {
+    trackViewContent(product);
+  }, [product, trackViewContent]);
 
   useEffect(() => {
     if (chartOpen) {
@@ -100,6 +106,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     try {
       await addLine(variantId, quantity);
+      trackAddToCart(product, quantity);
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate(80);
       }
