@@ -95,10 +95,7 @@ export function Header() {
         {/* Mobile: hamburger */}
         <button
           type="button"
-          onClick={() => {
-            console.log("Menu button clicked");
-            setMobileOpen(true);
-          }}
+          onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
           className="relative z-[60] grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
