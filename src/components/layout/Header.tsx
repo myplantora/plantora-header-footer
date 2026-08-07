@@ -36,6 +36,7 @@ function CartButton() {
     <button
       type="button"
       onClick={(e) => {
+        console.log("Cart button clicked");
         e.preventDefault();
         e.stopPropagation();
         openCart();
@@ -95,7 +96,10 @@ export function Header() {
         {/* Mobile: hamburger */}
         <button
           type="button"
-          onClick={() => setMobileOpen(true)}
+          onClick={() => {
+            console.log("Menu button clicked");
+            setMobileOpen(true);
+          }}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
           className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
