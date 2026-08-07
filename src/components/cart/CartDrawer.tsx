@@ -48,7 +48,9 @@ export function CartDrawer() {
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Your basket is empty.</p>
+            <p className="text-sm text-muted-foreground">
+              {isLoading ? "Loading your basket…" : "Your basket is empty."}
+            </p>
           ) : (
             <ul className="flex flex-col gap-4">
               {lines.map((line) => (
