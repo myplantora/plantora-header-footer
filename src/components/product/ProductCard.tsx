@@ -251,6 +251,3 @@ export function ProductCard({
         </div>
       </div>
     </article>
-  );
-}
-}
