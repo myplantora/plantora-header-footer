@@ -135,8 +135,8 @@ export function ProductCard({
       </div>
 
       <div className={cn(
-        "flex flex-1 flex-col p-4 pb-0",
-        product.promoLabel === "has-deal" && "px-2.5"
+        "flex flex-1 flex-col px-3.5 pt-4 pb-0",
+        product.promoLabel === "has-deal" && "px-2"
       )}>
         {/* Rating Row */}
         <div className="mb-2">
