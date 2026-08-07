@@ -136,7 +136,7 @@ export function CartRewards() {
                 decoding="async"
                 width={48}
                 height={48}
-                className="size-12 object-contain scale-[0.6]"
+                className="size-12 -translate-y-[2px] scale-[0.8] object-contain"
               />
             </span>
             <p
