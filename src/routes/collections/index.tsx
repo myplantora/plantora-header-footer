@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
-import { CartProvider } from "@/components/layout/CartContext";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ProductCard } from "@/components/product/ProductCard";
 import { getProductCards } from "@/services/shopify/collection.service";
@@ -48,8 +46,7 @@ function AllProducts() {
   const { data } = useSuspenseQuery(allProductsQuery);
 
   return (
-    <CartProvider>
-      <Header />
+    <>
       <main className="mx-auto max-w-[1400px] px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
         <h1 className="font-serif text-3xl text-primary sm:text-5xl">All products</h1>
         <p className="mt-3 text-sm text-muted-foreground">
@@ -73,6 +70,6 @@ function AllProducts() {
         )}
       </main>
       <Footer />
-    </CartProvider>
+    </>
   );
 }
