@@ -79,7 +79,7 @@ export function CartRewards() {
     
     const nextTier = state.nextTier;
     if (nextTier) {
-      const currentThreshold = currentTierIndex >= 0 ? state.tiers[currentTierIndex].threshold : 0;
+      const currentThreshold = currentTierIndex >= 0 && state.tiers[currentTierIndex] ? state.tiers[currentTierIndex].threshold : 0;
       const nextThreshold = nextTier.threshold;
       const range = nextThreshold - currentThreshold;
       const progressInRange = (amount - currentThreshold) / range;
