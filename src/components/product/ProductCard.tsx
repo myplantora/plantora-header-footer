@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
-import type { PlantoraProductCard } from "@/services/shopify/types";
-import { ProductBadges } from "./ProductBadges";
+import type { PlantoraProductCard, PlantoraVariant } from "@/services/shopify/types";
 import { ProductRating } from "./ProductRating";
+import { ProductBadges } from "./ProductBadges";
 
 type ProductCardProps = {
   product: PlantoraProductCard;
   priority?: boolean;
-  /** "berry" renders the highlighted #B3393F card, "default" the white card. */
   tone?: "default" | "berry";
   className?: string;
 };
@@ -19,193 +18,209 @@ type ProductCardProps = {
 export function ProductCard({
   product,
   priority = false,
-  tone = "default",
   className,
 }: ProductCardProps) {
   const addLine = useCartStore((s) => s.addLine);
   const openCart = useCartStore((s) => s.openCart);
+  const navigate = useNavigate();
+  
   const [pending, setPending] = useState(false);
-  const [selected, setSelected] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.options.map((o) => [o.name, o.values[0] ?? ""]))
-  );
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
+    const firstAvailable = product.variants.find(v => v.available) || product.variants[0];
+    if (firstAvailable) {
+      return Object.fromEntries(firstAvailable.selectedOptions.map(o => [o.name, o.value]));
+    }
+    return {};
+  });
 
-  const berry = tone === "berry";
-  const soldOut = product.availability === "out_of_stock";
+  const currentVariant = useMemo(() => {
+    return product.variants.find(v => 
+      v.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
+    ) || product.variants[0];
+  }, [product.variants, selectedOptions])!;
 
-  async function handleAdd() {
-    if (!product.defaultVariantId || soldOut || pending) return;
+  const soldOut = !currentVariant?.available;
+
+  const handleAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!currentVariant || soldOut || pending) return;
+    
     setPending(true);
-    openCart();
     try {
-      await addLine(product.defaultVariantId, 1);
-      toast.success(`${product.title} added to basket`);
+      await addLine(currentVariant.id, 1);
+      openCart();
     } catch {
-      toast.error("Could not add to basket. Please try again.");
+      toast.error("Could not add to basket");
     } finally {
       setPending(false);
     }
-  }
+  };
 
-  const sizeOption = product.options[0];
+  const handleNavigate = (e: React.MouseEvent) => {
+    // Only navigate if we didn't click a variant button or Add to Basket
+    if ((e.target as HTMLElement).closest('button')) return;
+    
+    const params: Record<string, string> = { variant: currentVariant.id };
+    Object.entries(selectedOptions).forEach(([name, value]) => {
+      params[name.toLowerCase()] = value;
+    });
+
+    navigate({
+      to: "/product/$handle",
+      params: { handle: product.handle },
+      search: params
+    });
+  };
+
+  // Identify Color and Size options
+  const colorOption = product.options.find(o => /color|colour/i.test(o.name));
+  const sizeOption = product.options.find(o => /size|pot/i.test(o.name));
+
+  const getColorHex = (name: string) => {
+    const map: Record<string, string> = {
+      green: "#1D4D44",
+      blue: "#2B4C7E",
+      cream: "#F5E6D3",
+      black: "#1A1A1A",
+      yellow: "#F7E052",
+      white: "#FFFFFF",
+      red: "#A52A2A"
+    };
+    return map[name.toLowerCase()] || "#cccccc";
+  };
 
   return (
     <article
+      onClick={handleNavigate}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-[19px] border transition-all duration-300 hover:shadow-soft",
-        berry ? "border-berry bg-[#CAC2E0]" : "border-border bg-card",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white transition-all duration-300",
         className
       )}
     >
-      <Link
-        to="/product/$handle"
-        params={{ handle: product.handle }}
-        className="relative block overflow-hidden bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      >
-        <div className="aspect-square w-full">
-          {product.featuredImage ? (
-            <img
-              src={product.featuredImage.url}
-              alt={product.featuredImage.altText || product.title}
-              width={600}
-              height={600}
-              loading={priority ? "eager" : "lazy"}
-              decoding="async"
-              className={cn(
-                "size-full object-cover transition-transform duration-700 group-hover:scale-110",
-                product.hoverImage && "group-hover:opacity-0"
-              )}
-            />
-          ) : (
-            <div className="grid size-full place-items-center text-xs text-muted-foreground">
-              No image
-            </div>
-          )}
-          {product.hoverImage ? (
-            <img
-              src={product.hoverImage.url}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 size-full object-cover opacity-0 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
-            />
-          ) : null}
+      {/* Image Section */}
+      <div className="relative aspect-square w-full overflow-hidden rounded-[18px]">
+        <img
+          src={currentVariant?.image?.url || product.featuredImage?.url}
+          alt={product.title}
+          loading={priority ? "eager" : "lazy"}
+          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        
+        {/* Discount Badge */}
+        {product.discountPercent && product.discountPercent > 0 && (
+          <div className="absolute right-3 top-3 z-10 rounded-full bg-[#1D4D44] px-2.5 py-1 text-[11px] font-bold text-white">
+            {product.discountPercent}% OFF
+          </div>
+        )}
+
+        {/* DOTD Badge */}
+        {product.promoLabel === "DOTD" && (
+          <div className="absolute left-3 top-3 z-10 rounded-full bg-[#A8622A] px-2.5 py-1 text-[11px] font-bold text-white">
+            ⚡ DOTD
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-4 pb-0">
+        {/* Rating Row */}
+        <div className="mb-2">
+          {product.reviews && <ProductRating reviews={product.reviews} />}
         </div>
 
-        {/* Custom Tag Shape (metafield/tag media) */}
-        {product.tagMedia ? (
-          <div className="custom_shape absolute left-[-15px] top-[-15px] z-20 rounded-br-[19px] rounded-tl-[19px] bg-white p-[11px] shadow-sm max-md:left-[-9px] max-md:top-[-9px] max-md:rounded-br-[18px] max-md:rounded-tl-[18px]">
-            <img
-              src={product.tagMedia.url}
-              alt={product.tagMedia.altText || ""}
-              loading="lazy"
-              className="h-auto w-[41px] max-md:w-[20px]"
-            />
-          </div>
-        ) : null}
-      </Link>
-
-      <div className={cn("flex flex-1 flex-col gap-2 p-3", berry && "px-[10px] pb-3")}>
-        {/* Rating and Reviews */}
-        {product.reviews ? (
-          <div className="flex items-center gap-1">
-            <ProductRating reviews={product.reviews} tone={tone} />
-          </div>
-        ) : null}
-
-        {/* Title */}
-        <h3
-          className={cn(
-            "min-w-0 font-sans text-[14px] font-semibold leading-tight",
-            berry ? "text-[#1d4d43]" : "text-[#1C6644]"
-          )}
-        >
-          <Link
-            to="/product/$handle"
-            params={{ handle: product.handle }}
-            className="line-clamp-2 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            {product.title}
-          </Link>
+        {/* Product Title */}
+        <h3 className="line-clamp-2 min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
+          {product.title}
         </h3>
 
-        {/* Price and Badges row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-baseline gap-1.5">
-            <span
-              className={cn(
-                "text-[15px] font-bold",
-                berry ? "text-[#1d4d43]" : "text-black"
-              )}
-            >
-              {formatMoney(product.price.amount, product.price.currency)}
+        {/* Price Row */}
+        <div className="mt-2 flex items-baseline gap-2">
+          <span className="text-[16px] font-bold text-[#1D4D44]">
+            {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
+          </span>
+          {currentVariant.compareAtPrice && (
+            <span className="text-[14px] text-[#A8622A] line-through">
+              {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
             </span>
-            {product.compareAtPrice ? (
-              <span className="text-[13px] text-muted-foreground line-through">
-                {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
-              </span>
-            ) : null}
-          </div>
+          )}
+        </div>
 
-          {product.badges.length > 0 && (
-            <div className="tag-container flex flex-row-reverse items-center justify-end gap-1">
-              {product.badges.slice(0, 2).map((badge, idx) => (
-                <span
-                  key={badge.key}
-                  className={cn(
-                    "flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                    idx === 0 ? "bg-[#C3E8E8] text-[#1d4d43]" : "bg-[#F2E8C2] text-[#1d4d43]"
-                  )}
-                >
-                  {badge.label}
-                </span>
-              ))}
+        {/* Feature Chips */}
+        <div className="mt-3">
+          <ProductBadges badges={product.badges} />
+        </div>
+
+        {/* Variant Selectors */}
+        <div className="mt-4 space-y-4">
+          {/* Size Section */}
+          {sizeOption && (
+            <div className="space-y-2">
+              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Size</span>
+              <div className="flex flex-wrap gap-2">
+                {sizeOption.values.map(val => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedOptions(prev => ({ ...prev, [sizeOption.name]: val }));
+                    }}
+                    className={cn(
+                      "min-w-[40px] rounded-full border px-3 py-1.5 text-[12px] font-medium transition-all",
+                      selectedOptions[sizeOption.name] === val
+                        ? "border-[#A8622A] bg-[#A8622A] text-white"
+                        : "border-gray-200 bg-white text-[#1D4D44]"
+                    )}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Color Section */}
+          {colorOption && (
+            <div className="space-y-2">
+              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Color</span>
+              <div className="flex flex-wrap gap-3">
+                {colorOption.values.map(val => (
+                  <button
+                    key={val}
+                    type="button"
+                    title={val}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedOptions(prev => ({ ...prev, [colorOption.name]: val }));
+                    }}
+                    className={cn(
+                      "size-8 rounded-full border-2 transition-all",
+                      selectedOptions[colorOption.name] === val
+                        ? "border-[#1D4D44]"
+                        : "border-transparent"
+                    )}
+                    style={{ backgroundColor: getColorHex(val) }}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
 
-        {/* Sizes (Simplified for Revamp) */}
-        {sizeOption ? (
-          <div className="mt-1 flex flex-wrap gap-1.5">
-            {sizeOption.values.map((value) => {
-              const active = selected[sizeOption.name] === value;
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
-                  }}
-                  className={cn(
-                    "rounded-full border px-3 py-1 text-[11px] font-medium transition-colors",
-                    active
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border text-primary hover:border-primary"
-                  )}
-                >
-                  {value.replace(/\s*pot\s*/i, "")}
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-
-        {/* CTA */}
-        <div className="mt-auto pt-2">
+        {/* Add to Basket */}
+        <div className="mt-6 pb-4">
           <button
             type="button"
             onClick={handleAdd}
-            disabled={soldOut || pending || !product.defaultVariantId}
+            disabled={soldOut || pending}
             className={cn(
-              "inline-flex h-[42px] w-full items-center justify-center rounded-full px-4 font-button text-sm font-bold transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-              berry
-                ? "bg-[#1d4d43] text-white hover:bg-[#1d4d43]/90"
-                : "bg-primary text-primary-foreground hover:bg-primary/90"
+              "flex h-[56px] w-full items-center justify-center rounded-full font-button text-[16px] font-bold transition-all",
+              soldOut
+                ? "bg-gray-200 text-gray-500"
+                : "bg-[#1D4D44] text-white active:scale-[0.98]"
             )}
           >
-            {soldOut ? "Sold out" : "Add to Basket"}
+            {pending ? "Adding..." : soldOut ? "Sold Out" : "Add to Basket"}
           </button>
         </div>
       </div>

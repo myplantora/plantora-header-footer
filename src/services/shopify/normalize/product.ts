@@ -51,12 +51,39 @@ function hashString(value: string): number {
   return Math.abs(hash);
 }
 
-/** Deterministic fallback reviews: 250-600 count, 4.2-4.8 average. */
+/** Deterministic fallback reviews: 12–67 count, 4.3–4.9 average. */
 function fallbackReviews(seed: string): PlantoraReviews {
   const hash = hashString(seed || "plantora");
-  const total = 250 + (hash % 351);
-  const average = Math.round((4.2 + ((hash >> 8) % 7) / 10) * 10) / 10;
+  const total = 12 + (hash % 56);
+  const average = Math.round((4.3 + ((hash >> 8) % 7) / 10) * 10) / 10;
   return { average, total, percent: Math.round((average / 5) * 100) };
+}
+
+/** Deterministic feature chips based on product info. */
+function generateFeatureChips(seed: string, productType?: string, tags: string[] = []): PlantoraBadge[] {
+  const chips: PlantoraBadge[] = [];
+  const hash = hashString(seed);
+  
+  if (tags.includes('Air Purifying') || productType?.toLowerCase().includes('plant')) {
+    chips.push({ key: 'air-purifying', label: '🍃 Air Purifying' });
+  }
+  
+  const pool = [
+    { key: 'vastu', label: '🏡 Vastu Approved' },
+    { key: 'gift', label: '🎁 Perfect Gift' },
+    { key: 'pet', label: '🐾 Pet Friendly' },
+    { key: 'low-maint', label: '✨ Low Maintenance' },
+    { key: 'beginner', label: '🌱 Beginner Friendly' }
+  ];
+
+  if (chips.length < 2) {
+    const second = pool[hash % pool.length];
+    if (second && second.key !== chips[0]?.key) {
+      chips.push(second);
+    }
+  }
+
+  return chips.slice(0, 2);
 }
 
 
@@ -135,7 +162,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
       Boolean(node?.availableForSale),
       typeof firstVariant?.quantityAvailable === "number" ? firstVariant.quantityAvailable : null,
     ),
-    badges,
+    badges: generateFeatureChips(node?.id ?? "", node?.productType, node?.tags ?? []),
     tagMedia: featureFlags.tagMedia
       ? readImage(map, media["tagMedia"]!.namespace, media["tagMedia"]!.key)
       : null,
