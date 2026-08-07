@@ -37,7 +37,7 @@ export function ProductCard({
     return product.variants.find(v => 
       v.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
     ) || product.variants[0];
-  }, [product.variants, selectedOptions]);
+  }, [product.variants, selectedOptions])!;
 
   const soldOut = !currentVariant?.available;
 
