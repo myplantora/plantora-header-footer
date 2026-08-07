@@ -71,18 +71,10 @@ export function CartRewards() {
   const fill = useMemo(() => {
     if (state.tiers.length === 0) return 0;
     
-    // Find how many tiers are already fully unlocked
     const unlockedCount = state.tiers.filter(t => t.unlocked).length;
-    
-    // If no tiers unlocked, we calculate progress towards the first tier
-    // If some are unlocked, we calculate progress from the current tier to the next
     const currentTierIndex = unlockedCount - 1;
-    const nextTierIndex = unlockedCount;
-    
     const segmentWidth = 100 / state.tiers.length;
     
-    // Base fill is the center of the last unlocked tier's icon
-    // If none unlocked, we start at 0 (or some small offset if we want the line to grow from the left)
     let baseFill = unlockedCount === 0 ? 0 : (currentTierIndex + 0.5) * segmentWidth;
     
     if (state.nextTier) {
@@ -91,20 +83,13 @@ export function CartRewards() {
       const range = nextThreshold - currentThreshold;
       const progressInRange = (amount - currentThreshold) / range;
       
-      // We calculate how much of the segment between icons to fill
-      // Each icon is centered at (index + 0.5) * segmentWidth
-      // The distance between centers is exactly segmentWidth
-      const progressInSegment = Math.min(Math.max(progressInRange, 0), 1) * segmentWidth;
-      
-      // If it's the first tier, we progress from 0 to 0.5 * segmentWidth
       if (unlockedCount === 0) {
-        return progressInRange * (0.5 * segmentWidth);
+        return Math.min(Math.max(progressInRange, 0), 1) * (0.5 * segmentWidth);
       }
       
-      return baseFill + progressInSegment;
+      return baseFill + Math.min(Math.max(progressInRange, 0), 1) * segmentWidth;
     }
     
-    // All tiers unlocked, fill to the last icon center
     return baseFill;
   }, [state, amount]);
 
