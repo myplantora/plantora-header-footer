@@ -10,7 +10,11 @@
     "shopDomain": "checkout.myplantora.com",
     "salesChannel": "headless",
     "currency": "USD",
-    "acceptedLanguage": "en"
+    "acceptedLanguage": "en",
+    "meta": {
+      "enabled": true,
+      "pixelId": "REPLACE_WITH_PIXEL_ID"
+    }
   },
   "pagination": {
     "collectionPageSize": 12,

@@ -1,16 +1,15 @@
-import { MetaEventData, MetaEventName } from './meta.types';
 import config from '../../../config/globalconf.json';
 
-const isDev = import.meta.env.DEV;
-const metaConfig = config.analytics?.meta;
+// @ts-ignore
+const metaConfig = (config.analytics as any)?.meta;
 
 /**
  * Validates the payload for common Meta ecommerce requirements
  */
-export const validateMetaPayload = (eventName: MetaEventName, data?: MetaEventData) => {
-  if (!isDev) return;
+export const validateMetaPayload = (eventName: string, data?: any) => {
+  if (import.meta.env.PROD) return;
 
-  const ecommerceEvents: MetaEventName[] = [
+  const ecommerceEvents = [
     'ViewContent',
     'AddToCart',
     'InitiateCheckout',
