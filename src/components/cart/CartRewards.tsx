@@ -91,16 +91,16 @@ export function CartRewards() {
       </p>
 
       <div className="relative flex items-start justify-between">
-        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
+        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-[5px] bg-secondary" />
         <div
-          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
+          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-[5px] bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
           style={{ width: `${fill}%` }}
         />
 
         {state.tiers.map((tier) => (
           <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
             <span
-              className={`grid size-10 place-items-center rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
+              className={`grid size-10 place-items-center rounded-[5px] ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
                 tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
               }`}
             >

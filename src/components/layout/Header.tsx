@@ -45,7 +45,7 @@ function CartButton() {
       <ShoppingBag className="h-5 w-5" aria-hidden="true" />
       <span
         aria-hidden="true"
-        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
+        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-[5px] bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
       >
         {count}
       </span>
@@ -169,7 +169,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1 rounded-[5px]">
           <button
             type="button"
             aria-label="Search"
