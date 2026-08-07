@@ -6,7 +6,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
-import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+
 
 const HOME_COLLECTION_ID = "659339542821";
 
@@ -69,7 +69,7 @@ function Index() {
         <BannerSection />
         <Hero />
         <CollectionScroller collectionId="659339542821" />
-        <SelfWateringSection />
+        
         
       </main>
       <Footer />
