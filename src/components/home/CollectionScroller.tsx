@@ -28,9 +28,9 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
   const mobileProducts = collection.products.slice(0, 4);
 
   return (
-    <section className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-6 lg:px-10 lg:pt-28">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <h2 className="font-serif text-3xl text-primary sm:text-4xl">
+    <section className="mx-auto max-w-[1400px] px-5 pt-0 sm:px-6 lg:px-10 lg:pt-28">
+      <div className="flex flex-wrap items-end justify-center text-center sm:justify-between sm:text-left gap-4">
+        <h2 className="font-serif text-3xl text-primary sm:text-4xl w-full sm:w-auto">
           {heading ?? collection.title}
         </h2>
         {collection.handle ? (

@@ -38,7 +38,7 @@ function Hero() {
   const { addItem } = useCart();
   return (
     <section className="bg-secondary">
-      <div className="mx-auto max-w-[1400px] px-5 py-24 text-center sm:px-6 lg:px-10 lg:py-36">
+      <div className="mx-auto max-w-[1400px] px-5 py-12 text-center sm:px-6 lg:px-10 lg:py-36">
         <p className="animate-fade-in text-[12px] font-medium uppercase tracking-[0.2em] text-accent">
           Premium plants, delivered
         </p>
