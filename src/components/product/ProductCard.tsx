@@ -95,7 +95,9 @@ export function ProductCard({
       onClick={handleNavigate}
       className={cn(
         "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] transition-all duration-300",
-        product.promoLabel === "has-deal" ? "bg-[#B3393F]" : "bg-[#F5F5F5]",
+        product.promoLabel === "has-deal"
+          ? "bg-[#B3393F]"
+          : "bg-[#F5F5F5] border border-[#E5E5E5]",
         className
       )}
     >
