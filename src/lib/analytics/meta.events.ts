@@ -78,7 +78,7 @@ export const initMetaPixel = (userData?: MetaUserData) => {
   if (window._fbq) return; // Prevent double init
 
   /* eslint-disable */
-  (function(f: any, b: any, e: string, v: string, n: any, t?: any, s?: any) {
+  (function(f: any, b: any, e: string, v: string, n?: any, t?: any, s?: any) {
     if (f.fbq) return;
     n = f.fbq = function() {
       n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
@@ -92,7 +92,9 @@ export const initMetaPixel = (userData?: MetaUserData) => {
     t.async = !0;
     t.src = v;
     s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
+    if (s && s.parentNode) {
+      s.parentNode.insertBefore(t, s);
+    }
   })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
   /* eslint-enable */
 
