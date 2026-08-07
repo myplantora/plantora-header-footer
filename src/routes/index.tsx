@@ -65,7 +65,6 @@ function Index() {
   return (
     <CartProvider>
       <AnnouncementBar />
-      <Header />
       <main>
         <BannerSection />
         <Hero />

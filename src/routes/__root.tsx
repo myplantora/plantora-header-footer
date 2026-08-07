@@ -142,7 +142,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ShopifyAnalytics />
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Header />
+      <CartDrawer />
       <Outlet />
       <Toaster position="bottom-right" />
     </QueryClientProvider>
