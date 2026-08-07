@@ -58,7 +58,13 @@ export function MobileNav({ open, onClose }: Props) {
           </button>
         </div>
 
-        <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
+        <div className="border-b px-5 py-3">
+          <p className="text-center text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+            Still footer colour is not changed
+          </p>
+        </div>
+
+        <nav className="h-[calc(100vh-104px)] overflow-y-auto px-5 pb-10">
           <ul className="flex flex-col gap-1">
             {navItems.map((item) => {
               // Only render valid TanStack Start routes to avoid build errors
