@@ -68,8 +68,32 @@ export function CartRewards() {
   const amount = subtotal?.amount ?? 0;
   const state = useMemo(() => resolveRewardState(amount), [amount]);
 
-  const activeIndex = state.tiers.reduce((acc, tier, i) => (tier.unlocked ? i : acc), -1);
-  const fill = activeIndex < 0 ? 0 : ((activeIndex + 0.5) / state.tiers.length) * 100;
+  const fill = useMemo(() => {
+    if (state.tiers.length === 0) return 0;
+    
+    const unlockedCount = state.tiers.filter(t => t.unlocked).length;
+    const currentTierIndex = unlockedCount - 1;
+    const segmentWidth = 100 / state.tiers.length;
+    
+    let baseFill = unlockedCount === 0 ? 0 : (currentTierIndex + 0.5) * segmentWidth;
+    
+    const nextTier = state.nextTier;
+    if (nextTier) {
+      const currentThreshold = currentTierIndex >= 0 && state.tiers[currentTierIndex] ? state.tiers[currentTierIndex].threshold : 0;
+      const nextThreshold = nextTier.threshold;
+      const range = nextThreshold - currentThreshold;
+      const progressInRange = (amount - currentThreshold) / range;
+      
+      if (unlockedCount === 0) {
+        return Math.min(Math.max(progressInRange, 0), 1) * (0.5 * segmentWidth);
+      }
+      
+      return baseFill + Math.min(Math.max(progressInRange, 0), 1) * segmentWidth;
+    }
+    
+    return baseFill;
+  }, [state, amount]);
+
   const activeCode = state.bestCode;
 
   return (
@@ -79,8 +103,8 @@ export function CartRewards() {
           <>
             You are{" "}
             <span className="font-semibold text-[#A8622A]">{formatMoney(state.remaining)}</span> away
-            from <span className="font-semibold">{state.nextTier.label}</span> on orders above{" "}
-            {formatMoney(state.nextTier.threshold)}
+            from <span className="font-semibold">{state.nextTier?.label}</span> on orders above{" "}
+            {formatMoney(state.nextTier?.threshold ?? 0)}
           </>
         ) : (
           <>
