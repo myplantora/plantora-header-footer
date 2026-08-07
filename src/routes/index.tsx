@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@/components/layout/Header";
+
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 
