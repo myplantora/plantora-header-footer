@@ -6,10 +6,11 @@ import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
 import { useCartStore } from "@/stores/cartStore";
+import { useCart } from "./CartContext";
 
 function CartButton() {
   const count = useCartStore((s) => s.totalQuantity);
-  const openCart = useCartStore((s) => s.openCart);
+  const { openCart } = useCart();
   const hydrate = useCartStore((s) => s.hydrate);
   const [bounce, setBounce] = useState(false);
   const first = useRef(true);
@@ -31,7 +32,11 @@ function CartButton() {
   return (
     <button
       type="button"
-      onClick={openCart}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCart();
+      }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
         "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
