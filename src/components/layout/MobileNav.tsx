@@ -60,7 +60,7 @@ export function MobileNav({ open, onClose }: Props) {
 
         <div className="border-b px-5 py-3">
           <p className="text-center text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-            Still same bg colour bro
+            Reduce the height little more, and icons not loaded.
           </p>
         </div>
 
