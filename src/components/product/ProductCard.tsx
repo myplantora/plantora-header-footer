@@ -11,6 +11,7 @@ import { ProductBadges } from "./ProductBadges";
 type ProductCardProps = {
   product: PlantoraProductCard;
   priority?: boolean;
+  tone?: "default" | "berry";
   className?: string;
 };
 
