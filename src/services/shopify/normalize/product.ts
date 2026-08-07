@@ -162,7 +162,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
       Boolean(node?.availableForSale),
       typeof firstVariant?.quantityAvailable === "number" ? firstVariant.quantityAvailable : null,
     ),
-    badges,
+    badges: generateFeatureChips(node?.id ?? "", node?.productType, node?.tags ?? []),
     tagMedia: featureFlags.tagMedia
       ? readImage(map, media["tagMedia"]!.namespace, media["tagMedia"]!.key)
       : null,
