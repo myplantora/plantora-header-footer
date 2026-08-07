@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Header } from "@/components/layout/Header";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 
 import { useShopifyCookies } from "@shopify/hydrogen-react";
 
