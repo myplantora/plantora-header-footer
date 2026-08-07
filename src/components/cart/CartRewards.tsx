@@ -139,7 +139,7 @@ export function CartRewards() {
                 decoding="async"
                 width={48}
                 height={48}
-                className="size-12 translate-y-0 scale-[0.8] object-contain"
+                className="absolute inset-0 m-auto size-12 scale-[0.8] object-contain"
               />
             </span>
             <p
