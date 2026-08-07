@@ -117,8 +117,11 @@ export function CartRewards() {
       <div className="relative flex items-start justify-between">
         <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
         <div
-          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
-          style={{ width: `${fill}%` }}
+          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none"
+          style={{ 
+            width: `${fill}%`,
+            backgroundColor: `oklch(from var(--reward-success) calc(l - ${Math.min(fill / 400, 0.15)}) c h)`
+          }}
         />
 
         {state.tiers.map((tier) => (
