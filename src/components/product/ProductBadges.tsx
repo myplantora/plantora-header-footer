@@ -12,29 +12,15 @@ export function ProductBadges({
 }) {
   if (badges.length === 0) return null;
   return (
-    <ul className="flex flex-wrap gap-1.5">
-      {badges.slice(0, 2).map((badge, index) => (
-        <li
+    <div className="flex flex-wrap gap-1.5">
+      {badges.slice(0, 2).map((badge) => (
+        <span
           key={badge.key}
-          style={{
-            backgroundColor: TAG_BACKGROUNDS[index % TAG_BACKGROUNDS.length],
-          }}
-          className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium text-primary",
-          )}
+          className="inline-flex items-center gap-1 rounded-full bg-[#D1E8E2] px-2.5 py-1 text-[11px] font-semibold text-[#1D4D44]"
         >
-          {badge.iconUrl ? (
-            <img
-              src={badge.iconUrl}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              className="size-4 shrink-0 object-contain"
-            />
-          ) : null}
           {badge.label}
-        </li>
+        </span>
       ))}
-    </ul>
+    </div>
   );
 }
