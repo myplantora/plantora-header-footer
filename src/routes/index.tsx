@@ -87,7 +87,7 @@ function Index() {
                   width={512}
                   height={330}
                   loading="lazy"
-                  className="aspect-[512/330] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="aspect-[512/330] w-full object-cover"
                 />
               </a>
             ))}
