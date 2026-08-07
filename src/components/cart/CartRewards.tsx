@@ -127,7 +127,7 @@ export function CartRewards() {
         {state.tiers.map((tier) => (
           <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
             <span
-              className={`relative flex size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
+              className={`relative flex size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none pb-[4px] ${
                 tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
               }`}
             >
