@@ -138,8 +138,8 @@ export function ProductCard({
       </div>
 
       <div className={cn(
-        "flex flex-1 flex-col px-3.5 pt-4 pb-0",
-        product.promoLabel === "has-deal" && "px-2"
+        "flex flex-1 flex-col px-[7px] pt-4 pb-0",
+        product.promoLabel === "has-deal" && "px-1"
       )}>
         {/* Product Title */}
         <h3 className="line-clamp-2 mt-5 min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
