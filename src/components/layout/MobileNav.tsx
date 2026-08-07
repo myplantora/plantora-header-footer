@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Change the checkout Bg colour to #C3754C and white font text colour use the exact referance i have you
+              Why announcement abr is here it should be at top and move left to right
             </p>
           </div>
           <ul className="flex flex-col gap-1">
