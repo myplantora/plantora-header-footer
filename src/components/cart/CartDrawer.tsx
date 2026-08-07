@@ -6,6 +6,10 @@ import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
+import paypalAsset from "@/assets/paypal.png.asset.json";
+import gpayAsset from "@/assets/gpay.png.asset.json";
+import mastercardAsset from "@/assets/mastercard.png.asset.json";
+
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
