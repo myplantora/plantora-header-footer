@@ -15,7 +15,6 @@ export function MobileNav({ open, onClose }: Props) {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
-      // Focus the close button when opened
       const closeBtn = panelRef.current?.querySelector("button");
       closeBtn?.focus();
     } else {
@@ -33,7 +32,6 @@ export function MobileNav({ open, onClose }: Props) {
         open ? "pointer-events-auto" : "pointer-events-none"
       )}
     >
-      {/* Backdrop */}
       <div
         className={cn(
           "absolute inset-0 bg-black/40 transition-opacity duration-500",
@@ -42,7 +40,6 @@ export function MobileNav({ open, onClose }: Props) {
         onClick={onClose}
       />
 
-      {/* Panel */}
       <div
         ref={panelRef}
         className={cn(
@@ -68,18 +65,32 @@ export function MobileNav({ open, onClose }: Props) {
             </p>
           </div>
           <ul className="flex flex-col gap-1">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.href}
-                  onClick={onClose}
-                  className="flex items-center justify-between py-4 text-lg font-medium text-black transition-colors hover:text-black/70"
-                >
-                  {item.label}
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              // Only render valid TanStack Start routes to avoid build errors
+              const isValidRoute = ["/", "/collections", "/collections/$handle", "/product/$handle"].some(
+                (route) => item.href === route || item.href.startsWith("/collections/") || item.href.startsWith("/product/")
+              );
+
+              return (
+                <li key={item.label}>
+                  {isValidRoute ? (
+                    <Link
+                      to={item.href as any}
+                      onClick={onClose}
+                      className="flex items-center justify-between py-4 text-lg font-medium text-black transition-colors hover:text-black/70"
+                    >
+                      {item.label}
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </Link>
+                  ) : (
+                    <span className="flex items-center justify-between py-4 text-lg font-medium text-black/50">
+                      {item.label}
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
 
           <div className="mt-10 space-y-6">
@@ -88,21 +99,9 @@ export function MobileNav({ open, onClose }: Props) {
                 Support
               </p>
               <ul className="mt-4 space-y-4">
-                <li>
-                  <Link to="/contact" onClick={onClose} className="text-[15px] text-black">
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/shipping" onClick={onClose} className="text-[15px] text-black">
-                    Shipping Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/returns" onClick={onClose} className="text-[15px] text-black">
-                    Returns & Refunds
-                  </Link>
-                </li>
+                <li className="text-[15px] text-black/50">Contact Us</li>
+                <li className="text-[15px] text-black/50">Shipping Policy</li>
+                <li className="text-[15px] text-black/50">Returns & Refunds</li>
               </ul>
             </div>
           </div>
