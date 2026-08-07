@@ -73,9 +73,8 @@ export function ProductCard({
     });
   };
 
-  // Identify Color and Size options
+  // Identify Color option
   const colorOption = product.options.find(o => /color|colour/i.test(o.name));
-  const sizeOption = product.options.find(o => /size|pot/i.test(o.name));
 
   const getColorHex = (name: string) => {
     const map: Record<string, string> = {
