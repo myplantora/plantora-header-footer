@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Change the footer bg colour to #1D4D44
+              Add automated tests to verify card slider taps always trigger selection on pointer-down across different loading scenarios.
             </p>
           </div>
           <ul className="flex flex-col gap-1">
