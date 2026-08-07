@@ -63,22 +63,28 @@ function fallbackReviews(seed: string): PlantoraReviews {
 const badgeGif = (key: string): string | undefined =>
   (metafieldConfig.badges as { key: string; gifUrl?: string }[]).find((b) => b.key === key)?.gifUrl;
 
+const chip = (key: string, label: string, gifKey: string): PlantoraBadge => {
+  const iconUrl = badgeGif(gifKey);
+  return iconUrl ? { key, label, iconUrl } : { key, label };
+};
+
 /** Deterministic feature chips based on product info. */
 function generateFeatureChips(seed: string, productType?: string, tags: string[] = []): PlantoraBadge[] {
   const chips: PlantoraBadge[] = [];
   const hash = hashString(seed);
 
   if (tags.includes('Air Purifying') || productType?.toLowerCase().includes('plant')) {
-    chips.push({ key: 'air-purifying', label: 'Air Purifying', iconUrl: badgeGif('air_purifying') ?? badgeGif('fast_growing') });
+    chips.push(chip('air-purifying', 'Air Purifying', 'fast_growing'));
   }
 
   const pool: PlantoraBadge[] = [
-    { key: 'vastu', label: 'Indoor Plant', iconUrl: badgeGif('indoor_plant') },
-    { key: 'gift', label: 'Perfect Gift', iconUrl: badgeGif('perfect_gift') },
-    { key: 'pet', label: 'Pet Friendly', iconUrl: badgeGif('pet_safe') },
-    { key: 'low-maint', label: 'Low Maintenance', iconUrl: badgeGif('low_maintenance') },
-    { key: 'beginner', label: 'Fast Growing', iconUrl: badgeGif('fast_growing') },
+    chip('vastu', 'Indoor Plant', 'indoor_plant'),
+    chip('gift', 'Perfect Gift', 'perfect_gift'),
+    chip('pet', 'Pet Friendly', 'pet_safe'),
+    chip('low-maint', 'Low Maintenance', 'low_maintenance'),
+    chip('beginner', 'Fast Growing', 'fast_growing'),
   ];
+
 
   if (chips.length < 2) {
     const second = pool[hash % pool.length];
