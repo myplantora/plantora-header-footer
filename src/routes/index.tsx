@@ -63,9 +63,8 @@ function Hero() {
 
 function Index() {
   return (
-    <CartProvider>
+    <>
       <AnnouncementBar />
-      <Header />
       <main>
         <BannerSection />
         <Hero />
@@ -98,6 +97,6 @@ function Index() {
         <SelfWateringSection />
       </main>
       <Footer />
-    </CartProvider>
+    </>
   );
 }
