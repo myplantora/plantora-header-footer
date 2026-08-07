@@ -233,7 +233,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                             type="button"
                             disabled={!matchingVariant?.available}
                             aria-pressed={active}
-                            onClick={() => matchingVariant && setVariantId(matchingVariant.id)}
+                             onPointerDown={(e) => {
+                               e.stopPropagation();
+                               matchingVariant && setVariantId(matchingVariant.id);
+                             }}
+                             onClick={(e) => {
+                               e.preventDefault();
+                               e.stopPropagation();
+                             }}
                             className={cn(
                               "rounded-md border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                               active

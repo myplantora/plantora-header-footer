@@ -176,7 +176,6 @@ export function RecommendationCard({ product, priority = false }: Props) {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
                     }}
                     style={{ touchAction: "manipulation" }}
                     className={cn(

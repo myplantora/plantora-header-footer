@@ -182,10 +182,6 @@ export function ProductCard({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
-                    }}
-                    onPointerDown={(e) => {
-                      e.stopPropagation();
                     }}
                     style={{ touchAction: "manipulation" }}
                     className={cn(
