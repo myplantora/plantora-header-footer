@@ -6,6 +6,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
+import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 
 const HOME_COLLECTION_ID = "659339542821";
 
@@ -68,6 +69,7 @@ function Index() {
         <BannerSection />
         <Hero />
         <CollectionScroller collectionId="659339542821" />
+        <SelfWateringSection />
         <section className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-14">
           <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl text-center">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
