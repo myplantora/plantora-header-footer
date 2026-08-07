@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+
 import { CartProvider } from "@/components/layout/CartContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -49,7 +49,6 @@ function AllProducts() {
 
   return (
     <CartProvider>
-      <AnnouncementBar />
       <Header />
       <main className="mx-auto max-w-[1400px] px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
         <h1 className="font-serif text-3xl text-primary sm:text-5xl">All products</h1>

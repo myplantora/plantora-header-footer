@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+
 import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ProductCard } from "@/components/product/ProductCard";
@@ -51,7 +51,6 @@ function CollectionPage() {
 
   return (
     <CartProvider>
-      <AnnouncementBar />
       <Header />
       <main className="mx-auto max-w-[1400px] px-5 py-14 sm:px-6 lg:px-10 lg:py-20">
         <header className="max-w-2xl">
