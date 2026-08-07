@@ -53,6 +53,8 @@ export function RecommendationCard({ product, priority = false }: Props) {
       });
     } catch {
       toast.error("Could not add to basket. Please try again.");
+    } finally {
+      setPending(false);
     }
   }
 

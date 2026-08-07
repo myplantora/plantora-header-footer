@@ -10,8 +10,11 @@ export function CartDrawer() {
     useCartStore();
 
   useEffect(() => {
-    if (isOpen) void hydrate();
-  }, [isOpen, hydrate]);
+    // Only fetch when the drawer opens with no locally known lines; otherwise
+    // render instantly from the store and let mutations keep it in sync.
+    if (isOpen && lines.length === 0) void hydrate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
