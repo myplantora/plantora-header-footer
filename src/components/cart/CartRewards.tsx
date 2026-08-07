@@ -129,14 +129,19 @@ export function CartRewards() {
         ))}
       </div>
 
-      <a
-        href={buildCheckoutUrl(checkoutUrl, activeCode)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-      >
+      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
+        <img
+          src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Discount.webp?v=1786051899"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          width={24}
+          height={24}
+          className="size-6 object-contain"
+        />
         Apply discounts at the checkout
-      </a>
+      </div>
     </section>
   );
 }
