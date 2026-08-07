@@ -165,7 +165,7 @@ export function ProductCard({
                 berry ? "text-berry-foreground/80" : "text-muted-foreground",
               )}
             >
-              Select {sizeOption.name}
+              Still clicking on the cart slider is not working please help me {sizeOption.name}
             </span>
             <div className="flex flex-wrap items-center gap-2">
               {sizeOption.values.map((value) => {

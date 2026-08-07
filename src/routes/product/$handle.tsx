@@ -216,7 +216,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 return (
                   <div key={option.name} className="flex flex-col gap-2">
                     <span className="text-sm font-medium text-primary">
-                      Select {option.name}
+                      Still clicking on the cart slider is not working please help me {option.name}
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {option.values.map((value) => {
