@@ -190,35 +190,6 @@ export function ProductCard({
 
         {/* Variant Selectors */}
         <div className="mt-4 space-y-4">
-          {/* Pot Section (Formerly Size) */}
-          {sizeOption && (
-            <div className="space-y-2">
-              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Pot Size</span>
-              <div className="flex flex-wrap gap-2">
-                {sizeOption.values
-                  .filter(val => /^[34]/.test(val))
-                  .map(val => (
-                    <button
-                      key={val}
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedOptions(prev => ({ ...prev, [sizeOption.name]: val }));
-                      }}
-                      className={cn(
-                        "min-w-[40px] rounded-full border px-3 py-1.5 text-[12px] font-medium transition-all",
-                        selectedOptions[sizeOption.name] === val
-                          ? "border-[#C3754C] bg-[#C3754C] text-white"
-                          : "border-gray-200 bg-white text-[#1D4D44]"
-                      )}
-                    >
-                      {val}
-                    </button>
-                  ))}
-              </div>
-            </div>
-          )}
-
           {/* Color Section (Pot Type/Color) */}
           {colorOption && (
             <div className="space-y-2">
