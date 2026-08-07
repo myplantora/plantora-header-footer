@@ -396,6 +396,5 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         </div>
       ) : null}
     </main>
-
   );
 }
