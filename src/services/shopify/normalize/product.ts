@@ -59,22 +59,32 @@ function fallbackReviews(seed: string): PlantoraReviews {
   return { average, total, percent: Math.round((average / 5) * 100) };
 }
 
+/** GIF icon lookup from globalconf badge config. */
+const badgeGif = (key: string): string | undefined =>
+  (metafieldConfig.badges as { key: string; gifUrl?: string }[]).find((b) => b.key === key)?.gifUrl;
+
+const chip = (key: string, label: string, gifKey: string): PlantoraBadge => {
+  const iconUrl = badgeGif(gifKey);
+  return iconUrl ? { key, label, iconUrl } : { key, label };
+};
+
 /** Deterministic feature chips based on product info. */
 function generateFeatureChips(seed: string, productType?: string, tags: string[] = []): PlantoraBadge[] {
   const chips: PlantoraBadge[] = [];
   const hash = hashString(seed);
-  
+
   if (tags.includes('Air Purifying') || productType?.toLowerCase().includes('plant')) {
-    chips.push({ key: 'air-purifying', label: '🍃 Air Purifying' });
+    chips.push(chip('air-purifying', 'Air Purifying', 'fast_growing'));
   }
-  
-  const pool = [
-    { key: 'vastu', label: '🪴 Indoor Plant' },
-    { key: 'gift', label: '🎁 Perfect Gift' },
-    { key: 'pet', label: '🐾 Pet Friendly' },
-    { key: 'low-maint', label: '✨ Low Maintenance' },
-    { key: 'beginner', label: '🌱 Beginner Friendly' }
+
+  const pool: PlantoraBadge[] = [
+    chip('vastu', 'Indoor Plant', 'indoor_plant'),
+    chip('gift', 'Perfect Gift', 'perfect_gift'),
+    chip('pet', 'Pet Friendly', 'pet_safe'),
+    chip('low-maint', 'Low Maintenance', 'low_maintenance'),
+    chip('beginner', 'Fast Growing', 'fast_growing'),
   ];
+
 
   if (chips.length < 2) {
     const second = pool[hash % pool.length];
@@ -85,6 +95,7 @@ function generateFeatureChips(seed: string, productType?: string, tags: string[]
 
   return chips.slice(0, 2);
 }
+
 
 
 /** Raw Shopify product node -> PlantoraProductCard. */
