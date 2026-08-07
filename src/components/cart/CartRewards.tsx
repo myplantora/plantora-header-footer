@@ -103,7 +103,7 @@ export function CartRewards() {
           <>
             You are{" "}
             <span className="font-semibold text-[#A8622A]">{formatMoney(state.remaining)}</span> away
-            from <span className="font-semibold">{state.nextTier?.label}</span> on orders above{" "}
+            from <span className="font-semibold">{state.nextTier?.label}</span> above{" "}
             {formatMoney(state.nextTier?.threshold ?? 0)}
           </>
         ) : (
