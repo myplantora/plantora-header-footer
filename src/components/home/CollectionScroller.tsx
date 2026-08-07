@@ -28,7 +28,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
   const mobileProducts = collection.products.slice(0, 4);
 
   return (
-    <section className="mx-auto max-w-[1400px] px-[5px] pt-20 sm:px-[5px] lg:px-[5px] lg:pt-28">
+    <section className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-6 lg:px-10 lg:pt-28">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="font-serif text-3xl text-primary sm:text-4xl">
           {heading ?? collection.title}
@@ -55,7 +55,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         </ul>
         <Link
           to="/collections"
-          className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-[5px] bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           View all products
         </Link>

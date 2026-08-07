@@ -20,7 +20,7 @@ export function ProductBadges({
             backgroundColor: TAG_BACKGROUNDS[index % TAG_BACKGROUNDS.length],
           }}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-[5px] px-2.5 py-1 text-[11px] font-medium text-primary",
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium text-primary",
           )}
         >
           {badge.iconUrl ? (

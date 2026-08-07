@@ -38,7 +38,7 @@ function Hero() {
   const { addItem } = useCart();
   return (
     <section className="bg-secondary">
-      <div className="mx-auto max-w-[1400px] px-[5px] py-24 text-center sm:px-[5px] lg:px-[5px] lg:py-36">
+      <div className="mx-auto max-w-[1400px] px-5 py-24 text-center sm:px-6 lg:px-10 lg:py-36">
         <p className="animate-fade-in text-[12px] font-medium uppercase tracking-[0.2em] text-accent">
           Premium plants, delivered
         </p>
@@ -52,7 +52,7 @@ function Hero() {
         <button
           type="button"
           onClick={() => addItem()}
-          className="mt-9 inline-flex items-center rounded-[5px] bg-primary px-7 py-3.5 text-[15px] font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="mt-9 inline-flex items-center rounded-[20px] bg-primary px-7 py-3.5 text-[15px] font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           Add a plant to cart
         </button>
@@ -68,7 +68,7 @@ function Index() {
         <BannerSection />
         <Hero />
         <CollectionScroller collectionId="659339542821" />
-        <section className="mx-auto max-w-[1400px] px-[5px] py-10 sm:px-[5px] lg:px-[5px] lg:py-14">
+        <section className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-14">
           <h2 className="font-serif text-3xl text-primary sm:text-4xl">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
@@ -79,7 +79,7 @@ function Index() {
               <a
                 key={offer.src}
                 href="#"
-                className="group block overflow-hidden rounded-[5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className="group block overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
                 <img
                   src={offer.src}

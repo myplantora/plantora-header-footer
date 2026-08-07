@@ -52,7 +52,7 @@ export function MobileNav({ open, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="grid size-10 place-items-center rounded-[5px] text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid size-10 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <X className="h-5 w-5" />
           </button>

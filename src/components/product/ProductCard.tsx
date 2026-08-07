@@ -51,7 +51,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-[5px] border transition-all duration-300 hover:shadow-soft",
+        "group relative flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:shadow-soft",
         berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
         className,
       )}
@@ -167,7 +167,7 @@ export function ProductCard({
             >
               Still clicking on the cart slider is not working please help me {sizeOption.name}
             </span>
-            <div className="flex flex-wrap items-center gap-2 rounded-[5px]">
+            <div className="flex flex-wrap items-center gap-2">
               {sizeOption.values.map((value) => {
                 const active = selected[sizeOption.name] === value;
                 return (
@@ -228,7 +228,7 @@ export function ProductCard({
           onClick={handleAdd}
           disabled={soldOut || pending || !product.defaultVariantId}
           className={cn(
-            "inline-flex h-10 w-full items-center justify-center rounded-[5px] px-4 font-button text-sm font-medium transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+            "inline-flex h-10 w-full items-center justify-center rounded-full px-4 font-button text-sm font-medium transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
             berry
               ? "bg-berry-muted text-berry-foreground"
               : "bg-primary text-primary-foreground",

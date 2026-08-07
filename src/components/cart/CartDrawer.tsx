@@ -36,7 +36,7 @@ export function CartDrawer() {
         className="absolute inset-0 bg-primary/40"
       />
       <aside className={cn(
-        "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft transition-transform duration-300 sm:rounded-l-[5px]",
+        "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft transition-transform duration-300 sm:rounded-l-md",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4">
@@ -45,7 +45,7 @@ export function CartDrawer() {
             type="button"
             onClick={closeCart}
             aria-label="Close basket"
-            className="shrink-0 rounded-[5px] p-2 text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="shrink-0 rounded-md p-2 text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <X className="size-5" />
           </button>
@@ -66,7 +66,7 @@ export function CartDrawer() {
             <ul className="flex flex-col gap-4">
               {lines.map((line) => (
                 <li key={line.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3">
-                  <div className="size-16 shrink-0 overflow-hidden rounded-[5px] bg-secondary">
+                  <div className="size-16 shrink-0 overflow-hidden rounded-md bg-secondary">
                     {line.imageUrl ? (
                       <img src={line.imageUrl} alt="" loading="lazy" className="size-full object-cover" />
                     ) : null}
@@ -89,7 +89,7 @@ export function CartDrawer() {
                             ? updateLine(line.id, line.quantity - 1)
                             : removeLine(line.id)
                         }
-                        className="rounded-[5px] border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       >
                         <Minus className="size-3.5" />
                       </button>
@@ -99,7 +99,7 @@ export function CartDrawer() {
                         aria-label="Increase quantity"
                         disabled={isLoading}
                         onClick={() => updateLine(line.id, line.quantity + 1)}
-                        className="rounded-[5px] border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       >
                         <Plus className="size-3.5" />
                       </button>
@@ -133,7 +133,7 @@ export function CartDrawer() {
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex w-full items-center justify-center gap-3 rounded-[5px] bg-[#C3754C] px-6 py-[14px] font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="mt-4 flex w-full items-center justify-center gap-3 rounded-full bg-[#C3754C] px-6 py-[14px] font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <span>CHECKOUT</span>
             </a>
