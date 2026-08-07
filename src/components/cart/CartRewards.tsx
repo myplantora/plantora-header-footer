@@ -134,9 +134,10 @@ export function CartRewards() {
                 aria-hidden="true"
                 loading="lazy"
                 decoding="async"
-                width={32}
-                height={32}
-                className="size-8 object-contain"
+                width={48}
+                height={48}
+                className="size-12 object-contain scale-150"
+
               />
             </span>
             <p
