@@ -64,7 +64,6 @@ function CouponPill({ code }: { code: string }) {
 
 export function CartRewards() {
   const subtotal = useCartStore((s) => s.subtotal);
-  const checkoutUrl = useCartStore((s) => s.checkoutUrl);
 
   const amount = subtotal?.amount ?? 0;
   const state = useMemo(() => resolveRewardState(amount), [amount]);
