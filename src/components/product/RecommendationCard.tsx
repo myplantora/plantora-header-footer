@@ -169,9 +169,18 @@ export function RecommendationCard({ product, priority = false }: Props) {
                     key={value}
                     type="button"
                     aria-pressed={active}
-                    onClick={() => setSelected((prev) => ({ ...prev, [sizeOption.name]: value }))}
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
+                    }}
+                    style={{ touchAction: "manipulation" }}
                     className={cn(
-                      "inline-flex items-center justify-center rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                      "inline-flex cursor-pointer select-none items-center justify-center rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                       active
                         ? "border border-gold bg-gold text-gold-foreground"
                         : "border border-berry-foreground/40 bg-transparent text-berry-foreground hover:border-berry-foreground",
