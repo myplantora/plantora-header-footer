@@ -38,14 +38,14 @@ function CartButton() {
       }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
-        "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        "relative grid h-11 w-11 place-items-center rounded-[5px] text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
         bounce && "animate-cart-bounce",
       )}
     >
       <ShoppingBag className="h-5 w-5" aria-hidden="true" />
       <span
         aria-hidden="true"
-        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
+        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-[5px] bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
       >
         {count}
       </span>
@@ -87,14 +87,14 @@ export function Header() {
         if (e.key === "Escape") setOpenMenu(null);
       }}
     >
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-4 sm:px-6 lg:h-20 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-[5px] sm:px-[5px] lg:h-20 lg:px-[5px]">
         {/* Mobile: hamburger */}
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-[5px] text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -119,7 +119,7 @@ export function Header() {
                     onFocus={() => (item.mega ? open(item.label) : setOpenMenu(null))}
                     aria-haspopup={item.mega ? "true" : undefined}
                     aria-expanded={item.mega ? isOpen : undefined}
-                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="nav-link inline-flex items-center gap-1 rounded-[5px] px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {item.label}
                     {item.mega ? (
@@ -139,7 +139,7 @@ export function Header() {
                       onMouseLeave={scheduleClose}
                       className="animate-fade-in absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-4"
                     >
-                      <div className="rounded-3xl border border-border bg-background p-5 shadow-soft">
+                      <div className="rounded-[5px] border border-border bg-background p-5 shadow-soft">
                         {item.mega.map((col) => (
                           <div key={col.title}>
                             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -151,7 +151,7 @@ export function Header() {
                                   <Link
                                     to={link.href}
                                     onBlur={scheduleClose}
-                                    className="block rounded-xl px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                                    className="block rounded-[5px] px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                                   >
                                     {link.label}
                                   </Link>
@@ -169,11 +169,11 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1 rounded-[5px]">
           <button
             type="button"
             aria-label="Search"
-            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-[5px] text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <Search className="h-5 w-5" aria-hidden="true" />
           </button>

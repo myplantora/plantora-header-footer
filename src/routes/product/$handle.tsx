@@ -120,10 +120,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] p-2.5 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] px-[5px] py-2.5 sm:px-[5px] sm:py-12 lg:px-[5px] lg:py-16">
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="min-w-0">
-          <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+          <div className="aspect-square w-full max-w-full overflow-hidden rounded-[5px] bg-secondary">
 
             {activeImage ? (
               <img
@@ -147,7 +147,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   type="button"
                   onClick={() => setActiveImage(img.url)}
                   className={cn(
-                    "size-20 shrink-0 overflow-hidden rounded-md border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                    "size-20 shrink-0 overflow-hidden rounded-[5px] border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                     activeImage === img.url ? "border-primary" : "border-border",
                   )}
                 >
@@ -176,7 +176,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center self-center rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
+                <span className="inline-flex items-center self-center rounded-[5px] bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
                   {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
                 </span>
               ) : null}
@@ -196,7 +196,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          <div className="inline-flex items-center gap-2 self-start rounded-md bg-[#8CD4DC] px-3 py-2 text-sm font-medium text-primary">
+          <div className="inline-flex items-center gap-2 self-start rounded-[5px] bg-[#8CD4DC] px-3 py-2 text-sm font-medium text-primary">
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Bag.svg?v=1786034307"
               alt=""
@@ -239,7 +239,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                                e.stopPropagation();
                              }}
                             className={cn(
-                              "rounded-md border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                              "rounded-[5px] border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                               active
                                 ? "border-primary bg-primary text-primary-foreground"
                                 : "border-border text-primary hover:border-primary",
@@ -257,7 +257,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center overflow-hidden rounded-md border border-border bg-background">
+            <div className="inline-flex items-center overflow-hidden rounded-[5px] border border-border bg-background">
               <button
                 type="button"
                 aria-label="Decrease quantity"
@@ -284,7 +284,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-56"
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-[5px] bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-56"
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
@@ -347,7 +347,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Chart.svg?v=1786030200"
               alt="Size chart"
-              className="max-h-[95vh] w-full rounded-md bg-background object-contain"
+              className="max-h-[95vh] w-full rounded-[5px] bg-background object-contain"
             />
           </div>
         </div>

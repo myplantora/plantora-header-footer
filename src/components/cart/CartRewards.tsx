@@ -91,16 +91,16 @@ export function CartRewards() {
       </p>
 
       <div className="relative flex items-start justify-between">
-        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
+        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-[5px] bg-secondary" />
         <div
-          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
+          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-[5px] bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
           style={{ width: `${fill}%` }}
         />
 
         {state.tiers.map((tier) => (
           <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
             <span
-              className={`grid size-10 place-items-center rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
+              className={`grid size-10 place-items-center rounded-[5px] ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
                 tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
               }`}
             >
@@ -128,7 +128,7 @@ export function CartRewards() {
         ))}
       </div>
 
-      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
+      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[5px] bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
         <img
           src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Discount.webp?v=1786051899"
           alt=""

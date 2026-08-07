@@ -7,7 +7,7 @@ const MOBILE_BANNER =
 
 export function BannerSection() {
   return (
-    <section className="w-full">
+    <section className="mx-auto max-w-[1400px] w-full px-[5px]">
       <Link
         to="/collections"
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
