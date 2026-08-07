@@ -173,7 +173,7 @@ export function Header() {
           >
             <Search className="h-5 w-5" aria-hidden="true" />
           </button>
-          <CartButton />
+          <CartButton key="cart-button" />
         </div>
       </div>
 

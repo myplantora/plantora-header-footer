@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { X, Minus, Plus } from "lucide-react";
 import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
@@ -6,6 +6,7 @@ import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
 export function CartDrawer() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
 
@@ -16,18 +17,27 @@ export function CartDrawer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
-
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Shopping basket">
+    <div 
+      ref={containerRef}
+      className={cn(
+        "fixed inset-0 z-50 transition-opacity duration-300",
+        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+      )}
+      role="dialog" 
+      aria-modal="true" 
+      aria-label="Shopping basket"
+    >
       <button
         type="button"
         aria-label="Close basket"
         onClick={closeCart}
         className="absolute inset-0 bg-primary/40"
       />
-      <aside className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft sm:rounded-l-md">
+      <aside className={cn(
+        "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft transition-transform duration-300 sm:rounded-l-md",
+        isOpen ? "translate-x-0" : "translate-x-full"
+      )}>
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4">
           <h2 className="truncate font-serif text-2xl text-primary">Your basket</h2>
           <button
