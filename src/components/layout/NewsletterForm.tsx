@@ -37,7 +37,7 @@ export function NewsletterForm() {
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
-      <p className="text-[12px] text-white/60">
+      <p className="text-center text-[12px] text-white/60">
         We respect your privacy. Unsubscribe anytime.
       </p>
     </form>
