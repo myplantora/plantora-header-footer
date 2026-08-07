@@ -139,7 +139,7 @@ export function ProductCard({
         product.promoLabel === "has-deal" && "px-2"
       )}>
         {/* Product Title */}
-        <h3 className="line-clamp-2 mt-[41px] min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
+        <h3 className="line-clamp-2 mt-5 min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
           {product.title}
         </h3>
 
