@@ -133,7 +133,7 @@ export function CartDrawer() {
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex w-full items-center justify-center gap-3 rounded-full bg-[#C3754C] px-6 py-4 font-button text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="mt-4 flex w-full items-center justify-center gap-3 rounded-full bg-[#C3754C] px-6 py-4 font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <span>CHECKOUT</span>
               <div className="flex -space-x-1.5 overflow-hidden">
