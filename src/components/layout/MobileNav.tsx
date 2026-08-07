@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Verify that every cart-slider card tap consistently selects the right variant and opens the cart drawer on the first click across mobile and desktop breakpoints.
+              Increase the tap target size and pointer-event handling for the cart slider and product cards so taps never get intercepted by overlapping containers or scrolling.
             </p>
           </div>
           <ul className="flex flex-col gap-1">
