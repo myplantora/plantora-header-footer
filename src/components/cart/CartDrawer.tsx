@@ -143,33 +143,34 @@ export function CartDrawer() {
             }}
             className="relative mt-4 flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[#C3754C] px-6 font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-3">
               <span className="tracking-widest">CHECKOUT</span>
-              <ChevronRight className="size-5" />
-            </div>
+              
+              <div className="flex items-center -space-x-1">
+                <div className="size-[32px] overflow-hidden rounded-full border border-white bg-white">
+                  <img
+                    src={paypalAsset.url}
+                    alt="PayPal"
+                    className="size-full object-contain p-1"
+                  />
+                </div>
+                <div className="size-[32px] overflow-hidden rounded-full border border-white bg-white">
+                  <img
+                    src={gpayAsset.url}
+                    alt="Google Pay"
+                    className="size-full object-contain p-1"
+                  />
+                </div>
+                <div className="size-[32px] overflow-hidden rounded-full border border-white bg-white">
+                  <img
+                    src={mastercardAsset.url}
+                    alt="Mastercard"
+                    className="size-full object-contain p-1"
+                  />
+                </div>
+              </div>
 
-            <div className="absolute right-6 flex items-center -space-x-2">
-              <div className="size-7 overflow-hidden rounded-full border border-white bg-white">
-                <img
-                  src={paypalAsset.url}
-                  alt="PayPal"
-                  className="size-full object-contain p-1"
-                />
-              </div>
-              <div className="size-7 overflow-hidden rounded-full border border-white bg-white">
-                <img
-                  src={gpayAsset.url}
-                  alt="Google Pay"
-                  className="size-full object-contain p-1"
-                />
-              </div>
-              <div className="size-7 overflow-hidden rounded-full border border-white bg-white">
-                <img
-                  src={mastercardAsset.url}
-                  alt="Mastercard"
-                  className="size-full object-contain p-1"
-                />
-              </div>
+              <ChevronRight className="size-5" />
             </div>
           </button>
 
