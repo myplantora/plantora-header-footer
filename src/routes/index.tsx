@@ -70,31 +70,6 @@ function Index() {
         <Hero />
         <CollectionScroller collectionId="659339542821" />
         <SelfWateringSection />
-        <section className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-14">
-          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl text-center">Offers for you today</h2>
-          <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { src: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer3.png?v=1785958543", alt: "Plantora offer: seasonal indoor plant deal" },
-              { src: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer2.png?v=1785958543", alt: "Plantora offer: outdoor plant bundle savings" },
-              { src: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer1.png?v=1785958543", alt: "Plantora offer: planters and accessories discount" },
-            ].map((offer) => (
-              <a
-                key={offer.src}
-                href="#"
-                className="group block overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-              >
-                <img
-                  src={offer.src}
-                  alt={offer.alt}
-                  width={512}
-                  height={330}
-                  loading="lazy"
-                  className="aspect-[512/330] w-full object-cover"
-                />
-              </a>
-            ))}
-          </div>
-        </section>
         
       </main>
       <Footer />
