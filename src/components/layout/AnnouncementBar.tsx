@@ -16,17 +16,22 @@ export function AnnouncementBar() {
 
   return (
     <div
-      className="flex h-[38px] items-center justify-center overflow-hidden bg-primary px-4 text-primary-foreground"
+      className="relative flex h-[34px] items-center overflow-hidden bg-primary px-4 text-primary-foreground"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
     >
-      <p
-        key={index}
-        aria-live="polite"
-        className="animate-fade-in truncate text-center text-[13px] font-medium tracking-[0.01em]"
-      >
-        {announcements[index]}
-      </p>
+      <div className="flex w-full whitespace-nowrap">
+        <div className="animate-marquee flex gap-12 sm:gap-24">
+          {[...announcements, ...announcements, ...announcements].map((text, i) => (
+            <p
+              key={`${text}-${i}`}
+              className="inline-flex shrink-0 items-center text-[13px] font-medium tracking-[0.01em]"
+            >
+              {text}
+            </p>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
