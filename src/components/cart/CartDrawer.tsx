@@ -51,11 +51,9 @@ export function CartDrawer() {
           </button>
         </header>
 
-        {lines.length > 0 ? (
-          <div className="border-b border-border px-5 py-4">
-            <CartRewards />
-          </div>
-        ) : null}
+        <div className="border-b border-border px-5 py-4">
+          <CartRewards />
+        </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
@@ -118,56 +116,55 @@ export function CartDrawer() {
           )}
         </div>
 
-        {lines.length > 0 ? (
-          <footer className="border-t border-border p-5">
-            <div className="flex items-center justify-between text-sm text-primary">
-              <span>Subtotal</span>
-              <span className="font-medium">
-                {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : "—"}
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                const url = buildCheckoutUrl(
-                  checkoutUrl,
-                  resolveRewardState(subtotal?.amount ?? 0).bestCode
-                );
-                if (url && url !== "#") {
-                  window.open(url, "_blank", "noopener,noreferrer");
-                }
-              }}
-              className="mt-4 flex w-full items-center justify-between rounded-[5px] bg-[#C3754C] px-6 py-[14px] font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            >
-              <div className="flex items-center gap-4">
-                <span className="tracking-widest">CHECKOUT</span>
-                <div className="flex items-center -space-x-2">
-                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PhonePe_Logo.webp?v=1786051899"
-                      alt="PhonePe"
-                      className="size-full object-contain p-1"
-                    />
-                  </div>
-                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paytm_Logo.webp?v=1786051899"
-                      alt="Paytm"
-                      className="size-full object-contain p-1"
-                    />
-                  </div>
-                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                    <img
-                      src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Google_Pay_Logo.webp?v=1786051899"
-                      alt="Google Pay"
-                      className="size-full object-contain p-1.5"
-                    />
-                  </div>
+        <footer className={cn("border-t border-border p-5", lines.length === 0 && "opacity-50 pointer-events-none")}>
+          <div className="flex items-center justify-between text-sm text-primary">
+            <span>Subtotal</span>
+            <span className="font-medium">
+              {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : formatMoney(0)}
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              if (lines.length === 0) return;
+              const url = buildCheckoutUrl(
+                checkoutUrl,
+                resolveRewardState(subtotal?.amount ?? 0).bestCode
+              );
+              if (url && url !== "#") {
+                window.open(url, "_blank", "noopener,noreferrer");
+              }
+            }}
+            className="mt-4 flex w-full items-center justify-between rounded-[5px] bg-[#C3754C] px-6 py-[14px] font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          >
+            <div className="flex items-center gap-4">
+              <span className="tracking-widest">CHECKOUT</span>
+              <div className="flex items-center -space-x-2">
+                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PhonePe_Logo.webp?v=1786051899"
+                    alt="PhonePe"
+                    className="size-full object-contain p-1"
+                  />
+                </div>
+                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paytm_Logo.webp?v=1786051899"
+                    alt="Paytm"
+                    className="size-full object-contain p-1"
+                  />
+                </div>
+                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Google_Pay_Logo.webp?v=1786051899"
+                    alt="Google Pay"
+                    className="size-full object-contain p-1.5"
+                  />
                 </div>
               </div>
-              <ChevronRight className="size-6 stroke-[3]" />
-            </button>
-          </footer>
-        ) : null}
+            </div>
+            <ChevronRight className="size-6 stroke-[3]" />
+          </button>
+        </footer>
       </aside>
     </div>
   );
