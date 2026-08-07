@@ -61,7 +61,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
   const roundedAverage = product.reviews ? Math.round(product.reviews.average * 10) / 10 : 0;
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-md border border-berry bg-berry text-berry-foreground shadow-soft transition-all duration-300">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[5px] border border-berry bg-berry text-berry-foreground shadow-soft transition-all duration-300">
       <Link
         to="/product/$handle"
         params={{ handle: product.handle }}
