@@ -48,7 +48,7 @@ function CollectionPage() {
   if (!collection) throw notFound();
 
   return (
-    <>
+    <div className="min-h-screen bg-[#F8F8F8]">
       <main className="mx-auto max-w-[1400px] px-5 py-14 sm:px-6 lg:px-10 lg:py-20">
         <header className="max-w-2xl">
           <h1 className="font-serif text-4xl text-primary sm:text-5xl">{collection.title}</h1>
@@ -73,6 +73,6 @@ function CollectionPage() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
