@@ -46,7 +46,7 @@ function AllProducts() {
   const { data } = useSuspenseQuery(allProductsQuery);
 
   return (
-    <>
+    <div className="min-h-screen bg-[#F8F8F8]">
       <main className="mx-auto max-w-[1400px] px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
         <h1 className="font-serif text-3xl text-primary sm:text-5xl">All products</h1>
         <p className="mt-3 text-sm text-muted-foreground">
@@ -70,6 +70,6 @@ function AllProducts() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
