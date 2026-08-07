@@ -23,7 +23,8 @@ export function ProductCard({
   className,
 }: ProductCardProps) {
   const addLine = useCartStore((s) => s.addLine);
-  const isLoading = useCartStore((s) => s.isLoading);
+  const openCart = useCartStore((s) => s.openCart);
+  const [pending, setPending] = useState(false);
   const [selected, setSelected] = useState<Record<string, string>>(() =>
     Object.fromEntries(product.options.map((o) => [o.name, o.values[0] ?? ""])),
   );
@@ -32,12 +33,16 @@ export function ProductCard({
   const soldOut = product.availability === "out_of_stock";
 
   async function handleAdd() {
-    if (!product.defaultVariantId || soldOut) return;
+    if (!product.defaultVariantId || soldOut || pending) return;
+    setPending(true);
+    openCart();
     try {
       await addLine(product.defaultVariantId, 1);
       toast.success(`${product.title} added to basket`);
     } catch {
       toast.error("Could not add to basket. Please try again.");
+    } finally {
+      setPending(false);
     }
   }
 
