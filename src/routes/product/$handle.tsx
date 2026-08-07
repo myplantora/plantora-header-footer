@@ -83,6 +83,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   });
 
   const [quantity, setQuantity] = useState(1);
+  const [chartOpen, setChartOpen] = useState(false);
+  const [guaranteeOpen, setGuaranteeOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(() => {
     const v = product.variants.find(v => v.id === (search.variant || product.defaultVariantId));
     return v?.image?.url ?? product.featuredImage?.url ?? product.gallery[0]?.url ?? null;
@@ -92,6 +94,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     const v = product.variants.find(v => v.id === variantId);
     if (v?.image?.url) setActiveImage(v.image.url);
   }, [variantId, product.variants]);
+
+  useEffect(() => {
+    if (chartOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [chartOpen]);
   const { trackViewContent, trackAddToCart } = useMetaTracking();
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
