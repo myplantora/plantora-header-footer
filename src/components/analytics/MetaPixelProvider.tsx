@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouterState } from '@tanstack/react-router';
-import { initMetaPixel, trackMetaPageView } from '../lib/analytics/meta.events';
-import { isMetaEnabled } from '../lib/analytics/meta.helpers';
+import { initMetaPixel, trackMetaPageView } from '@/lib/analytics/meta.events';
+import { isMetaEnabled } from '@/lib/analytics/meta.helpers';
 
 /**
  * Global provider for Meta Pixel tracking
@@ -17,8 +17,7 @@ export function MetaPixelProvider() {
     // Initialize on mount
     initMetaPixel();
     
-    // Initial PageView (Meta snippet usually handles first one, but SPA needs care)
-    // We delay slightly to ensure DOM is ready for title/url capture
+    // Initial PageView
     const timer = setTimeout(() => {
       trackMetaPageView();
     }, 100);
@@ -30,9 +29,7 @@ export function MetaPixelProvider() {
   useEffect(() => {
     if (!isMetaEnabled()) return;
     
-    // Skip the very first PageView which is handled by the initial mount effect
-    // to prevent duplicate fires on load.
-    if (window._fbq && window.fbq.loaded) {
+    if (window.fbq && window.fbq.loaded) {
       trackMetaPageView();
     }
   }, [pathname]);
