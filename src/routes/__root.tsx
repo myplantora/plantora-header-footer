@@ -12,6 +12,7 @@ import { Header } from "@/components/layout/Header";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 
 import { useShopifyCookies } from "@shopify/hydrogen-react";
+import { CartProvider } from "@/components/layout/CartContext";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
@@ -143,11 +144,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ShopifyAnalytics />
-      <Header />
-      <CartDrawer />
-      <Outlet />
-      <Toaster position="bottom-right" />
+      <CartProvider>
+        <ShopifyAnalytics />
+        <Header />
+        <CartDrawer />
+        <Outlet />
+        <Toaster position="bottom-right" />
+      </CartProvider>
     </QueryClientProvider>
   );
 }

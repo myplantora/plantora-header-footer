@@ -55,12 +55,12 @@ function ProductPage() {
   if (!data) throw notFound();
 
   return (
-    <CartProvider>
+    <>
       <AnnouncementBar />
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
       <Footer />
-    </CartProvider>
+    </>
   );
 }
 
