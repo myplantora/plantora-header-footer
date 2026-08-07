@@ -240,3 +240,7 @@ export const useCartStore = create<CartState>()(
     },
   ),
 );
+
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as any).__CART_STORE__ = useCartStore;
+}
