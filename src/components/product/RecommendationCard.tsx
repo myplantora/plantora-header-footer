@@ -207,7 +207,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
           type="button"
           onClick={handleAdd}
           disabled={soldOut || pending || !selectedVariant?.id}
-          className="mt-auto inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-4 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="mt-auto inline-flex h-10 w-full items-center justify-center rounded-[5px] bg-primary px-4 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           {soldOut ? "Sold out" : "Add to Basket"}
         </button>
