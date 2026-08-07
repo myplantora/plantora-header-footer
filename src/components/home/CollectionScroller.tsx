@@ -39,7 +39,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         <ul className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
           {(collection.products || []).map((product, i) => (
             <li key={product.id}>
-              <ProductCard product={product} priority={i < 4} tone={toneFor(i)} />
+              <ProductCard product={product} priority={i < 4} />
             </li>
           ))}
         </ul>

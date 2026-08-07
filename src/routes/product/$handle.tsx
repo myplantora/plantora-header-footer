@@ -76,11 +76,22 @@ function boughtCountFromSeed(seed: string) {
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
-  const [variantId, setVariantId] = useState(product.defaultVariantId);
-  const [activeImage, setActiveImage] = useState(product.featuredImage?.url ?? product.gallery[0]?.url ?? null);
-  const [chartOpen, setChartOpen] = useState(false);
-  const [guaranteeOpen, setGuaranteeOpen] = useState(false);
+  const search = Route.useSearch() as any;
+  const [variantId, setVariantId] = useState(() => {
+    if (search.variant) return search.variant;
+    return product.defaultVariantId;
+  });
+
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(() => {
+    const v = product.variants.find(v => v.id === (search.variant || product.defaultVariantId));
+    return v?.image?.url ?? product.featuredImage?.url ?? product.gallery[0]?.url ?? null;
+  });
+
+  useEffect(() => {
+    const v = product.variants.find(v => v.id === variantId);
+    if (v?.image?.url) setActiveImage(v.image.url);
+  }, [variantId, product.variants]);
   const { trackViewContent, trackAddToCart } = useMetaTracking();
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
@@ -97,10 +108,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     return () => document.body.classList.remove("overflow-hidden");
   }, [chartOpen]);
 
-  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0] ?? null;
-  const price = variant?.price ?? product.price;
-  const compareAt = variant?.compareAtPrice ?? product.compareAtPrice;
-  const soldOut = variant ? !variant.available : product.availability === "out_of_stock";
+  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+  const price = variant.price;
+  const compareAt = variant.compareAtPrice;
+  const soldOut = !variant.available;
 
   async function handleAdd() {
     if (!variantId || soldOut) return;
