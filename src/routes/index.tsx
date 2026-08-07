@@ -52,7 +52,7 @@ function Hero() {
         <button
           type="button"
           onClick={() => addItem()}
-          className="mt-9 inline-flex items-center rounded-[20px] bg-primary px-7 py-3.5 text-[15px] font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="mt-9 inline-flex items-center rounded-[5px] bg-primary px-7 py-3.5 text-[15px] font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           Add a plant to cart
         </button>
