@@ -60,7 +60,7 @@ export function MobileNav({ open, onClose }: Props) {
 
         <div className="border-b px-5 py-3">
           <p className="text-center text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-            Still footer colour is not changed
+            Still same bg colour bro
           </p>
         </div>
 
