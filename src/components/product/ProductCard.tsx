@@ -167,7 +167,7 @@ export function ProductCard({
             >
               Still clicking on the cart slider is not working please help me {sizeOption.name}
             </span>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 rounded-[5px]">
               {sizeOption.values.map((value) => {
                 const active = selected[sizeOption.name] === value;
                 return (

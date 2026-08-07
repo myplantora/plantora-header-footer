@@ -86,14 +86,14 @@ export function RecommendationCard({ product, priority = false }: Props) {
         </div>
 
         {/* DOTD badge */}
-        <span className="absolute top-3 left-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[#B87B4E] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1 whitespace-nowrap rounded-[5px] bg-[#B87B4E] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
           <Zap className="size-3 fill-current" />
           DOTD
         </span>
 
         {/* Discount badge */}
         {product.discountPercent ? (
-          <span className="absolute top-3 right-3 whitespace-nowrap rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">
+          <span className="absolute top-3 right-3 whitespace-nowrap rounded-[5px] bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">
             {product.discountPercent}% OFF
           </span>
         ) : null}
@@ -188,7 +188,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
                     }}
                     style={{ touchAction: "manipulation" }}
                     className={cn(
-                      "inline-flex cursor-pointer select-none items-center justify-center rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                      "inline-flex cursor-pointer select-none items-center justify-center rounded-[5px] px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                       active
                         ? "border border-gold bg-gold text-gold-foreground"
                         : "border border-berry-foreground/40 bg-transparent text-berry-foreground hover:border-berry-foreground",

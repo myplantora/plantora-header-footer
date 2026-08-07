@@ -128,7 +128,7 @@ export function CartRewards() {
         ))}
       </div>
 
-      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
+      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[5px] bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
         <img
           src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Discount.webp?v=1786051899"
           alt=""
