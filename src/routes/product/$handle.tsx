@@ -159,13 +159,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         </div>
 
         <div className="min-w-0 flex flex-col gap-3">
-          <ProductBadges badges={product.badges} />
+          <div className="flex flex-wrap items-center gap-3">
+            <ProductBadges badges={product.badges} />
+            {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
+          </div>
 
           <h1 className="font-serif text-4xl leading-tight text-primary sm:text-5xl">
             {product.title}
           </h1>
 
-          {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3">
@@ -213,7 +215,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 return (
                   <div key={option.name} className="flex flex-col gap-2">
                     <span className="text-sm font-medium text-primary">
-                      Still clicking on the cart slider is not working please help me {option.name}
+                      {option.name}
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {option.values.map((value) => {
