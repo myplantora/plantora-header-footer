@@ -77,9 +77,10 @@ export function CartRewards() {
     
     let baseFill = unlockedCount === 0 ? 0 : (currentTierIndex + 0.5) * segmentWidth;
     
-    if (state.nextTier) {
+    const nextTier = state.nextTier;
+    if (nextTier) {
       const currentThreshold = currentTierIndex >= 0 ? state.tiers[currentTierIndex].threshold : 0;
-      const nextThreshold = state.nextTier.threshold;
+      const nextThreshold = nextTier.threshold;
       const range = nextThreshold - currentThreshold;
       const progressInRange = (amount - currentThreshold) / range;
       
