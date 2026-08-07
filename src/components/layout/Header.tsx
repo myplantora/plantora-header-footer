@@ -38,7 +38,7 @@ function CartButton() {
       }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
-        "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        "relative grid h-11 w-11 place-items-center rounded-[5px] text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
         bounce && "animate-cart-bounce",
       )}
     >
@@ -94,7 +94,7 @@ export function Header() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-[5px] text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -119,7 +119,7 @@ export function Header() {
                     onFocus={() => (item.mega ? open(item.label) : setOpenMenu(null))}
                     aria-haspopup={item.mega ? "true" : undefined}
                     aria-expanded={item.mega ? isOpen : undefined}
-                    className="nav-link inline-flex items-center gap-1 rounded-xl px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="nav-link inline-flex items-center gap-1 rounded-[5px] px-3 py-2 text-[15px] font-medium text-black transition-colors duration-300 hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {item.label}
                     {item.mega ? (
@@ -151,7 +151,7 @@ export function Header() {
                                   <Link
                                     to={link.href}
                                     onBlur={scheduleClose}
-                                    className="block rounded-xl px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                                    className="block rounded-[5px] px-3 py-2 text-[15px] text-black transition-colors duration-200 hover:bg-secondary hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                                   >
                                     {link.label}
                                   </Link>
@@ -173,7 +173,7 @@ export function Header() {
           <button
             type="button"
             aria-label="Search"
-            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid h-11 w-11 place-items-center rounded-[5px] text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <Search className="h-5 w-5" aria-hidden="true" />
           </button>
