@@ -137,14 +137,14 @@ export function CartDrawer() {
             >
               <span>CHECKOUT</span>
               <div className="flex -space-x-1.5 overflow-hidden">
-                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
-                  <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal" className="h-2.5 object-contain" />
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-1 ring-border">
+                  <img src="https://cdn.iconscout.com/icon/free/png-256/free-paypal-logo-icon-download-in-svg-png-gif-file-formats--payment-method-business-pack-icons-2728148.png" alt="PayPal" className="h-3.5 object-contain" />
                 </div>
-                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-1 ring-border">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo.svg" alt="Google Pay" className="h-3 object-contain" />
                 </div>
-                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-2 object-contain" />
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-1 ring-border">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-3.5 object-contain" />
                 </div>
               </div>
               <svg 
