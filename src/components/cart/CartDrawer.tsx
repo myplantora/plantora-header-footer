@@ -121,9 +121,9 @@ export function CartDrawer() {
         </div>
 
         <footer className={cn("border-t border-border p-5", lines.length === 0 && "opacity-50 pointer-events-none")}>
-          <div className="flex items-center justify-between text-sm text-primary">
-            <span>Subtotal</span>
-            <span className="font-medium">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-muted-foreground">SUBTOTAL</span>
+            <span className="text-lg font-bold text-primary">
               {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : formatMoney(0)}
             </span>
           </div>
