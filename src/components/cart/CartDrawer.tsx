@@ -142,11 +142,11 @@ export function CartDrawer() {
                 window.open(url, "_blank", "noopener,noreferrer");
               }
             }}
-            className="relative mt-4 flex h-[52px] w-full items-center justify-between rounded-full bg-[#C3754C] px-8 font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="relative mt-4 flex h-[52px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
-            <span className="tracking-widest">CHECKOUT</span>
-            
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[10px]">
+              <span className="tracking-widest">CHECKOUT</span>
+              
               <div className="flex items-center -space-x-2">
                 <div className="size-[32px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                   <img
