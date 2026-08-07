@@ -119,7 +119,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     return () => document.body.classList.remove("overflow-hidden");
   }, [chartOpen]);
 
-  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+  const variant = (product.variants.find((v) => v.id === variantId) ?? product.variants[0])!;
   const price = variant.price;
   const compareAt = variant.compareAtPrice;
   const soldOut = !variant.available;
