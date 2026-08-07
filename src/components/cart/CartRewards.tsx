@@ -68,8 +68,46 @@ export function CartRewards() {
   const amount = subtotal?.amount ?? 0;
   const state = useMemo(() => resolveRewardState(amount), [amount]);
 
-  const activeIndex = state.tiers.reduce((acc, tier, i) => (tier.unlocked ? i : acc), -1);
-  const fill = activeIndex < 0 ? 0 : ((activeIndex + 0.5) / state.tiers.length) * 100;
+  const fill = useMemo(() => {
+    if (state.tiers.length === 0) return 0;
+    
+    // Find how many tiers are already fully unlocked
+    const unlockedCount = state.tiers.filter(t => t.unlocked).length;
+    
+    // If no tiers unlocked, we calculate progress towards the first tier
+    // If some are unlocked, we calculate progress from the current tier to the next
+    const currentTierIndex = unlockedCount - 1;
+    const nextTierIndex = unlockedCount;
+    
+    const segmentWidth = 100 / state.tiers.length;
+    
+    // Base fill is the center of the last unlocked tier's icon
+    // If none unlocked, we start at 0 (or some small offset if we want the line to grow from the left)
+    let baseFill = unlockedCount === 0 ? 0 : (currentTierIndex + 0.5) * segmentWidth;
+    
+    if (state.nextTier) {
+      const currentThreshold = currentTierIndex >= 0 ? state.tiers[currentTierIndex].threshold : 0;
+      const nextThreshold = state.nextTier.threshold;
+      const range = nextThreshold - currentThreshold;
+      const progressInRange = (amount - currentThreshold) / range;
+      
+      // We calculate how much of the segment between icons to fill
+      // Each icon is centered at (index + 0.5) * segmentWidth
+      // The distance between centers is exactly segmentWidth
+      const progressInSegment = Math.min(Math.max(progressInRange, 0), 1) * segmentWidth;
+      
+      // If it's the first tier, we progress from 0 to 0.5 * segmentWidth
+      if (unlockedCount === 0) {
+        return progressInRange * (0.5 * segmentWidth);
+      }
+      
+      return baseFill + progressInSegment;
+    }
+    
+    // All tiers unlocked, fill to the last icon center
+    return baseFill;
+  }, [state, amount]);
+
   const activeCode = state.bestCode;
 
   return (
