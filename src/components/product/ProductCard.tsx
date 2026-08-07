@@ -182,6 +182,15 @@ export function ProductCard({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      const matchingVariant = product.variants.find((v) =>
+                        v.selectedOptions.every((so) => {
+                          if (so.name === sizeOption.name) return so.value === value;
+                          return so.value === selected[so.name];
+                        })
+                      );
+                      if (matchingVariant) {
+                        useCartStore.getState().addLine(matchingVariant.id, 1);
+                      }
                     }}
                     style={{ touchAction: "manipulation" }}
                     className={cn(
