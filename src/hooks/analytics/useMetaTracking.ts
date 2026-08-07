@@ -34,7 +34,7 @@ export function useMetaTracking() {
       content_ids: [product.id],
       content_name: product.title,
       content_type: 'product',
-      value: product.price?.amount || 0,
+      value: (product.price?.amount || 0),
       currency: product.price?.currencyCode || 'USD'
     });
   };
