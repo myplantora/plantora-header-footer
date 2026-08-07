@@ -114,7 +114,11 @@ export function CartRewards() {
         )}
       </p>
 
-      <div className="relative flex items-start justify-between px-2">
+      <div 
+        className="relative flex items-start justify-between px-2"
+        role="list"
+        aria-label="Reward milestones"
+      >
         <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary mx-2" />
         <div
           className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none ml-2"
@@ -124,37 +128,46 @@ export function CartRewards() {
           }}
         />
 
-        {state.tiers.map((tier) => (
-          <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
-            <div className="flex flex-col items-center min-w-[64px]">
-              <span
-                className={`relative flex size-9 sm:size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
-                  tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
-                }`}
-              >
-                <img
-                  src={tier.unlocked ? UNLOCKED_GIF : LOCKED_GIF}
-                  alt=""
+        {state.tiers.map((tier, index) => {
+          const isCurrent = state.currentTier?.id === tier.id;
+          const isNext = state.nextTier?.id === tier.id;
+          
+          return (
+            <div 
+              key={tier.id} 
+              className="relative z-10 flex flex-1 flex-col items-center"
+              role="listitem"
+            >
+              <div className="flex flex-col items-center min-w-[64px]">
+                <span
+                  className={`relative flex size-9 sm:size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
+                    tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
+                  }`}
                   aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  width={48}
-                  height={48}
-                  className="size-8 sm:size-10 -translate-y-[2px] scale-[0.8] object-contain"
-                />
-              </span>
-              <p
-                className={`mt-1.5 text-center text-[10px] sm:text-[11px] font-medium leading-tight px-1 ${
-                  tier.unlocked ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                {tier.label}
-              </p>
-              <span className="sr-only">{tier.unlocked ? "Unlocked" : "Locked"}</span>
-              {tier.code && tier.code === activeCode ? <CouponPill code={tier.code} /> : null}
+                >
+                  <img
+                    src={tier.unlocked ? UNLOCKED_GIF : LOCKED_GIF}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    width={48}
+                    height={48}
+                    className="size-8 sm:size-10 -translate-y-[2px] scale-[0.8] object-contain"
+                  />
+                </span>
+                <p
+                  className={`mt-1.5 text-center text-[10px] sm:text-[11px] font-medium leading-tight px-1 ${
+                    tier.unlocked ? "text-primary" : "text-muted-foreground"
+                  } ${isCurrent || isNext ? "font-bold" : ""}`}
+                  aria-label={`${tier.label}: ${tier.unlocked ? 'Unlocked' : 'Locked'}${isCurrent ? ' (Current Reward)' : ''}${isNext ? ' (Next Goal)' : ''}`}
+                >
+                  {tier.label}
+                </p>
+                {tier.code && tier.code === activeCode ? <CouponPill code={tier.code} /> : null}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
