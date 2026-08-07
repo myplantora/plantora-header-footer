@@ -35,15 +35,14 @@ export function SelfWateringSection() {
           <h2 className="font-serif text-3xl leading-tight sm:text-4xl">
             About Self-Watering Planters
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed opacity-85 lg:mx-0">
+          <p className="mx-auto mt-2 max-w-xl text-base leading-relaxed opacity-85 lg:mx-0">
             Self-watering planters provide consistent moisture, prevent overwatering, and simplify
             care for healthy plant growth.
           </p>
 
-          <h3 className="mt-10 font-serif text-2xl sm:text-3xl">How it works</h3>
+          <h3 className="mt-6 font-serif text-2xl sm:text-3xl">How it works</h3>
 
-
-          <ol className="mt-8 grid grid-cols-3 gap-3 sm:gap-6">
+          <ol className="mt-4 grid grid-cols-3 gap-3 sm:gap-6">
             {STEPS.map((step) => (
               <li key={step.src} className="min-w-0">
                 <img
