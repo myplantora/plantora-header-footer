@@ -120,8 +120,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] p-2.5 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
-      <div className="grid gap-10 lg:grid-cols-2">
+    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
+      <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
           <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary p-[6px]">
 
@@ -286,17 +286,15 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:w-auto sm:min-w-56"
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:min-w-56"
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
           </div>
 
-          <div className="mt-1">
-            <DeliveryEstimator />
-          </div>
+          <DeliveryEstimator />
 
-          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3 mt-1">
+          <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3">
             <img
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Replacement.png?v=1786037056"
               alt="10-Day Damage Replacement Guarantee"
