@@ -94,13 +94,13 @@ export function ProductCard({
     <article
       onClick={handleNavigate}
       className={cn(
-        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[18px] transition-all duration-300",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] transition-all duration-300",
         product.promoLabel === "has-deal" ? "bg-[#CAC2E0]" : "bg-white",
         className
       )}
     >
       {/* Image Section */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-[18px]">
+      <div className="relative aspect-square w-full overflow-hidden rounded-[20px]">
         <img
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
@@ -144,7 +144,7 @@ export function ProductCard({
         </div>
 
         {/* Product Title */}
-        <h3 className="line-clamp-2 min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
+        <h3 className="line-clamp-2 mt-[41px] min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
           {product.title}
         </h3>
 
