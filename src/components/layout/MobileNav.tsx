@@ -59,11 +59,6 @@ export function MobileNav({ open, onClose }: Props) {
         </div>
 
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
-          <div className="mb-6 border-b border-border py-4">
-            <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Reduce the bottom padding half the current
-            </p>
-          </div>
           <ul className="flex flex-col gap-1">
             {navItems.map((item) => {
               // Only render valid TanStack Start routes to avoid build errors
