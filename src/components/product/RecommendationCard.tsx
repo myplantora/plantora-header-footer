@@ -15,7 +15,8 @@ type Props = {
 
 export function RecommendationCard({ product, priority = false }: Props) {
   const addLine = useCartStore((s) => s.addLine);
-  const isLoading = useCartStore((s) => s.isLoading);
+  const openCart = useCartStore((s) => s.openCart);
+  const [pending, setPending] = useState(false);
 
   const sizeOption = product.options[0];
   const [selected, setSelected] = useState<Record<string, string>>(() =>
@@ -38,7 +39,9 @@ export function RecommendationCard({ product, priority = false }: Props) {
 
   async function handleAdd() {
     const variantId = selectedVariant?.id ?? product.defaultVariantId;
-    if (!variantId || soldOut) return;
+    if (!variantId || soldOut || pending) return;
+    setPending(true);
+    openCart();
     try {
       await addLine(variantId, 1);
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
@@ -50,6 +53,8 @@ export function RecommendationCard({ product, priority = false }: Props) {
       });
     } catch {
       toast.error("Could not add to basket. Please try again.");
+    } finally {
+      setPending(false);
     }
   }
 
@@ -184,7 +189,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
         <button
           type="button"
           onClick={handleAdd}
-          disabled={soldOut || isLoading || !selectedVariant?.id}
+          disabled={soldOut || pending || !selectedVariant?.id}
           className="mt-auto inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-4 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           {soldOut ? "Sold out" : "Add to Basket"}
