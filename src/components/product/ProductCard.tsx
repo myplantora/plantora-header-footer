@@ -128,7 +128,7 @@ export function ProductCard({
 
         {/* DOTD Badge (Replacement for promo labels) */}
         {product.promoLabel === "DOTD" && (
-          <div className="absolute left-3 top-3 z-10 rounded-full bg-[#A8622A] px-2.5 py-1 text-[11px] font-bold text-white">
+          <div className="absolute left-3 top-3 z-10 rounded-full bg-[#C3754C] px-2.5 py-1 text-[11px] font-bold text-white">
             ⚡ DOTD
           </div>
         )}
@@ -154,7 +154,7 @@ export function ProductCard({
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
-            <span className="text-[14px] text-[#A8622A] line-through">
+            <span className="text-[14px] text-[#C3754C] line-through">
               {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
             </span>
           )}
@@ -193,7 +193,7 @@ export function ProductCard({
                     className={cn(
                       "min-w-[40px] rounded-full border px-3 py-1.5 text-[12px] font-medium transition-all",
                       selectedOptions[sizeOption.name] === val
-                        ? "border-[#A8622A] bg-[#A8622A] text-white"
+                        ? "border-[#C3754C] bg-[#C3754C] text-white"
                         : "border-gray-200 bg-white text-[#1D4D44]"
                     )}
                   >
