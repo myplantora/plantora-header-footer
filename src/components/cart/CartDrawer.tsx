@@ -126,17 +126,20 @@ export function CartDrawer() {
                 {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : "—"}
               </span>
             </div>
-            <a
-              href={buildCheckoutUrl(
-                checkoutUrl,
-                resolveRewardState(subtotal?.amount ?? 0).bestCode,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => {
+                const url = buildCheckoutUrl(
+                  checkoutUrl,
+                  resolveRewardState(subtotal?.amount ?? 0).bestCode
+                );
+                if (url && url !== "#") {
+                  window.open(url, "_blank", "noopener,noreferrer");
+                }
+              }}
               className="mt-4 flex w-full items-center justify-center gap-3 rounded-full bg-[#C3754C] px-6 py-[14px] font-button text-base font-bold text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <span>CHECKOUT</span>
-            </a>
+            </button>
           </footer>
         ) : null}
       </aside>

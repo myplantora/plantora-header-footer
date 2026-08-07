@@ -6,10 +6,14 @@ import { navItems } from "@/config/navigation";
 import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
 import { useCartStore } from "@/stores/cartStore";
+import { resolveRewardState } from "@/lib/rewards";
+import { buildCheckoutUrl } from "@/components/cart/CartRewards";
 
 function CartButton() {
   const count = useCartStore((s) => s.totalQuantity);
   const openCart = useCartStore((s) => s.openCart);
+  const checkoutUrl = useCartStore((s) => s.checkoutUrl);
+  const subtotal = useCartStore((s) => s.subtotal);
   const hydrate = useCartStore((s) => s.hydrate);
   const [bounce, setBounce] = useState(false);
   const first = useRef(true);
@@ -34,7 +38,17 @@ function CartButton() {
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        openCart();
+        if (count === 0) {
+          const url = buildCheckoutUrl(
+            checkoutUrl,
+            resolveRewardState(subtotal?.amount ?? 0).bestCode
+          );
+          if (url && url !== "#") {
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        } else {
+          openCart();
+        }
       }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(

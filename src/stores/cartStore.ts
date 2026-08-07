@@ -188,7 +188,7 @@ export const useCartStore = create<CartState>()(
 
 
       addLine: async (merchandiseId, quantity = 1) => {
-        set({ isLoading: true, isOpen: true });
+        set({ isLoading: true });
         try {
           const cartId = get().cartId;
           const lines = [{ merchandiseId, quantity }];
