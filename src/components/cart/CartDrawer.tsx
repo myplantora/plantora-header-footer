@@ -133,9 +133,30 @@ export function CartDrawer() {
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="mt-4 flex w-full items-center justify-center gap-3 rounded-full bg-[#C3754C] px-6 py-4 font-button text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              Checkout
+              <span>CHECKOUT</span>
+              <div className="flex -space-x-1.5 overflow-hidden">
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
+                  <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal" className="h-2.5 object-contain" />
+                </div>
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Google_Pay_%28GPay%29_Logo.svg" alt="Google Pay" className="h-3 object-contain" />
+                </div>
+                <div className="flex size-7 items-center justify-center rounded-full bg-white ring-2 ring-[#C3754C]">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-2 object-contain" />
+                </div>
+              </div>
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="3" 
+                className="size-5 shrink-0"
+                aria-hidden="true"
+              >
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </a>
           </footer>
         ) : null}
