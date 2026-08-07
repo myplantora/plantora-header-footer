@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 
-import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 
@@ -93,7 +93,7 @@ function Index() {
             ))}
           </div>
         </section>
-        <SelfWateringSection />
+        
       </main>
       <Footer />
     </>
