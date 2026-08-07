@@ -38,7 +38,7 @@ function Hero() {
   const { addItem } = useCart();
   return (
     <section className="bg-secondary">
-      <div className="mx-auto max-w-[1400px] px-5 py-24 text-center sm:px-6 lg:px-10 lg:py-36">
+      <div className="mx-auto max-w-[1400px] px-[5px] py-24 text-center sm:px-[5px] lg:px-[5px] lg:py-36">
         <p className="animate-fade-in text-[12px] font-medium uppercase tracking-[0.2em] text-accent">
           Premium plants, delivered
         </p>
@@ -68,7 +68,7 @@ function Index() {
         <BannerSection />
         <Hero />
         <CollectionScroller collectionId="659339542821" />
-        <section className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-14">
+        <section className="mx-auto max-w-[1400px] px-[5px] py-10 sm:px-[5px] lg:px-[5px] lg:py-14">
           <h2 className="font-serif text-3xl text-primary sm:text-4xl">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[

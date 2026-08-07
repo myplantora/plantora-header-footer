@@ -87,7 +87,7 @@ export function Header() {
         if (e.key === "Escape") setOpenMenu(null);
       }}
     >
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-4 sm:px-6 lg:h-20 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-[5px] sm:px-[5px] lg:h-20 lg:px-[5px]">
         {/* Mobile: hamburger */}
         <button
           type="button"

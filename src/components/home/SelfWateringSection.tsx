@@ -21,7 +21,7 @@ const STEPS = [
 export function SelfWateringSection() {
   return (
     <section className="bg-teal-deep text-teal-deep-foreground bg-teal-glow">
-      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-8 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-12">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-[5px] py-8 sm:px-[5px] lg:grid-cols-2 lg:gap-16 lg:px-[5px] lg:py-12">
         <img
           src={HERO}
           alt="Self-watering planter cross-section with water reservoir and fiddle leaf fig"

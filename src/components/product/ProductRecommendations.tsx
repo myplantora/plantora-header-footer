@@ -31,7 +31,7 @@ export function ProductRecommendations({
   if (products.length === 0) return null;
 
   return (
-    <section className="mx-auto w-full max-w-[1400px] bg-[#F8F8F8] px-5 pt-12 pb-8 sm:px-6 sm:pt-16 sm:pb-12 lg:px-10 lg:pt-20 lg:pb-16">
+    <section className="mx-auto w-full max-w-[1400px] bg-[#F8F8F8] px-[5px] pt-12 pb-8 sm:px-[5px] sm:pt-16 sm:pb-12 lg:px-[5px] lg:pt-20 lg:pb-16">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="font-serif text-2xl text-primary sm:text-3xl lg:text-4xl">
           {heading}
