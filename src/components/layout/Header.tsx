@@ -42,11 +42,11 @@ function CartButton() {
       }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
-        "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        "relative z-[60] grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
         bounce && "animate-cart-bounce",
       )}
     >
-      <ShoppingBag className="h-5 w-5" aria-hidden="true" />
+      <ShoppingBag className="pointer-events-none h-5 w-5" aria-hidden="true" />
       <span
         aria-hidden="true"
         className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
@@ -98,9 +98,9 @@ export function Header() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
           aria-expanded={mobileOpen}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
+          className="relative z-[60] grid h-11 w-11 shrink-0 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
         >
-          <Menu className="h-5 w-5" aria-hidden="true" />
+          <Menu className="pointer-events-none h-5 w-5" aria-hidden="true" />
         </button>
 
         <div className="flex flex-1 justify-center lg:flex-none lg:justify-start">
@@ -177,9 +177,9 @@ export function Header() {
           <button
             type="button"
             aria-label="Search"
-            className="grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="relative z-[60] grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Search className="h-5 w-5" aria-hidden="true" />
+            <Search className="pointer-events-none h-5 w-5" aria-hidden="true" />
           </button>
           <CartButton key="cart-button" />
         </div>
