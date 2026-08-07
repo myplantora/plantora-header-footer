@@ -26,7 +26,7 @@ export function ProductCard({
   const openCart = useCartStore((s) => s.openCart);
   const [pending, setPending] = useState(false);
   const [selected, setSelected] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.options.map((o) => [o.name, o.values[0] ?? ""])),
+    Object.fromEntries(product.options.map((o) => [o.name, o.values[0] ?? ""]))
   );
 
   const berry = tone === "berry";
@@ -51,9 +51,9 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-[5px] border transition-all duration-300 hover:shadow-soft",
-        berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
-        className,
+        "group relative flex h-full flex-col overflow-hidden rounded-[19px] border transition-all duration-300 hover:shadow-soft",
+        berry ? "border-berry bg-[#CAC2E0]" : "border-border bg-card",
+        className
       )}
     >
       <Link
@@ -71,8 +71,8 @@ export function ProductCard({
               loading={priority ? "eager" : "lazy"}
               decoding="async"
               className={cn(
-                "size-full object-cover transition-opacity duration-500",
-                product.hoverImage && "group-hover:opacity-0",
+                "size-full object-cover transition-transform duration-700 group-hover:scale-110",
+                product.hoverImage && "group-hover:opacity-0"
               )}
             />
           ) : (
@@ -87,155 +87,127 @@ export function ProductCard({
               aria-hidden="true"
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              className="absolute inset-0 size-full object-cover opacity-0 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
             />
           ) : null}
         </div>
 
+        {/* Custom Tag Shape (metafield/tag media) */}
         {product.tagMedia ? (
-          <img
-            src={product.tagMedia.url}
-            alt={product.tagMedia.altText}
-            loading="lazy"
-            className="absolute right-3 top-3 h-9 w-auto"
-          />
+          <div className="custom_shape absolute left-[-15px] top-[-15px] z-20 rounded-br-[19px] rounded-tl-[19px] bg-white p-[11px] shadow-sm max-md:left-[-9px] max-md:top-[-9px] max-md:rounded-br-[18px] max-md:rounded-tl-[18px]">
+            <img
+              src={product.tagMedia.url}
+              alt={product.tagMedia.altText || ""}
+              loading="lazy"
+              className="h-auto w-[41px] max-md:w-[20px]"
+            />
+          </div>
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-3">
-        {product.reviews ? <ProductRating reviews={product.reviews} tone={tone} /> : null}
+      <div className={cn("flex flex-1 flex-col gap-2 p-3", berry && "px-[10px] pb-3")}>
+        {/* Rating and Reviews */}
+        {product.reviews ? (
+          <div className="flex items-center gap-1">
+            <ProductRating reviews={product.reviews} tone={tone} />
+          </div>
+        ) : null}
 
+        {/* Title */}
         <h3
           className={cn(
-            "min-w-0 font-serif text-[14px] leading-[22.4px]",
-            berry ? "text-berry-foreground" : "text-[#1C6644]",
+            "min-w-0 font-sans text-[14px] font-semibold leading-tight",
+            berry ? "text-[#1d4d43]" : "text-[#1C6644]"
           )}
         >
           <Link
             to="/product/$handle"
             params={{ handle: product.handle }}
-            className="line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="line-clamp-2 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             {product.title}
           </Link>
         </h3>
 
-        <div className="flex flex-wrap items-baseline gap-2 text-[13.125px]">
-          <span
-            className={cn(
-              "font-medium",
-              berry ? "text-berry-foreground" : "text-black",
-            )}
-          >
-            {formatMoney(product.price.amount, product.price.currency)}
-          </span>
-          {product.compareAtPrice ? (
+        {/* Price and Badges row */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-baseline gap-1.5">
             <span
               className={cn(
-                "line-through",
-                berry ? "text-berry-foreground/70" : "text-muted-foreground",
+                "text-[15px] font-bold",
+                berry ? "text-[#1d4d43]" : "text-black"
               )}
             >
-              {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
+              {formatMoney(product.price.amount, product.price.currency)}
             </span>
-          ) : null}
-          {product.availability === "limited" ? (
-            <span
-              className={cn(
-                "font-medium",
-                berry ? "text-berry-foreground" : "text-accent",
-              )}
-            >
-              Only a few left
-            </span>
-          ) : null}
+            {product.compareAtPrice ? (
+              <span className="text-[13px] text-muted-foreground line-through">
+                {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
+              </span>
+            ) : null}
+          </div>
+
+          {product.badges.length > 0 && (
+            <div className="tag-container flex flex-row-reverse items-center justify-end gap-1">
+              {product.badges.slice(0, 2).map((badge, idx) => (
+                <span
+                  key={badge.key}
+                  className={cn(
+                    "flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                    idx === 0 ? "bg-[#C3E8E8] text-[#1d4d43]" : "bg-[#F2E8C2] text-[#1d4d43]"
+                  )}
+                >
+                  {badge.label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
-        {product.badges.length > 0 ? (
-          <div>
-            <ProductBadges badges={product.badges} tone={tone} />
-          </div>
-        ) : null}
-
+        {/* Sizes (Simplified for Revamp) */}
         {sizeOption ? (
-          <div className="flex flex-col gap-2">
-            <span
-              className={cn(
-                "text-xs font-medium",
-                berry ? "text-berry-foreground/80" : "text-muted-foreground",
-              )}
-            >
-              {sizeOption.name}
-            </span>
-            <div className="flex flex-wrap items-center gap-2">
-              {sizeOption.values.map((value) => {
-                const active = selected[sizeOption.name] === value;
-                return (
-                  <button
-                    key={value}
-                    type="button"
-                    aria-pressed={active}
-                    onPointerDown={(e) => {
-                      e.stopPropagation();
-                      setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      const matchingVariant = product.variants.find((v) =>
-                        v.selectedOptions.every((so) => {
-                          if (so.name === sizeOption.name) return so.value === value;
-                          return so.value === selected[so.name];
-                        })
-                      );
-                      if (matchingVariant) {
-                        useCartStore.getState().addLine(matchingVariant.id, 1);
-                      }
-                    }}
-                    style={{ touchAction: "manipulation" }}
-                    className={cn(
-                      "grid size-9 shrink-0 cursor-pointer select-none place-items-center rounded-full border px-1 text-[11px] leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                      berry
-                        ? active
-                          ? "border-berry-foreground bg-berry-foreground/25 text-berry-foreground"
-                          : "border-berry-foreground/40 text-berry-foreground/90 hover:border-berry-foreground"
-                        : active
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-primary hover:border-primary",
-                    )}
-                  >
-                    {value.replace(/\s*pot\s*/i, "")}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            {sizeOption.values.map((value) => {
+              const active = selected[sizeOption.name] === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelected((prev) => ({ ...prev, [sizeOption.name]: value }));
+                  }}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-[11px] font-medium transition-colors",
+                    active
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border text-primary hover:border-primary"
+                  )}
+                >
+                  {value.replace(/\s*pot\s*/i, "")}
+                </button>
+              );
+            })}
           </div>
         ) : null}
 
-        {product.promoLabel ? (
-          <p
+        {/* CTA */}
+        <div className="mt-auto pt-2">
+          <button
+            type="button"
+            onClick={handleAdd}
+            disabled={soldOut || pending || !product.defaultVariantId}
             className={cn(
-              "rounded-full px-2.5 py-1.5 text-xs font-medium",
-              berry ? "bg-berry-foreground/15 text-berry-foreground" : "bg-secondary text-primary",
+              "inline-flex h-[42px] w-full items-center justify-center rounded-full px-4 font-button text-sm font-bold transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+              berry
+                ? "bg-[#1d4d43] text-white hover:bg-[#1d4d43]/90"
+                : "bg-primary text-primary-foreground hover:bg-primary/90"
             )}
           >
-            {product.promoLabel}
-          </p>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={handleAdd}
-          disabled={soldOut || pending || !product.defaultVariantId}
-          className={cn(
-            "inline-flex h-10 w-full items-center justify-center rounded-full px-4 font-button text-sm font-medium transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
-            berry
-              ? "bg-berry-muted text-berry-foreground"
-              : "bg-primary text-primary-foreground",
-          )}
-        >
-          {soldOut ? "Sold out" : "Add to Basket"}
-        </button>
+            {soldOut ? "Sold out" : "Add to Basket"}
+          </button>
+        </div>
       </div>
     </article>
   );
