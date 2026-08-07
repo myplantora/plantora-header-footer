@@ -92,16 +92,16 @@ export function CartRewards() {
       </p>
 
       <div className="relative flex items-start justify-between">
-        <div className="absolute inset-x-0 top-4 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
+        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
         <div
-          className="absolute left-0 top-4 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
+          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-[var(--reward-success)] transition-[width] duration-300 ease-in-out motion-reduce:transition-none"
           style={{ width: `${fill}%` }}
         />
 
         {state.tiers.map((tier) => (
           <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center">
             <span
-              className={`grid size-8 place-items-center rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
+              className={`grid size-10 place-items-center rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
                 tier.unlocked ? "bg-[var(--reward-success)]" : "bg-secondary"
               }`}
             >
@@ -111,9 +111,9 @@ export function CartRewards() {
                 aria-hidden="true"
                 loading="lazy"
                 decoding="async"
-                width={16}
-                height={16}
-                className="size-4 object-contain"
+                width={32}
+                height={32}
+                className="size-8 object-contain"
               />
             </span>
             <p
