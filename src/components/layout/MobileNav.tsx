@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Follow the universal typograph of header and fo center alignment
+              Change the footer background colour to #1D4D44
             </p>
           </div>
           <ul className="flex flex-col gap-1">
