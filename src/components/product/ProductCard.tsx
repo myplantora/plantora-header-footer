@@ -138,15 +138,15 @@ export function ProductCard({
         "flex flex-1 flex-col px-3.5 pt-4 pb-0",
         product.promoLabel === "has-deal" && "px-2"
       )}>
-        {/* Rating Row */}
-        <div className="mb-2">
-          {product.reviews && <ProductRating reviews={product.reviews} />}
-        </div>
-
         {/* Product Title */}
         <h3 className="line-clamp-2 mt-[41px] min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
           {product.title}
         </h3>
+
+        {/* Rating Row */}
+        <div className="mt-1">
+          {product.reviews && <ProductRating reviews={product.reviews} />}
+        </div>
 
         {/* Price Row */}
         <div className="mt-2 flex items-baseline gap-2">
