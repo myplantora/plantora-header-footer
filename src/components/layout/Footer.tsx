@@ -113,7 +113,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4 px-5 py-4 text-[13px] text-white/70 sm:px-6 lg:flex-row lg:justify-between lg:px-10">
           <p>© 2026 Plantora. All Rights Reserved.</p>
           <p className="text-center">Made with ❤️ for plant lovers across the USA.</p>
-          <PaymentIcons />
+          
         </div>
       </div>
     </footer>
