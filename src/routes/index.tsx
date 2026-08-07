@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 
 
-
+import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 
 
@@ -40,8 +40,7 @@ function Index() {
   return (
     <>
       <main>
-        
-        
+        <BannerSection />
         <CollectionScroller collectionId="659339542821" />
         
         
