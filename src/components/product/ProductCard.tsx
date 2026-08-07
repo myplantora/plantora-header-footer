@@ -94,7 +94,8 @@ export function ProductCard({
     <article
       onClick={handleNavigate}
       className={cn(
-        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white transition-all duration-300",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[18px] transition-all duration-300",
+        product.promoLabel === "has-deal" ? "bg-[#CAC2E0]" : "bg-white",
         className
       )}
     >
@@ -107,14 +108,25 @@ export function ProductCard({
           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         
-        {/* Discount Badge */}
+        {/* Custom Shape Badge (Top Left) */}
+        {product.tagMedia?.url && (
+          <div className="absolute -left-2 -top-2 z-10 rounded-br-[18px] rounded-tl-[18px] bg-white p-2 md:-left-[15px] md:-top-[15px] md:rounded-br-[19px] md:rounded-tl-[19px] md:p-[11px]">
+            <img 
+              src={product.tagMedia.url} 
+              alt="Badge" 
+              className="max-w-[20px] md:max-w-[41px]" 
+            />
+          </div>
+        )}
+
+        {/* Discount Badge (Top Right) */}
         {product.discountPercent && product.discountPercent > 0 && (
           <div className="absolute right-3 top-3 z-10 rounded-full bg-[#1D4D44] px-2.5 py-1 text-[11px] font-bold text-white">
             {product.discountPercent}% OFF
           </div>
         )}
 
-        {/* DOTD Badge */}
+        {/* DOTD Badge (Replacement for promo labels) */}
         {product.promoLabel === "DOTD" && (
           <div className="absolute left-3 top-3 z-10 rounded-full bg-[#A8622A] px-2.5 py-1 text-[11px] font-bold text-white">
             ⚡ DOTD
@@ -122,7 +134,10 @@ export function ProductCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-4 pb-0">
+      <div className={cn(
+        "flex flex-1 flex-col p-4 pb-0",
+        product.promoLabel === "has-deal" && "px-2.5"
+      )}>
         {/* Rating Row */}
         <div className="mb-2">
           {product.reviews && <ProductRating reviews={product.reviews} />}
@@ -145,9 +160,19 @@ export function ProductCard({
           )}
         </div>
 
-        {/* Feature Chips */}
-        <div className="mt-3">
-          <ProductBadges badges={product.badges} />
+        {/* Feature Chips (Metafields/Tags) */}
+        <div className="mt-2 flex flex-wrap gap-x-2 gap-y-1">
+          {product.badges.map((badge, idx) => (
+            <span 
+              key={badge.key}
+              className={cn(
+                "flex items-center rounded-full px-2 py-0.5 text-[12px] font-semibold text-[#1d4d43]",
+                idx === 0 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
+              )}
+            >
+              {badge.label}
+            </span>
+          ))}
         </div>
 
         {/* Variant Selectors */}
@@ -217,7 +242,8 @@ export function ProductCard({
               "flex h-[56px] w-full items-center justify-center rounded-full font-button text-[16px] font-bold transition-all",
               soldOut
                 ? "bg-gray-200 text-gray-500"
-                : "bg-[#1D4D44] text-white active:scale-[0.98]"
+                : "bg-[#1D4D44] text-white active:scale-[0.98]",
+              product.promoLabel === "has-deal" && "px-0"
             )}
           >
             {pending ? "Adding..." : soldOut ? "Sold Out" : "Add to Basket"}
@@ -226,4 +252,5 @@ export function ProductCard({
       </div>
     </article>
   );
+}
 }
