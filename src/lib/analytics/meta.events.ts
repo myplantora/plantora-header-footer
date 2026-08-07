@@ -35,7 +35,7 @@ export const trackMetaEvent = (
 
   validateMetaPayload(eventName as MetaEventName, data);
 
-  if (isDev) {
+  if (isDev || (typeof window !== 'undefined' && window.location.search.includes('debug_pixel=true'))) {
     console.group(`%c META EVENT: ${eventName}`, 'color: #1877F2; font-weight: bold;');
     console.log('Payload:', payload);
     if (userData) console.log('User Data (Advanced Matching):', userData);
@@ -61,7 +61,9 @@ export const trackMetaPageView = () => {
   
   try {
     window.fbq('track', 'PageView');
-    if (isDev) console.log('%c META EVENT: PageView', 'color: #1877F2; font-weight: bold;');
+    if (isDev || (typeof window !== 'undefined' && window.location.search.includes('debug_pixel=true'))) {
+      console.log('%c META EVENT: PageView', 'color: #1877F2; font-weight: bold;');
+    }
   } catch (error) {
     console.error('Meta Pixel PageView error:', error);
   }
