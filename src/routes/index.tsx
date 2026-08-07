@@ -64,7 +64,6 @@ function Hero() {
 function Index() {
   return (
     <>
-      <AnnouncementBar />
       <main>
         <BannerSection />
         <Hero />

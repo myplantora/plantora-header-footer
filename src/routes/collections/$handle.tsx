@@ -51,7 +51,6 @@ function CollectionPage() {
 
   return (
     <CartProvider>
-      <AnnouncementBar />
       <Header />
       <main className="mx-auto max-w-[1400px] px-5 py-14 sm:px-6 lg:px-10 lg:py-20">
         <header className="max-w-2xl">

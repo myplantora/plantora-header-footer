@@ -56,7 +56,6 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
-      <AnnouncementBar />
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
       <Footer />
