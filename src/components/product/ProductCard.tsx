@@ -51,7 +51,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-md border transition-all duration-300 hover:shadow-soft",
+        "group relative flex h-full flex-col overflow-hidden rounded-[5px] border transition-all duration-300 hover:shadow-soft",
         berry ? "border-berry bg-berry text-berry-foreground" : "border-border bg-card",
         className,
       )}
@@ -165,7 +165,7 @@ export function ProductCard({
                 berry ? "text-berry-foreground/80" : "text-muted-foreground",
               )}
             >
-              Still clicking on the cart slider is not working please help me {sizeOption.name}
+              {sizeOption.name}
             </span>
             <div className="flex flex-wrap items-center gap-2">
               {sizeOption.values.map((value) => {

@@ -42,7 +42,7 @@ function Hero() {
         <p className="animate-fade-in text-[12px] font-medium uppercase tracking-[0.2em] text-accent">
           Premium plants, delivered
         </p>
-        <h1 className="animate-fade-in mx-auto mt-6 max-w-3xl font-serif text-4xl leading-[1.1] text-primary sm:text-6xl">
+        <h1 className="animate-fade-in mx-auto mt-6 max-w-3xl font-serif text-4xl font-bold leading-[1.1] text-primary sm:text-6xl">
           Bring nature home, one healthy plant at a time.
         </h1>
         <p className="animate-fade-in mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-muted-foreground">
@@ -69,7 +69,7 @@ function Index() {
         <Hero />
         <CollectionScroller collectionId="659339542821" />
         <section className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-14">
-          <h2 className="font-serif text-3xl text-primary sm:text-4xl">Offers for you today</h2>
+          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl text-center">Offers for you today</h2>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { src: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer3.png?v=1785958543", alt: "Plantora offer: seasonal indoor plant deal" },
