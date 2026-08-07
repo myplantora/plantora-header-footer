@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Check, X, Minus, Plus, Info } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+
 import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ProductBadges } from "@/components/product/ProductBadges";
