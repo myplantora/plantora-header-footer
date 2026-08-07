@@ -169,13 +169,23 @@ export function ProductCard({
             <span 
               key={badge.key}
               className={cn(
-                "flex items-center rounded-full px-2 py-0.5 text-[12px] font-semibold text-[#1d4d43]",
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-semibold text-[#1d4d43]",
                 idx === 0 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
               )}
             >
+              {badge.iconUrl && (
+                <img
+                  src={badge.iconUrl}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  className="size-[14px] shrink-0 object-contain"
+                />
+              )}
               {badge.label}
             </span>
           ))}
+
         </div>
 
         {/* Variant Selectors */}
