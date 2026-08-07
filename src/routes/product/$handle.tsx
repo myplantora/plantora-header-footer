@@ -57,11 +57,9 @@ function ProductPage() {
   return (
     <CartProvider>
       <AnnouncementBar />
-      <Header />
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
       <Footer />
-      <CartDrawer />
     </CartProvider>
   );
 }
