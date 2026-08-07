@@ -169,16 +169,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </h1>
 
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
               <span className="font-serif text-2xl font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
-                <span className="text-2xl text-[#C3754C] line-through">
+                <span className="text-xl text-[#C3754C] line-through">
                   {formatMoney(compareAt.amount, compareAt.currency)}
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center self-center rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
+                <span className="inline-flex items-center rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
                   {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
                 </span>
               ) : null}
@@ -186,7 +186,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             <button
               type="button"
               onClick={() => setChartOpen(true)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               Size Chart
               <img
