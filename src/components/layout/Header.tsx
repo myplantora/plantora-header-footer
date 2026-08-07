@@ -31,7 +31,11 @@ function CartButton() {
   return (
     <button
       type="button"
-      onClick={openCart}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCart();
+      }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
         "relative grid h-11 w-11 place-items-center rounded-full text-black transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
