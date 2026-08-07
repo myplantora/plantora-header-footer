@@ -15,6 +15,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { useShopifyCookies } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/layout/CartContext";
 import { MetaPixelProvider } from "@/components/analytics/MetaPixelProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
@@ -153,6 +154,7 @@ function RootComponent() {
         <Header />
         <CartDrawer />
         <Outlet />
+        <Analytics />
         <Toaster position="bottom-right" />
       </CartProvider>
     </QueryClientProvider>
