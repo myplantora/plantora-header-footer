@@ -218,13 +218,13 @@ export function ProductCard({
         </div>
 
         {/* Add to Basket */}
-        <div className="mt-6 pb-4">
+        <div className="mt-5 pb-3">
           <button
             type="button"
             onClick={handleAdd}
             disabled={soldOut || pending}
             className={cn(
-              "flex h-[44px] w-full items-center justify-center rounded-full font-button text-[14px] font-medium transition-all",
+              "flex h-[40px] w-full items-center justify-center rounded-full font-button text-[13px] font-medium transition-all",
               soldOut
                 ? "bg-gray-200 text-gray-500"
                 : "bg-[#1D4D44] text-white active:scale-[0.98]",
