@@ -6,6 +6,10 @@ import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
+import paypalAsset from "@/assets/paypal.png.asset.json";
+import gpayAsset from "@/assets/gpay.png.asset.json";
+import mastercardAsset from "@/assets/mastercard.png.asset.json";
+
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
@@ -138,29 +142,29 @@ export function CartDrawer() {
           >
             <div className="flex items-center gap-4">
               <span className="tracking-widest">CHECKOUT</span>
-              <div className="flex items-center -space-x-2">
-                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PhonePe_Logo.webp?v=1786051899"
-                    alt="PhonePe"
-                    className="size-full object-contain p-1"
-                  />
+                <div className="flex items-center -space-x-2">
+                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                    <img
+                      src={paypalAsset.url}
+                      alt="PayPal"
+                      className="size-full object-contain p-1"
+                    />
+                  </div>
+                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                    <img
+                      src={gpayAsset.url}
+                      alt="Google Pay"
+                      className="size-full object-contain p-1"
+                    />
+                  </div>
+                  <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
+                    <img
+                      src={mastercardAsset.url}
+                      alt="Mastercard"
+                      className="size-full object-contain p-1.5"
+                    />
+                  </div>
                 </div>
-                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paytm_Logo.webp?v=1786051899"
-                    alt="Paytm"
-                    className="size-full object-contain p-1"
-                  />
-                </div>
-                <div className="size-9 overflow-hidden rounded-full border-2 border-white bg-white">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Google_Pay_Logo.webp?v=1786051899"
-                    alt="Google Pay"
-                    className="size-full object-contain p-1.5"
-                  />
-                </div>
-              </div>
             </div>
             <ChevronRight className="size-6 stroke-[3]" />
           </button>
