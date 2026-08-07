@@ -108,13 +108,14 @@ export function ProductCard({
           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         
-        {/* Custom Shape Badge (Top Left) */}
+        {/* Product Tag GIF (Top Left) */}
         {product.tagMedia?.url && (
-          <div className="absolute -left-2 -top-2 z-10 rounded-br-[18px] rounded-tl-[18px] bg-white p-2 md:-left-[15px] md:-top-[15px] md:rounded-br-[19px] md:rounded-tl-[19px] md:p-[11px]">
+          <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px]">
             <img 
               src={product.tagMedia.url} 
-              alt="Badge" 
-              className="max-w-[20px] md:max-w-[41px]" 
+              alt="Product tag" 
+              className="h-auto w-[40px] md:w-[70px]"
+              loading={priority ? "eager" : "lazy"}
             />
           </div>
         )}
