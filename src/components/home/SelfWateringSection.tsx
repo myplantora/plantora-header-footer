@@ -54,14 +54,6 @@ export function SelfWateringSection() {
           ))}
         </div>
 
-        <div className="mt-16 overflow-hidden rounded-[5px]">
-          <img
-            src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/HowItWorks_Banner.png?v=1785958543"
-            alt="Plantora self-watering system illustration"
-            className="w-full object-cover"
-            loading="lazy"
-          />
-        </div>
       </div>
     </section>
   );
