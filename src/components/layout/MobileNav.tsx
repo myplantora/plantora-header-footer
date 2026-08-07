@@ -61,7 +61,7 @@ export function MobileNav({ open, onClose }: Props) {
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
           <div className="mb-6 border-b border-border py-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Implement haptic feedback and clearer tap feedback for the card slider selection so users feel instant confirmation on mobile.
+              Verify that every cart-slider card tap consistently selects the right variant and opens the cart drawer on the first click across mobile and desktop breakpoints.
             </p>
           </div>
           <ul className="flex flex-col gap-1">
