@@ -58,9 +58,11 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="border-b border-border px-5 py-4">
-          <CartRewards />
-        </div>
+        {lines.length > 0 && (
+          <div className="border-b border-border px-5 py-4">
+            <CartRewards />
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
