@@ -1,5 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 import { Footer } from "@/components/layout/Footer";
 
@@ -44,6 +46,16 @@ export const Route = createFileRoute("/collections/$handle")({
 function CollectionPage() {
   const { handle } = Route.useParams();
   const { data: collection } = useSuspenseQuery(collectionQuery(handle));
+  const { track } = useMetaTracking();
+
+  useEffect(() => {
+    if (collection) {
+      track('ViewCategory', {
+        content_name: collection.title,
+        content_category: collection.title
+      });
+    }
+  }, [collection, track]);
 
   if (!collection) throw notFound();
 

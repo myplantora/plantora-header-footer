@@ -5,6 +5,7 @@ import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
+import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 import paypalAsset from "@/assets/paypal.png.asset.json";
 import gpayAsset from "@/assets/gpay.png.asset.json";
@@ -12,8 +13,9 @@ import mastercardAsset from "@/assets/mastercard.png.asset.json";
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
+  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate, totalQuantity } =
     useCartStore();
+  const { trackInitiateCheckout } = useMetaTracking();
 
   useEffect(() => {
     // Only fetch when the drawer opens with no locally known lines; otherwise
@@ -130,6 +132,7 @@ export function CartDrawer() {
           <button
             onClick={() => {
               if (lines.length === 0) return;
+              trackInitiateCheckout({ lines, subtotal, totalQuantity });
               const url = buildCheckoutUrl(
                 checkoutUrl,
                 resolveRewardState(subtotal?.amount ?? 0).bestCode
