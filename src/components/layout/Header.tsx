@@ -38,17 +38,7 @@ function CartButton() {
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (count === 0) {
-          const url = buildCheckoutUrl(
-            checkoutUrl,
-            resolveRewardState(subtotal?.amount ?? 0).bestCode
-          );
-          if (url && url !== "#") {
-            window.open(url, "_blank", "noopener,noreferrer");
-          }
-        } else {
-          openCart();
-        }
+        openCart();
       }}
       aria-label={`Shopping cart, ${count} item${count === 1 ? "" : "s"}`}
       className={cn(
