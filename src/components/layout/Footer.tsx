@@ -34,7 +34,7 @@ function FooterLinks({ title, links }: { title: string; links: { label: string; 
 export function Footer() {
   return (
     <footer style={{ backgroundColor: '#1D4D44' }} className="w-full text-white">
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
+      <div className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] lg:gap-10">
           <div className="max-w-md">
             <Logo tone="light" />
@@ -110,7 +110,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/15">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4 px-5 py-6 text-[13px] text-white/70 sm:px-6 lg:flex-row lg:justify-between lg:px-10">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4 px-5 py-4 text-[13px] text-white/70 sm:px-6 lg:flex-row lg:justify-between lg:px-10">
           <p>© 2026 Plantora. All Rights Reserved.</p>
           <p className="text-center">Made with ❤️ for plant lovers across the USA.</p>
           <PaymentIcons />
