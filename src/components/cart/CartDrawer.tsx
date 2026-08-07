@@ -120,7 +120,7 @@ export function CartDrawer() {
           )}
         </div>
 
-        <footer className={cn("border-t border-border p-5", lines.length === 0 && "opacity-50 pointer-events-none")}>
+        <footer className={cn("border-t border-border p-5", lines.length === 0 && "opacity-50")}>
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">SUBTOTAL</span>
             <span className="text-lg font-bold text-primary">
