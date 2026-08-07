@@ -98,14 +98,18 @@ export function CartRewards() {
 
   return (
     <section aria-label="Cart rewards" className="space-y-4">
-      <p aria-live="polite" className="text-center text-[10px] text-primary sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis px-2">
+      <p aria-live="polite" className="text-center text-sm text-primary">
         {state.nextTier ? (
           <>
-            Add <span className="font-semibold text-[#A8622A]">{formatMoney(state.remaining)}</span> for <span className="font-semibold">{state.nextTier?.label}</span>
+            You are{" "}
+            <span className="font-semibold text-[#A8622A]">{formatMoney(state.remaining)}</span> away
+            from <span className="font-semibold">{state.nextTier?.label}</span> on orders above{" "}
+            {formatMoney(state.nextTier?.threshold ?? 0)}
           </>
         ) : (
           <>
-            <span className="font-semibold">{state.currentTier?.label}</span> unlocked — best reward earned!
+            You&apos;ve unlocked <span className="font-semibold">{state.currentTier?.label}</span> —
+            the best reward available.
           </>
         )}
       </p>
