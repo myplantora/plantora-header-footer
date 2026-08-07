@@ -139,7 +139,7 @@ export function Header() {
                       onMouseLeave={scheduleClose}
                       className="animate-fade-in absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-4"
                     >
-                      <div className="rounded-3xl border border-border bg-background p-5 shadow-soft">
+                      <div className="rounded-[5px] border border-border bg-background p-5 shadow-soft">
                         {item.mega.map((col) => (
                           <div key={col.title}>
                             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">

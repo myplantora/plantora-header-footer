@@ -79,7 +79,7 @@ function Index() {
               <a
                 key={offer.src}
                 href="#"
-                className="group block overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className="group block overflow-hidden rounded-[5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
                 <img
                   src={offer.src}
