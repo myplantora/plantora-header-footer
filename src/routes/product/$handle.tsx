@@ -130,7 +130,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary p-[6px]">
+          <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
 
             {activeImage ? (
               <img
