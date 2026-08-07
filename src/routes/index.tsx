@@ -42,7 +42,7 @@ function Hero() {
         <p className="animate-fade-in text-[12px] font-medium uppercase tracking-[0.2em] text-accent">
           Premium plants, delivered
         </p>
-        <h1 className="animate-fade-in mx-auto mt-6 max-w-3xl font-serif text-4xl leading-[1.1] text-primary sm:text-6xl">
+        <h1 className="animate-fade-in mx-auto mt-6 max-w-3xl font-serif text-4xl font-bold leading-[1.1] text-primary sm:text-6xl">
           Bring nature home, one healthy plant at a time.
         </h1>
         <p className="animate-fade-in mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-muted-foreground">
