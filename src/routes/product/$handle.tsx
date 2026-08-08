@@ -478,6 +478,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
 function BadgeItem({ badge }: { badge: any }) {
   const [error, setError] = useState(false);
+  
+  const handleError = () => {
+    setError(true);
+    console.error(`[Plantora] Failed to load Badge GIF: "${badge.label}"`, {
+      key: badge.key,
+      url: badge.iconUrl,
+      timestamp: new Date().toISOString()
+    });
+  };
+
   return (
     <span 
       className={cn(
@@ -497,7 +507,7 @@ function BadgeItem({ badge }: { badge: any }) {
             onLoad={(e) => {
               (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
             }}
-            onError={() => setError(true)}
+            onError={handleError}
             {...({ playsInline: true } as any)}
           />
         </div>
