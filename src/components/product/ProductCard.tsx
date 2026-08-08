@@ -141,7 +141,7 @@ export function ProductCard({
         product.promoLabel === "has-deal" && "px-1"
       )}>
         {/* Product Title */}
-        <h3 className="line-clamp-2 mt-2 min-h-[40px] text-[16px] font-semibold leading-[1.25] text-[#1D4D44]">
+        <h3 className="line-clamp-2 mt-2 min-h-[40px] text-[16px] font-normal leading-[1.25] text-[#1D4D44]">
           {product.title}
         </h3>
 
@@ -152,11 +152,11 @@ export function ProductCard({
 
         {/* Price Row */}
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-[16px] font-bold text-[#1D4D44]">
+          <span className="text-[16px] font-normal text-[#1D4D44]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
-            <span className="text-[14px] text-[#C3754C] line-through">
+            <span className="text-[14px] text-[#C3754C] line-through font-normal">
               {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
             </span>
           )}
@@ -168,7 +168,7 @@ export function ProductCard({
             <span 
               key={badge.key}
               className={cn(
-                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-semibold text-[#1d4d43]",
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-normal text-[#1d4d43]",
                 idx === 0 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
               )}
             >
