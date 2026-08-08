@@ -83,6 +83,7 @@ function boughtCountFromSeed(seed: string) {
 }
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
+  const [tagMediaError, setTagMediaError] = useState(false);
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const search = Route.useSearch() as any;
@@ -163,7 +164,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         <div className="min-w-0">
           <div className="relative aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
             {/* Product Tag GIF (Top Left) */}
-            {product.tagMedia?.url && (
+            {product.tagMedia?.url && !tagMediaError && (
               <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
                 <img 
                   src={product.tagMedia.url} 
@@ -171,7 +172,18 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   aria-hidden="true"
                   className="h-auto w-[60px] sm:w-[100px]"
                   loading="eager"
+                  onError={() => setTagMediaError(true)}
                   {...({ playsInline: true } as any)}
+                />
+              </div>
+            )}
+            {tagMediaError && product.featuredImage?.url && (
+              <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none opacity-50">
+                 <img 
+                  src={product.featuredImage.url} 
+                  alt="" 
+                  aria-hidden="true"
+                  className="h-auto w-[40px] sm:w-[60px] rounded-full object-cover aspect-square border-2 border-white/50"
                 />
               </div>
             )}

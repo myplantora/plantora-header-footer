@@ -20,6 +20,7 @@ export function ProductCard({
   priority = false,
   className,
 }: ProductCardProps) {
+  const [tagMediaError, setTagMediaError] = useState(false);
   const addLine = useCartStore((s) => s.addLine);
   const openCart = useCartStore((s) => s.openCart);
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ export function ProductCard({
         />
         
         {/* Product Tag GIF (Top Left) */}
-        {product.tagMedia?.url && (
+        {product.tagMedia?.url && !tagMediaError && (
           <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px] pointer-events-none">
             <img 
               src={product.tagMedia.url} 
@@ -118,6 +119,7 @@ export function ProductCard({
               aria-hidden="true"
               className="h-auto w-[40px] md:w-[70px]"
               loading={priority ? "eager" : "lazy"}
+              onError={() => setTagMediaError(true)}
               {...({ playsInline: true } as any)}
             />
           </div>
