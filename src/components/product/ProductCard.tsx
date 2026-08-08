@@ -133,7 +133,7 @@ export function ProductCard({
                 onLoad={(e) => {
                   (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
                 }}
-                onError={() => setTagMediaError(true)}
+                onError={handleTagMediaError}
                 {...({ playsInline: true } as any)}
               />
             </div>
