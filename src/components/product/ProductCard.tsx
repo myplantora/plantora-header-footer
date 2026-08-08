@@ -192,7 +192,7 @@ export function ProductCard({
           {/* Color Section (Pot Type/Color) */}
           {colorOption && (
             <div className="space-y-2">
-              <span className="text-[13px] font-semibold text-[#1D4D44]">Select Pot</span>
+              <span className="text-[13px] font-normal text-[#1D4D44]">Select Pot</span>
               <div className="flex flex-wrap gap-3">
                 {colorOption.values.map(val => (
                   <button
