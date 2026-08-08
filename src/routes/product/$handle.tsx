@@ -84,6 +84,15 @@ function boughtCountFromSeed(seed: string) {
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const [tagMediaError, setTagMediaError] = useState(false);
+  
+  const handleTagMediaError = () => {
+    setTagMediaError(true);
+    console.error(`[Plantora] Failed to load Product Tag GIF for product: "${product.title}"`, {
+      handle: product.handle,
+      url: product.tagMedia?.url,
+      timestamp: new Date().toISOString()
+    });
+  };
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const search = Route.useSearch() as any;
@@ -178,7 +187,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                     onLoad={(e) => {
                       (e.currentTarget as HTMLImageElement).parentElement?.firstElementChild?.remove();
                     }}
-                    onError={() => setTagMediaError(true)}
+                    onError={handleTagMediaError}
                     {...({ playsInline: true } as any)}
                   />
                 </div>
@@ -478,6 +487,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
 function BadgeItem({ badge }: { badge: any }) {
   const [error, setError] = useState(false);
+  
+  const handleError = () => {
+    setError(true);
+    console.error(`[Plantora] Failed to load Badge GIF: "${badge.label}"`, {
+      key: badge.key,
+      url: badge.iconUrl,
+      timestamp: new Date().toISOString()
+    });
+  };
+
   return (
     <span 
       className={cn(
@@ -497,7 +516,7 @@ function BadgeItem({ badge }: { badge: any }) {
             onLoad={(e) => {
               (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
             }}
-            onError={() => setError(true)}
+            onError={handleError}
             {...({ playsInline: true } as any)}
           />
         </div>
