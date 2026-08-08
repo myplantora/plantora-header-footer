@@ -467,3 +467,28 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     </main>
   );
 }
+
+function BadgeItem({ badge }: { badge: any }) {
+  const [error, setError] = useState(false);
+  return (
+    <span 
+      className={cn(
+        "flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium text-[#1D4D44]",
+        badge.label === "Indoor Plant" ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
+      )}
+    >
+      {badge.iconUrl && !error && (
+        <img
+          src={badge.iconUrl}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="size-[18px] shrink-0 object-contain"
+          onError={() => setError(true)}
+          {...({ playsInline: true } as any)}
+        />
+      )}
+      {badge.label}
+    </span>
+  );
+}
