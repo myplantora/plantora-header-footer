@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { helpLinks, shopLinks } from "@/config/navigation";
 import { Logo } from "./Logo";
-import { NewsletterForm } from "./NewsletterForm";
 import { PaymentIcons } from "./PaymentIcons";
 
 const socials = [
