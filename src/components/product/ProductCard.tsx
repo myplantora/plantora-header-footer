@@ -118,7 +118,7 @@ export function ProductCard({
               aria-hidden="true"
               className="h-auto w-[40px] md:w-[70px]"
               loading={priority ? "eager" : "lazy"}
-              playsInline
+              {...({ playsInline: true } as any)}
             />
           </div>
         )}
@@ -181,7 +181,7 @@ export function ProductCard({
                   aria-hidden="true"
                   loading="lazy"
                   className="size-[14px] shrink-0 object-contain"
-                  playsInline
+                  {...({ playsInline: true } as any)}
                 />
               )}
               {badge.label}

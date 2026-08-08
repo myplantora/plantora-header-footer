@@ -171,7 +171,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   aria-hidden="true"
                   className="h-auto w-[60px] sm:w-[100px]"
                   loading="eager"
-                  playsInline
+                  {...({ playsInline: true } as any)}
                 />
               </div>
             )}
@@ -228,7 +228,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                       aria-hidden="true"
                       loading="lazy"
                       className="size-[18px] shrink-0 object-contain"
-                      playsInline
+                      {...({ playsInline: true } as any)}
                     />
                   )}
                   {badge.label}
@@ -268,7 +268,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 alt=""
                 aria-hidden="true"
                 className="h-5 w-5 object-contain"
-                playsInline
+                {...({ playsInline: true } as any)}
               />
             </button>
           </div>
