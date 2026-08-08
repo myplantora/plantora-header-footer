@@ -187,7 +187,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                     onLoad={(e) => {
                       (e.currentTarget as HTMLImageElement).parentElement?.firstElementChild?.remove();
                     }}
-                    onError={() => setTagMediaError(true)}
+                    onError={handleTagMediaError}
                     {...({ playsInline: true } as any)}
                   />
                 </div>
