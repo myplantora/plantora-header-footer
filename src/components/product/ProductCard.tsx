@@ -21,6 +21,15 @@ export function ProductCard({
   className,
 }: ProductCardProps) {
   const [tagMediaError, setTagMediaError] = useState(false);
+
+  const handleTagMediaError = () => {
+    setTagMediaError(true);
+    console.error(`[Plantora] Failed to load Product Card Tag GIF for product: "${product.title}"`, {
+      handle: product.handle,
+      url: product.tagMedia?.url,
+      timestamp: new Date().toISOString()
+    });
+  };
   const addLine = useCartStore((s) => s.addLine);
   const openCart = useCartStore((s) => s.openCart);
   const navigate = useNavigate();
