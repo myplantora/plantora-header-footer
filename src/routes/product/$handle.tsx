@@ -164,12 +164,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           <div className="relative aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
             {/* Product Tag GIF (Top Left) */}
             {product.tagMedia?.url && (
-              <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4">
+              <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
                 <img 
                   src={product.tagMedia.url} 
-                  alt="Product tag" 
+                  alt="" 
+                  aria-hidden="true"
                   className="h-auto w-[60px] sm:w-[100px]"
                   loading="eager"
+                  {...({ playsInline: true } as any)}
                 />
               </div>
             )}
@@ -226,6 +228,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                       aria-hidden="true"
                       loading="lazy"
                       className="size-[18px] shrink-0 object-contain"
+                      {...({ playsInline: true } as any)}
                     />
                   )}
                   {badge.label}
@@ -265,6 +268,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 alt=""
                 aria-hidden="true"
                 className="h-5 w-5 object-contain"
+                {...({ playsInline: true } as any)}
               />
             </button>
           </div>

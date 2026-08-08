@@ -111,12 +111,14 @@ export function ProductCard({
         
         {/* Product Tag GIF (Top Left) */}
         {product.tagMedia?.url && (
-          <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px]">
+          <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px] pointer-events-none">
             <img 
               src={product.tagMedia.url} 
-              alt="Product tag" 
+              alt="" 
+              aria-hidden="true"
               className="h-auto w-[40px] md:w-[70px]"
               loading={priority ? "eager" : "lazy"}
+              {...({ playsInline: true } as any)}
             />
           </div>
         )}
@@ -179,6 +181,7 @@ export function ProductCard({
                   aria-hidden="true"
                   loading="lazy"
                   className="size-[14px] shrink-0 object-contain"
+                  {...({ playsInline: true } as any)}
                 />
               )}
               {badge.label}
