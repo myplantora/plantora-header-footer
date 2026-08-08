@@ -20,6 +20,7 @@ export function ProductCard({
   priority = false,
   className,
 }: ProductCardProps) {
+  const [tagMediaError, setTagMediaError] = useState(false);
   const addLine = useCartStore((s) => s.addLine);
   const openCart = useCartStore((s) => s.openCart);
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ export function ProductCard({
         />
         
         {/* Product Tag GIF (Top Left) */}
-        {product.tagMedia?.url && (
+        {product.tagMedia?.url && !tagMediaError && (
           <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px] pointer-events-none">
             <img 
               src={product.tagMedia.url} 
@@ -118,6 +119,7 @@ export function ProductCard({
               aria-hidden="true"
               className="h-auto w-[40px] md:w-[70px]"
               loading={priority ? "eager" : "lazy"}
+              onError={() => setTagMediaError(true)}
               {...({ playsInline: true } as any)}
             />
           </div>
@@ -167,27 +169,8 @@ export function ProductCard({
         {/* Feature Chips (Metafields/Tags) */}
         <div className="mt-2 flex flex-wrap gap-x-2 gap-y-1">
           {product.badges.map((badge, idx) => (
-            <span 
-              key={badge.key}
-              className={cn(
-                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-normal text-[#1d4d43]",
-                idx === 0 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
-              )}
-            >
-              {badge.iconUrl && (
-                <img
-                  src={badge.iconUrl}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  className="size-[14px] shrink-0 object-contain"
-                  {...({ playsInline: true } as any)}
-                />
-              )}
-              {badge.label}
-            </span>
+            <BadgeItem key={badge.key} badge={badge} idx={idx} />
           ))}
-
         </div>
 
         {/* Variant Selectors */}
@@ -239,5 +222,30 @@ export function ProductCard({
         </div>
       </div>
     </article>
+  );
+}
+
+function BadgeItem({ badge, idx }: { badge: any, idx: number }) {
+  const [error, setError] = useState(false);
+  return (
+    <span 
+      className={cn(
+        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-normal text-[#1d4d43]",
+        idx === 0 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
+      )}
+    >
+      {badge.iconUrl && !error && (
+        <img
+          src={badge.iconUrl}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="size-[14px] shrink-0 object-contain"
+          onError={() => setError(true)}
+          {...({ playsInline: true } as any)}
+        />
+      )}
+      {badge.label}
+    </span>
   );
 }
