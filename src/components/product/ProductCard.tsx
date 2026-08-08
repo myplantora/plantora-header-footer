@@ -106,7 +106,7 @@ export function ProductCard({
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
           loading={priority ? "eager" : "lazy"}
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="size-full object-cover"
         />
         
         {/* Product Tag GIF (Top Left) */}
