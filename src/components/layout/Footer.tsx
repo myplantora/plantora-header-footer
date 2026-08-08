@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { helpLinks, shopLinks } from "@/config/navigation";
 import { Logo } from "./Logo";
-import { NewsletterForm } from "./NewsletterForm";
 import { PaymentIcons } from "./PaymentIcons";
 
 const socials = [
@@ -35,7 +34,7 @@ export function Footer() {
   return (
     <footer style={{ backgroundColor: '#1D4D44' }} className="w-full text-white">
       <div className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-16">
-        <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] lg:gap-10">
+        <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr] lg:gap-10">
           <div className="max-w-md">
             <Logo tone="light" />
             <h2 className="mt-6 font-serif text-3xl leading-tight">Bring Nature Home.</h2>
@@ -97,15 +96,6 @@ export function Footer() {
           <FooterLinks title="Shop" links={shopLinks} />
           <FooterLinks title="Help" links={helpLinks} />
 
-          <div>
-            <h3 className="font-serif text-xl text-white">Stay Connected</h3>
-            <p className="mt-5 font-serif text-2xl leading-snug">Join the Plantora Community</p>
-            <p className="mt-3 text-[15px] leading-relaxed text-white/70">
-              Get plant care tips, exclusive offers, new arrivals, and seasonal inspiration delivered
-              straight to your inbox.
-            </p>
-            <NewsletterForm />
-          </div>
         </div>
       </div>
 
