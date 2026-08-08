@@ -97,15 +97,6 @@ export function Footer() {
           <FooterLinks title="Shop" links={shopLinks} />
           <FooterLinks title="Help" links={helpLinks} />
 
-          <div>
-            <h3 className="font-serif text-xl text-white">Stay Connected</h3>
-            <p className="mt-5 font-serif text-2xl leading-snug">Join the Plantora Community</p>
-            <p className="mt-3 text-[15px] leading-relaxed text-white/70">
-              Get plant care tips, exclusive offers, new arrivals, and seasonal inspiration delivered
-              straight to your inbox.
-            </p>
-            <NewsletterForm />
-          </div>
         </div>
       </div>
 
