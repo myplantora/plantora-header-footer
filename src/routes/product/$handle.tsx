@@ -84,6 +84,15 @@ function boughtCountFromSeed(seed: string) {
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const [tagMediaError, setTagMediaError] = useState(false);
+  
+  const handleTagMediaError = () => {
+    setTagMediaError(true);
+    console.error(`[Plantora] Failed to load Product Tag GIF for product: "${product.title}"`, {
+      handle: product.handle,
+      url: product.tagMedia?.url,
+      timestamp: new Date().toISOString()
+    });
+  };
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const search = Route.useSearch() as any;
