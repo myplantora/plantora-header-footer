@@ -113,15 +113,21 @@ export function ProductCard({
         {/* Product Tag GIF (Top Left) */}
         {product.tagMedia?.url && !tagMediaError && (
           <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px] pointer-events-none">
-            <img 
-              src={product.tagMedia.url} 
-              alt="" 
-              aria-hidden="true"
-              className="h-auto w-[40px] md:w-[70px]"
-              loading={priority ? "eager" : "lazy"}
-              onError={() => setTagMediaError(true)}
-              {...({ playsInline: true } as any)}
-            />
+            <div className="relative">
+              <div className="absolute inset-0 animate-pulse rounded-full bg-black/5" />
+              <img 
+                src={product.tagMedia.url} 
+                alt="" 
+                aria-hidden="true"
+                className="relative h-auto w-[40px] md:w-[70px]"
+                loading="lazy"
+                onLoad={(e) => {
+                  (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
+                }}
+                onError={() => setTagMediaError(true)}
+                {...({ playsInline: true } as any)}
+              />
+            </div>
           </div>
         )}
 
@@ -235,15 +241,21 @@ function BadgeItem({ badge, idx }: { badge: any, idx: number }) {
       )}
     >
       {badge.iconUrl && !error && (
-        <img
-          src={badge.iconUrl}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="size-[14px] shrink-0 object-contain"
-          onError={() => setError(true)}
-          {...({ playsInline: true } as any)}
-        />
+        <div className="relative size-[14px] shrink-0">
+          <div className="absolute inset-0 animate-pulse rounded-full bg-black/5" />
+          <img
+            src={badge.iconUrl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="relative size-full object-contain"
+            onLoad={(e) => {
+              (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
+            }}
+            onError={() => setError(true)}
+            {...({ playsInline: true } as any)}
+          />
+        </div>
       )}
       {badge.label}
     </span>

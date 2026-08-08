@@ -166,15 +166,22 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             {/* Product Tag GIF (Top Left) */}
             {product.tagMedia?.url && !tagMediaError && (
               <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
-                <img 
-                  src={product.tagMedia.url} 
-                  alt="" 
-                  aria-hidden="true"
-                  className="h-auto w-[60px] sm:w-[100px]"
-                  loading="eager"
-                  onError={() => setTagMediaError(true)}
-                  {...({ playsInline: true } as any)}
-                />
+                <div className="relative">
+                  {/* Subtle placeholder while loading */}
+                  <div className="absolute inset-0 animate-pulse rounded-full bg-black/5" />
+                  <img 
+                    src={product.tagMedia.url} 
+                    alt="" 
+                    aria-hidden="true"
+                    className="relative h-auto w-[60px] sm:w-[100px] transition-opacity duration-300"
+                    loading="lazy"
+                    onLoad={(e) => {
+                      (e.currentTarget as HTMLImageElement).parentElement?.firstElementChild?.remove();
+                    }}
+                    onError={() => setTagMediaError(true)}
+                    {...({ playsInline: true } as any)}
+                  />
+                </div>
               </div>
             )}
             {tagMediaError && product.featuredImage?.url && (
@@ -184,6 +191,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   alt="" 
                   aria-hidden="true"
                   className="h-auto w-[40px] sm:w-[60px] rounded-full object-cover aspect-square border-2 border-white/50"
+                  loading="lazy"
                 />
               </div>
             )}
@@ -478,15 +486,21 @@ function BadgeItem({ badge }: { badge: any }) {
       )}
     >
       {badge.iconUrl && !error && (
-        <img
-          src={badge.iconUrl}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="size-[18px] shrink-0 object-contain"
-          onError={() => setError(true)}
-          {...({ playsInline: true } as any)}
-        />
+        <div className="relative size-[18px] shrink-0">
+          <div className="absolute inset-0 animate-pulse rounded-full bg-black/5" />
+          <img
+            src={badge.iconUrl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="relative size-full object-contain"
+            onLoad={(e) => {
+              (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
+            }}
+            onError={() => setError(true)}
+            {...({ playsInline: true } as any)}
+          />
+        </div>
       )}
       {badge.label}
     </span>
