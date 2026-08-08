@@ -226,25 +226,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex flex-wrap items-center gap-3">
               {product.badges.map((badge) => (
-                <span 
-                  key={badge.key}
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium text-[#1D4D44]",
-                    badge.label === "Indoor Plant" ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
-                  )}
-                >
-                  {badge.iconUrl && (
-                    <img
-                      src={badge.iconUrl}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      className="size-[18px] shrink-0 object-contain"
-                      {...({ playsInline: true } as any)}
-                    />
-                  )}
-                  {badge.label}
-                </span>
+                <BadgeItem key={badge.key} badge={badge} />
               ))}
             </div>
             {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
