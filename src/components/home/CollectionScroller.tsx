@@ -2,6 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/product/ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
+import { cn } from "@/lib/utils";
 
 export const collectionByIdQuery = (id: string, limit = 12) =>
   queryOptions({
