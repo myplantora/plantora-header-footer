@@ -53,7 +53,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
           <Link
             to="/collections/$handle"
             params={{ handle: collection.handle || "all" }}
-            className="flex items-center gap-2 rounded-full border border-[#1D4D44] px-8 py-3 text-[14px] font-bold text-[#1D4D44] transition-all hover:bg-[#1D4D44] hover:text-white"
+            className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
           >
             View more product
           </Link>
