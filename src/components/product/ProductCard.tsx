@@ -233,6 +233,16 @@ export function ProductCard({
 
 function BadgeItem({ badge, idx }: { badge: any, idx: number }) {
   const [error, setError] = useState(false);
+
+  const handleError = () => {
+    setError(true);
+    console.error(`[Plantora] Failed to load Card Badge GIF: "${badge.label}"`, {
+      key: badge.key,
+      url: badge.iconUrl,
+      timestamp: new Date().toISOString()
+    });
+  };
+
   return (
     <span 
       className={cn(
@@ -252,7 +262,7 @@ function BadgeItem({ badge, idx }: { badge: any, idx: number }) {
             onLoad={(e) => {
               (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
             }}
-            onError={() => setError(true)}
+            onError={handleError}
             {...({ playsInline: true } as any)}
           />
         </div>
