@@ -161,7 +161,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+          <div className="relative aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+            {/* Product Tag GIF (Top Left) */}
+            {product.tagMedia?.url && (
+              <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4">
+                <img 
+                  src={product.tagMedia.url} 
+                  alt="Product tag" 
+                  className="h-auto w-[60px] sm:w-[100px]"
+                  loading="eager"
+                />
+              </div>
+            )}
+
 
             {activeImage ? (
               <img
