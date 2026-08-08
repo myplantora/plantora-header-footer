@@ -2,6 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/product/ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
+import { cn } from "@/lib/utils";
 
 export const collectionByIdQuery = (id: string, limit = 12) =>
   queryOptions({
@@ -25,8 +26,6 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
   if (!collection || collection.products.length === 0) return null;
 
-  const mobileProducts = collection.products.slice(0, 4);
-
   return (
     <section className="mx-auto w-full max-w-[1400px] bg-[#F5F5F5] px-5 py-10 md:px-6 lg:px-10 lg:py-16">
       <div className="flex flex-col items-center justify-center text-center gap-4">
@@ -35,14 +34,30 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         </h2>
       </div>
 
-      <div className="mt-8">
-        <ul className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
+      <div className="mt-8 flex flex-col items-center">
+        <ul className="grid w-full grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
           {(collection.products || []).map((product, i) => (
-            <li key={product.id}>
+            <li 
+              key={product.id}
+              className={cn(
+                i >= 4 ? "hidden md:block" : "block",
+                i >= 8 ? "md:hidden" : ""
+              )}
+            >
               <ProductCard product={product} priority={i < 4} />
             </li>
           ))}
         </ul>
+
+        <div className="mt-10">
+          <Link
+            to="/collections/$handle"
+            params={{ handle: collection.handle || "all" }}
+            className="flex items-center gap-2 rounded-full border border-[#1D4D44] px-8 py-3 text-[14px] font-bold text-[#1D4D44] transition-all hover:bg-[#1D4D44] hover:text-white"
+          >
+            View more product
+          </Link>
+        </div>
       </div>
     </section>
   );
