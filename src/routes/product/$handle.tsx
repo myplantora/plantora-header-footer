@@ -55,8 +55,17 @@ function ProductPage() {
   const { data } = useSuspenseQuery(productQuery(handle));
   if (!data) throw notFound();
 
+  // Get background color from promoLabel
+  const bgColors: Record<string, string> = {
+    "deal": "#B3393F",
+    "organic": "#F2E8C2",
+    "premium": "#1D4D44",
+    "fresh": "#C3E8E8"
+  };
+  const bgColor = bgColors[data.product.promoLabel || ""] || "#F8F8F8";
+
   return (
-    <div className="min-h-screen bg-[#F8F8F8]">
+    <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: bgColor }}>
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
       <Footer />
@@ -149,10 +158,22 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden bg-[#F8F8F8] p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
+    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+          <div className="relative aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+            {/* Product Tag GIF (Top Left) */}
+            {product.tagMedia?.url && (
+              <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4">
+                <img 
+                  src={product.tagMedia.url} 
+                  alt="Product tag" 
+                  className="h-auto w-[60px] sm:w-[100px]"
+                  loading="eager"
+                />
+              </div>
+            )}
+
 
             {activeImage ? (
               <img
@@ -189,7 +210,28 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
         <div className="min-w-0 flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-3">
-            <ProductBadges badges={product.badges} />
+            <div className="flex flex-wrap items-center gap-3">
+              {product.badges.map((badge) => (
+                <span 
+                  key={badge.key}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium text-[#1D4D44]",
+                    badge.label === "Indoor Plant" ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
+                  )}
+                >
+                  {badge.iconUrl && (
+                    <img
+                      src={badge.iconUrl}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      className="size-[18px] shrink-0 object-contain"
+                    />
+                  )}
+                  {badge.label}
+                </span>
+              ))}
+            </div>
             {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
           </div>
 
