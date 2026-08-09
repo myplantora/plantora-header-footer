@@ -150,17 +150,17 @@ export function ProductCard({
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference */}
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          {product.badges.slice(0, 2).map((badge, idx) => (
+        <div className="flex flex-wrap gap-1 mb-2">
+          {product.badges.slice(0, 3).map((badge, idx) => (
             <span 
               key={badge.key}
               className={cn(
-                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-normal text-[#1d4d43]",
-                idx === 0 ? "bg-[#EDE9D2]" : "bg-[#C3E8E8]"
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-normal text-[#1d4d43]",
+                idx === 0 ? "bg-[#EDE9D2]" : idx === 1 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
               )}
             >
               {badge.iconUrl && (
-                <img src={badge.iconUrl} alt="" className="size-3.5 object-contain" />
+                <img src={badge.iconUrl} alt="" className="size-3 object-contain" />
               )}
               {badge.label}
             </span>
