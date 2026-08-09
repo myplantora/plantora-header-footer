@@ -29,10 +29,17 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
   return (
     <SectionContainer className="bg-[#FFFFFF] pt-6 pb-10 lg:pt-10 lg:pb-16">
-      <div className="flex flex-col items-center justify-center text-center gap-4">
-        <h2 className="font-serif text-[28px] font-bold text-primary sm:text-4xl w-full">
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">
           {heading ?? collection.title}
         </h2>
+        <Link
+          to="/collections/$handle"
+          params={{ handle: collection.handle || "all" }}
+          className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
+        >
+          View all
+        </Link>
       </div>
 
       <div className="mt-8 flex flex-col items-center">
