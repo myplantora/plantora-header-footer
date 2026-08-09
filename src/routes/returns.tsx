@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import { Footer } from '@/components/layout/Footer';
 
@@ -11,6 +12,87 @@ export const Route = createFileRoute('/returns')({
   }),
   component: ReturnsPage,
 });
+
+function ReplacementRequestForm() {
+  const [emailOrPhone, setEmailOrPhone] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailOrPhone.trim()) return;
+    window.location.href = `mailto:care@myplantora.com?subject=Replacement Request&body=Email/Phone: ${encodeURIComponent(emailOrPhone)}`;
+  };
+
+  return (
+    <section className="rounded-lg bg-[#F8F8F8] p-6">
+      <h2 className="mb-4 font-serif text-2xl text-[#1D4D44]">
+        Place a Replacement Request
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label
+            htmlFor="replacement-email"
+            className="mb-1 block text-sm font-medium text-[#1D4D44]"
+          >
+            Email or Phone
+          </label>
+          <input
+            id="replacement-email"
+            type="text"
+            value={emailOrPhone}
+            onChange={(e) => setEmailOrPhone(e.target.value)}
+            placeholder="care@myplantora.com Enter email address used for placing the order"
+            className="w-full rounded-lg border border-[#1D4D44]/20 bg-white px-4 py-3 text-sm text-[#1D4D44] placeholder:text-[#1D4D44]/50 focus:border-[#74A84A] focus:outline-none focus:ring-1 focus:ring-[#74A84A]"
+          />
+        </div>
+
+        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-[#4A4A4A]">
+          <li>
+            If the customer receives a damaged replacement plant, they are
+            eligible for a refund upon image verification of the replacement.
+          </li>
+          <li>
+            If the planter is found to have visible scratches or is broken, we
+            will promptly initiate a refund for the item upon image or video
+            verification.
+          </li>
+          <li>
+            We require a video of the package being opened to initiate a
+            refund.
+          </li>
+          <li>A clearly labeled image is required for all requests.</li>
+        </ul>
+
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+            className="mt-1 h-4 w-4 accent-[#74A84A]"
+          />
+          <span className="text-sm text-[#4A4A4A]">
+            By proceeding, you accept our{' '}
+            <Link
+              to="/terms"
+              className="underline underline-offset-2 transition-opacity hover:opacity-70"
+            >
+              Terms & Conditions
+            </Link>
+          </span>
+        </label>
+
+        <button
+          type="submit"
+          disabled={!emailOrPhone.trim() || !acceptedTerms}
+          className="h-11 w-full rounded-lg bg-[#1D4D44] px-6 text-sm font-medium text-white transition-colors hover:bg-[#1D4D44]/90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Submit Request
+        </button>
+      </form>
+    </section>
+  );
+}
 
 function ReturnsPage() {
   return (
@@ -51,6 +133,8 @@ function ReturnsPage() {
                 <li>You will bear the shipping charges to return the products.</li>
               </ul>
             </section>
+
+            <ReplacementRequestForm />
 
             <section className="border-t pt-8">
               <h2 className="font-serif text-xl text-primary mb-2">Return Address:</h2>
