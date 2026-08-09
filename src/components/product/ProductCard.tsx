@@ -196,7 +196,7 @@ export function ProductCard({
             onClick={handleAdd}
             disabled={soldOut || pending}
             className={cn(
-              "flex h-[42px] w-full items-center justify-center rounded-full font-sans text-[13px] font-medium transition-all",
+              "flex h-[38px] md:h-[42px] w-full items-center justify-center rounded-full font-sans text-[12px] md:text-[13px] font-medium transition-all",
               soldOut
                 ? "bg-[#f2f2f2] text-[#999]"
                 : "bg-[#1D4D44] text-white active:scale-[0.98]"
