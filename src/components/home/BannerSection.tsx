@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { SectionContainer } from "@/components/layout/SectionContainer";
 
 const DESKTOP_BANNER =
   "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/BannerDesktop.png?v=1785914980";
@@ -7,7 +8,7 @@ const MOBILE_BANNER =
 
 export function BannerSection() {
   return (
-    <section className="w-full">
+    <SectionContainer noPadding>
       <Link
         to="/collections"
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
@@ -31,6 +32,6 @@ export function BannerSection() {
           className="hidden h-auto w-full md:block"
         />
       </Link>
-    </section>
+    </SectionContainer>
   );
 }
