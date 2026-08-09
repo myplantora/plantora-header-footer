@@ -123,7 +123,7 @@ export function ProductCard({
               src={product.tagMedia.url} 
               alt="" 
               aria-hidden="true"
-              className="h-auto w-[45px] md:w-[75px]"
+              className="h-auto w-[40px] md:w-[65px]"
               loading="lazy"
               onError={handleTagMediaError}
               {...({ playsInline: true } as any)}
