@@ -103,136 +103,106 @@ export function ProductCard({
     <article
       onClick={handleNavigate}
       className={cn(
-        "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] transition-all duration-300",
-        product.promoLabel === "has-deal"
-          ? "bg-[#B3393F]"
-          : "bg-[#F5F5F5] border border-[#E5E5E5]",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden transition-all duration-300",
         className
       )}
     >
-      {/* Image Section */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-[20px]">
+      {/* Image Section - Pixel Perfect 1:1 Aspect Ratio */}
+      <div className="relative aspect-square w-full overflow-hidden rounded-[20px] bg-[#F5F5F5]">
         <img
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
           loading={priority ? "eager" : "lazy"}
-          className="size-full object-cover"
+          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         
-        {/* Product Tag GIF (Top Left) */}
+        {/* Product Tag GIF (Top Left) - Precisely positioned */}
         {product.tagMedia?.url && !tagMediaError && (
-          <div className="absolute -left-1 -top-1 z-10 md:-left-[10px] md:-top-[10px] pointer-events-none">
-            <div className="relative">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-black/5" />
-              <img 
-                src={product.tagMedia.url} 
-                alt="" 
-                aria-hidden="true"
-                className="relative h-auto w-[40px] md:w-[70px]"
-                loading="lazy"
-                onLoad={(e) => {
-                  (e.currentTarget as HTMLImageElement).previousElementSibling?.remove();
-                }}
-                onError={handleTagMediaError}
-                {...({ playsInline: true } as any)}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Discount Badge (Top Right) */}
-        {product.discountPercent && product.discountPercent > 0 && (
-          <div className="absolute right-3 top-3 z-10 rounded-full bg-[#1D4D44] px-2.5 py-1 text-[11px] font-normal text-white">
-            {product.discountPercent}% OFF
-          </div>
-        )}
-
-        {/* DOTD Badge (Replacement for promo labels) */}
-        {product.promoLabel === "DOTD" && (
-          <div className="absolute left-3 top-3 z-10 rounded-full bg-[#C3754C] px-2.5 py-1 text-[11px] font-normal text-white">
-            ⚡ DOTD
+          <div className="absolute -left-1 -top-1 z-10 md:-left-2 md:-top-2 pointer-events-none">
+            <img 
+              src={product.tagMedia.url} 
+              alt="" 
+              aria-hidden="true"
+              className="h-auto w-[45px] md:w-[75px]"
+              loading="lazy"
+              onError={handleTagMediaError}
+              {...({ playsInline: true } as any)}
+            />
           </div>
         )}
       </div>
 
-      <div className={cn(
-        "flex flex-1 flex-col px-[7px] pt-4 pb-0",
-        product.promoLabel === "has-deal" && "px-1"
-      )}>
-        {/* Product Title */}
-        <h3 className="line-clamp-2 mt-2 min-h-[40px] text-[16px] font-normal leading-[1.25] text-[#1D4D44]">
-          {product.title}
-        </h3>
-
-        {/* Rating Row */}
-        <div className="mt-1">
-          {product.reviews && <ProductRating reviews={product.reviews} />}
-        </div>
-
-        {/* Price Row */}
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-[16px] font-normal text-[#1D4D44]">
-            {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
-          </span>
-          {currentVariant.compareAtPrice && (
-            <span className="text-[14px] text-[#C3754C] line-through font-normal">
-              {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
-            </span>
-          )}
-        </div>
-
-        {/* Feature Chips (Metafields/Tags) */}
-        <div className="mt-2 flex flex-wrap gap-x-2 gap-y-1">
-          {product.badges.map((badge, idx) => (
-            <BadgeItem key={badge.key} badge={badge} idx={idx} />
-          ))}
-        </div>
-
-        {/* Variant Selectors */}
-        <div className="mt-4 space-y-4">
-          {/* Color Section (Pot Type/Color) */}
-          {colorOption && (
-            <div className="space-y-2">
-              <span className="text-[13px] font-medium text-[#1D4D44]">Select Pot</span>
-              <div className="flex flex-wrap gap-3">
-                {colorOption.values.map(val => (
-                  <button
-                    key={val}
-                    type="button"
-                    title={val}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedOptions(prev => ({ ...prev, [colorOption.name]: val }));
-                    }}
-                    className={cn(
-                      "size-8 rounded-full border-2 transition-all",
-                      selectedOptions[colorOption.name] === val
-                        ? "border-[#1D4D44]"
-                        : "border-transparent"
-                    )}
-                    style={{ backgroundColor: getColorHex(val) }}
-                  />
+      <div className="flex flex-1 flex-col pt-3 pb-2">
+        {/* Reviews Row - Exact Judge.me style from reference */}
+        <div className="flex items-center gap-1.5 mb-1">
+          {product.reviews ? (
+            <ProductRating reviews={product.reviews} />
+          ) : (
+            <div className="flex items-center gap-1 opacity-60">
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="size-3 text-[#ccc]">★</span>
                 ))}
               </div>
+              <span className="text-[11px] text-[#707070]">0 reviews</span>
             </div>
           )}
         </div>
 
-        {/* Add to Basket */}
-        <div className="mt-5 pb-3">
+        {/* Feature Tags - Exact spacing and styling from reference */}
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {product.badges.slice(0, 2).map((badge, idx) => (
+            <span 
+              key={badge.key}
+              className={cn(
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-normal text-[#1d4d43]",
+                idx === 0 ? "bg-[#EDE9D2]" : "bg-[#C3E8E8]"
+              )}
+            >
+              {badge.iconUrl && (
+                <img src={badge.iconUrl} alt="" className="size-3.5 object-contain" />
+              )}
+              {badge.label}
+            </span>
+          ))}
+        </div>
+
+        {/* Product Title - Fraunces 500, line-height matching reference */}
+        <h3 className="line-clamp-2 text-[15px] md:text-[16px] font-medium leading-[1.3] text-[#1D4D44] font-serif mb-1">
+          {product.title}
+        </h3>
+
+        {/* Price Row - Exact layout and colours from Reference HTML */}
+        <div className="flex items-center gap-2 mt-auto">
+          <span className="text-[18px] font-bold text-[#1D4D44]">
+            {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
+          </span>
+          {currentVariant.compareAtPrice && (
+            <span className="text-[13px] text-[#707070] line-through font-normal">
+              {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
+            </span>
+          )}
+          {product.discountPercent && product.discountPercent > 0 && (
+            <span className="bg-[#F5C439] text-[#1d4d43] text-[11px] px-2 py-0.5 rounded-full font-medium">
+              {product.discountPercent}% OFF
+            </span>
+          )}
+        </div>
+
+        {/* Add to Basket Button - Matching Kyari's exact mobile padding and style */}
+        <div className="mt-4">
           <button
             type="button"
             onClick={handleAdd}
             disabled={soldOut || pending}
             className={cn(
-              "flex h-[40px] w-full items-center justify-center rounded-full font-button text-[13px] font-medium transition-all",
+              "flex h-[42px] w-full items-center justify-center rounded-full font-sans text-[13px] font-medium transition-all",
               soldOut
-                ? "bg-gray-200 text-gray-500"
-                : "bg-[#1D4D44] text-white active:scale-[0.98]",
-              product.promoLabel === "has-deal" && "px-0"
+                ? "bg-[#f2f2f2] text-[#999]"
+                : "bg-[#1D4D44] text-white active:scale-[0.98]"
             )}
           >
-            {pending ? "Adding..." : soldOut ? "Sold Out" : "Add to Basket"}
+            {pending ? "ADDING..." : soldOut ? "SOLD OUT" : "ADD TO BASKET"}
           </button>
         </div>
       </div>
