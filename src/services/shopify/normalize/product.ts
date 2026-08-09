@@ -119,10 +119,10 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
   const badges: PlantoraBadge[] = featureFlags.badges
     ? metafieldConfig.badges
         .filter((badge) => readBoolean(map, badge.namespace, badge.key))
-        .map((badge, idx) => {
+        .map((badge, idx): PlantoraBadge => {
           const iconUrl = (badge as { gifUrl?: string }).gifUrl ?? (badge.key === 'tagMedia' ? badgeIcon?.url : null);
           const bgColors = ['#EDE9D2', '#C3E8E8', '#F2E8C2'];
-          const backgroundColor = bgColors[idx % bgColors.length];
+          const backgroundColor = bgColors[idx % bgColors.length] || '#EDE9D2';
           return iconUrl ? { key: badge.key, label: badge.label, iconUrl, backgroundColor } : { key: badge.key, label: badge.label, backgroundColor };
         })
     : [];
