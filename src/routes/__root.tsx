@@ -157,7 +157,7 @@ function RootComponent() {
         <Outlet />
         <Analytics />
         <Toaster position="bottom-right" />
-        {process.env.NODE_ENV === 'development' && <PaddingAuditOverlay />}
+        <PaddingAuditOverlay />
       </CartProvider>
     </QueryClientProvider>
   );
