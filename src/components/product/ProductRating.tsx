@@ -12,7 +12,7 @@ export function ProductRating({
   const rounded = Math.round(reviews.average * 10) / 10;
   return (
     <div
-      className="flex items-center gap-1.5 leading-none"
+      className="flex items-center gap-1.5 leading-none w-max"
       aria-label={`Rated ${rounded} out of 5 from ${reviews.total} reviews`}
     >
       <span className="flex items-center gap-0.5" aria-hidden="true">
