@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, X, Minus, Plus, Info } from "lucide-react";
+import { Check, Minus, Plus, Info } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+import { SectionContainer } from "@/components/layout/SectionContainer";
 
 
 import { CartProvider } from "@/components/layout/CartContext";
@@ -172,7 +173,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-0 sm:py-8 lg:py-12">
+    <SectionContainer as="main" noPadding className="sm:py-8 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
           <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md">

@@ -1,4 +1,5 @@
 import React from "react";
+import { SectionContainer } from "@/components/layout/SectionContainer";
 
 const PLANTORA_FEATURES = [
   {
@@ -25,43 +26,41 @@ const PLANTORA_FEATURES = [
 
 export function WhyChooseKyari() {
   return (
-    <section className="bg-[#F8F8F8] py-8 md:py-12 overflow-hidden px-2.5">
-      <div className="mx-auto max-w-[1400px]">
-        <div className="mb-4 text-center md:mb-8">
-          <h2 className="font-fraunces text-[22px] font-medium tracking-tight text-[#1D4D44] md:text-3xl">
-            Why Choose Plantora?
-          </h2>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-4 md:gap-x-6 md:gap-y-8">
-          {PLANTORA_FEATURES.map((feature, index) => (
-            <div 
-              key={index} 
-              className="group flex flex-col items-center text-center"
-            >
-              <div className="relative mb-1.5 flex aspect-square w-full max-h-[80px] md:max-h-[100px] items-center justify-center overflow-hidden rounded-[5px] bg-transparent transition-transform duration-500 group-hover:scale-[1.02]">
-                <img
-                  src={feature.image}
-                  alt={feature.title}
-                  className="h-[80%] w-[80%] object-contain"
-                  loading="lazy"
-                />
-              </div>
-              
-              <div className="space-y-0.5 px-1">
-                <h3 className="font-sans text-[13px] font-bold leading-tight text-[#1D4D44] md:text-[15px]">
-                  <span className="relative inline-block">
-                    {feature.title}
-                  </span>
-                </h3>
-                <p className="font-sans text-[11px] leading-relaxed text-[#1D4D44]/70 md:text-[12px]">
-                  {feature.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <SectionContainer className="bg-[#F8F8F8] py-8 md:py-12">
+      <div className="mb-4 text-center md:mb-8">
+        <h2 className="font-fraunces text-[22px] font-medium tracking-tight text-[#1D4D44] md:text-3xl">
+          Why Choose Plantora?
+        </h2>
       </div>
-    </section>
+      
+      <div className="grid grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-4 md:gap-x-6 md:gap-y-8">
+        {PLANTORA_FEATURES.map((feature, index) => (
+          <div 
+            key={index} 
+            className="group flex flex-col items-center text-center"
+          >
+            <div className="relative mb-1.5 flex aspect-square w-full max-h-[80px] md:max-h-[100px] items-center justify-center overflow-hidden rounded-[5px] bg-transparent transition-transform duration-500 group-hover:scale-[1.02]">
+              <img
+                src={feature.image}
+                alt={feature.title}
+                className="h-[80%] w-[80%] object-contain"
+                loading="lazy"
+              />
+            </div>
+            
+            <div className="space-y-0.5 px-1">
+              <h3 className="font-sans text-[13px] font-bold leading-tight text-[#1D4D44] md:text-[15px]">
+                <span className="relative inline-block">
+                  {feature.title}
+                </span>
+              </h3>
+              <p className="font-sans text-[11px] leading-relaxed text-[#1D4D44]/70 md:text-[12px]">
+                {feature.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SectionContainer>
   );
 }
