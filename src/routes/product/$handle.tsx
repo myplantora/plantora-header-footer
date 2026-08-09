@@ -225,7 +225,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             )}
           </div>
           {product.gallery.length > 1 ? (
-            <div className="mt-3 flex gap-3 overflow-x-auto px-2.5 sm:px-0">
+            <div className="mt-3 flex gap-3 overflow-x-auto px-2.5">
               {product.gallery.map((img) => (
                 <button
                   key={img.url}
@@ -243,7 +243,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0 flex flex-col gap-3 px-2.5 sm:px-0">
+        <div className="min-w-0 flex flex-col gap-3 px-2.5">
           <div className="flex flex-wrap items-center gap-3">
             {product.badges.map((badge) => (
               <BadgeItem key={badge.key} badge={badge} />
