@@ -25,9 +25,10 @@ export const SectionContainer = ({
     <Component
       className={cn(
         "w-full mx-auto overflow-x-hidden",
-        !noPadding && "px-2.5",
+        noPadding ? "px-0" : "px-2.5",
         className
       )}
+      data-no-padding={noPadding}
       {...props}
     >
       <div className={cn("mx-auto w-full", maxWidth)}>
