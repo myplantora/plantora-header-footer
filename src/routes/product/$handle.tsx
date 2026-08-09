@@ -172,10 +172,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-2.5 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
+    <main className="mx-auto w-full max-w-[1400px] overflow-x-hidden p-0 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="relative aspect-square w-full max-w-full overflow-hidden rounded-md bg-secondary">
+          <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md">
             {/* Product Tag GIF (Top Left) */}
             {product.tagMedia?.url && !tagMediaError && (
               <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
@@ -225,7 +225,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             )}
           </div>
           {product.gallery.length > 1 ? (
-            <div className="mt-3 flex gap-3 overflow-x-auto">
+            <div className="mt-3 flex gap-3 overflow-x-auto px-2.5 sm:px-0">
               {product.gallery.map((img) => (
                 <button
                   key={img.url}
@@ -243,7 +243,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0 flex flex-col gap-3">
+        <div className="min-w-0 flex flex-col gap-3 px-2.5 sm:px-0">
           <div className="flex flex-wrap items-center gap-3">
             {product.badges.map((badge) => (
               <BadgeItem key={badge.key} badge={badge} />
