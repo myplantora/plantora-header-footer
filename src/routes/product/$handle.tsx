@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Check, X, Minus, Plus, Info } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
+import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+
 
 import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
@@ -68,7 +70,9 @@ function ProductPage() {
     <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: bgColor }}>
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
+      <MarqueeBanner />
       <Footer />
+
     </div>
   );
 }
