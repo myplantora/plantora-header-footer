@@ -19,6 +19,7 @@ export type PlantoraBadge = {
   key: string;
   label: string;
   iconUrl?: string;
+  backgroundColor?: string;
 };
 
 export type PlantoraReviews = {
