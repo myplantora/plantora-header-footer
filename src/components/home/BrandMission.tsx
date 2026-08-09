@@ -15,7 +15,7 @@ export const BrandMission = () => {
                   d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
                 />
               </defs>
-              <text className="font-quicksand text-[14px] uppercase tracking-[0.1em] fill-current">
+              <text className="font-sans text-[14px] uppercase tracking-[0.1em] fill-current">
                 <textPath xlinkHref="#textCircle">
                   Where Greenery Thrives • Where Greenery Thrives •
                 </textPath>
