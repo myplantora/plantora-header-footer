@@ -9,6 +9,8 @@ import { CollectionScroller, collectionByIdQuery } from "@/components/home/Colle
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
 import { MediaMentions } from "@/components/home/MediaMentions";
 import { BrandMission } from "@/components/home/BrandMission";
+import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+
 
 
 const HOME_COLLECTION_ID = "659339542821";
@@ -48,6 +50,8 @@ function Index() {
         <WhyChooseKyari />
         <MediaMentions />
         <BrandMission />
+        <MarqueeBanner />
+
         
         
       </main>
