@@ -48,13 +48,14 @@ export function MobileNav({ open, onClose }: Props) {
         )}
       >
         <div className="flex h-16 items-center justify-between px-5">
-          <span className="font-serif text-xl text-primary">Plantora</span>
+          <span className="font-serif text-xl text-primary" aria-hidden="true">Plantora</span>
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close menu"
             className="grid size-10 place-items-center rounded-full text-black transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
