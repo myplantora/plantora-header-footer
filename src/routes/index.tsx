@@ -7,6 +7,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
+import { MediaMentions } from "@/components/home/MediaMentions";
 
 
 const HOME_COLLECTION_ID = "659339542821";
@@ -44,6 +45,7 @@ function Index() {
         <BannerSection />
         <CollectionScroller collectionId="659339542821" />
         <WhyChooseKyari />
+        <MediaMentions />
         
         
       </main>
