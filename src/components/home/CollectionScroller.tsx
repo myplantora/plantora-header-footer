@@ -28,7 +28,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
   if (!collection || collection.products.length === 0) return null;
 
   return (
-    <SectionContainer className="bg-[#F5F5F5] py-10 lg:py-16">
+    <SectionContainer className="bg-[#FFFFFF] py-10 lg:py-16">
       <div className="flex flex-col items-center justify-center text-center gap-4">
         <h2 className="font-serif text-[28px] font-bold text-primary sm:text-4xl w-full">
           {heading ?? "Explore Our Plants"}

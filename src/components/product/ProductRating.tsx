@@ -16,15 +16,23 @@ export function ProductRating({
       aria-label={`Rated ${rounded} out of 5 from ${reviews.total} reviews`}
     >
       <span className="flex items-center gap-0.5" aria-hidden="true">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <Star
-            key={i}
-            className="size-3.5 fill-[#E9AD20] text-[#E9AD20]"
-          />
-        ))}
+        {[0, 1, 2, 3, 4].map((i) => {
+          const isFull = i + 1 <= Math.floor(reviews.average);
+          const isHalf = !isFull && i < reviews.average;
+          return (
+            <span key={i} className="relative size-3.5">
+              <span className="text-[#eee] absolute inset-0">★</span>
+              {isFull ? (
+                <span className="text-[#E9AD20] absolute inset-0">★</span>
+              ) : isHalf ? (
+                <span className="text-[#E9AD20] absolute inset-0 overflow-hidden" style={{ width: '50%' }}>★</span>
+              ) : null}
+            </span>
+          );
+        })}
       </span>
-      <span className="text-[13px] font-medium text-primary">
-        {rounded.toFixed(1)} <span className="text-muted-foreground mx-0.5">|</span> {reviews.total}
+      <span className="text-[12px] font-medium text-[#707070] leading-none">
+        {rounded.toFixed(1)} | {reviews.total}
       </span>
     </div>
   );
