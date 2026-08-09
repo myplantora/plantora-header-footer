@@ -3,6 +3,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { RecommendationCard } from "./RecommendationCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
+import { SectionContainer } from "@/components/layout/SectionContainer";
 
 const RECOMMENDATION_COLLECTION_ID = "collections/659339542821";
 
@@ -31,7 +32,7 @@ export function ProductRecommendations({
   if (products.length === 0) return null;
 
   return (
-    <section className="mx-auto w-full max-w-[1400px] bg-[#F8F8F8] px-2.5 pt-12 pb-8 sm:pt-16 sm:pb-12 lg:pt-20 lg:pb-16">
+    <SectionContainer className="bg-[#F8F8F8] pt-12 pb-8 sm:pt-16 sm:pb-12 lg:pt-20 lg:pb-16">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="font-serif text-2xl text-primary sm:text-3xl lg:text-4xl">
           {heading}
@@ -64,6 +65,6 @@ export function ProductRecommendations({
           View all products
         </Link>
       ) : null}
-    </section>
+    </SectionContainer>
   );
 }
