@@ -119,9 +119,11 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
   const badges: PlantoraBadge[] = featureFlags.badges
     ? metafieldConfig.badges
         .filter((badge) => readBoolean(map, badge.namespace, badge.key))
-        .map((badge) => {
+        .map((badge, idx) => {
           const iconUrl = (badge as { gifUrl?: string }).gifUrl ?? (badge.key === 'tagMedia' ? badgeIcon?.url : null);
-          return iconUrl ? { key: badge.key, label: badge.label, iconUrl } : { key: badge.key, label: badge.label };
+          const bgColors = ['#EDE9D2', '#C3E8E8', '#F2E8C2'];
+          const backgroundColor = bgColors[idx % bgColors.length];
+          return iconUrl ? { key: badge.key, label: badge.label, iconUrl, backgroundColor } : { key: badge.key, label: badge.label, backgroundColor };
         })
     : [];
 
