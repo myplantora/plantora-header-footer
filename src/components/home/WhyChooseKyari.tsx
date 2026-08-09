@@ -25,7 +25,7 @@ const PLANTORA_FEATURES = [
 
 export function WhyChooseKyari() {
   return (
-    <section className="bg-[#F8F8F8] py-8 md:py-12 overflow-hidden px-2.5 sm:px-0">
+    <section className="bg-[#F8F8F8] py-8 md:py-12 overflow-hidden px-2.5">
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-4 text-center md:mb-8">
           <h2 className="font-fraunces text-[22px] font-medium tracking-tight text-[#1D4D44] md:text-3xl">
