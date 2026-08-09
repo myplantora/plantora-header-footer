@@ -2,8 +2,8 @@ import React from "react";
 
 export const BrandMission = () => {
   return (
-    <section className="bg-white py-12 lg:py-16">
-      <div className="mx-auto px-2.5 max-w-[1400px] flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
+    <section className="bg-white py-12 lg:py-16 px-2.5 sm:px-0">
+      <div className="mx-auto max-w-[1400px] flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
         {/* Left Side: Rotating Text & Image */}
         <div className="relative w-48 h-48 lg:w-64 lg:h-64 flex items-center justify-center shrink-0">
           {/* Inner Image (GIF) - Full Render without cropping */}
