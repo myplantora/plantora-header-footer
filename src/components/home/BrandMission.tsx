@@ -6,13 +6,12 @@ export const BrandMission = () => {
       <div className="container mx-auto px-4 lg:px-20 flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
         {/* Left Side: Rotating Text & Image */}
         <div className="relative w-48 h-48 lg:w-64 lg:h-64 flex items-center justify-center shrink-0">
-          {/* Rotating Text Wrapper Removed */}
-          {/* Inner Image (GIF) with Zoom */}
+          {/* Inner Image (GIF) - Full Render without cropping */}
           <div className="w-40 h-40 lg:w-56 lg:h-56 rounded-full overflow-hidden flex items-center justify-center bg-[#F8F8F8]">
             <img 
               src="https://kyari.co/cdn/shop/files/Greenery.webp?v=1762848088" 
               alt="Greenery Thrives"
-              className="w-full h-full object-cover scale-125"
+              className="w-full h-full object-contain scale-110"
               loading="lazy"
             />
           </div>
