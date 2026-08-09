@@ -150,7 +150,7 @@ export function ProductCard({
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference */}
-        <div className="flex flex-wrap gap-1 mb-2 h-[22px] overflow-hidden items-start">
+        <div className="flex gap-1 mb-2 h-[22px] overflow-hidden items-start">
           {product.badges.map((badge, idx) => (
             <span 
               key={badge.key}
