@@ -190,7 +190,7 @@ export function ProductCard({
         </div>
 
         {/* Add to Basket Button - Matching Kyari's exact mobile padding and style */}
-        <div className="mt-4">
+        <div className="mt-3 md:mt-4">
           <button
             type="button"
             onClick={handleAdd}
