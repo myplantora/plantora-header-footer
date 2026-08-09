@@ -61,23 +61,23 @@ function CollectionPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
-      <main className="mx-auto max-w-[1400px] px-5 py-14 sm:px-6 lg:px-10 lg:py-20">
-        <header className="max-w-2xl">
-          <h1 className="font-serif text-4xl text-primary sm:text-5xl">{collection.title}</h1>
+      <main className="mx-auto max-w-[1400px] px-2.5 py-10 lg:py-16">
+        <header className="mb-8 text-center sm:text-left">
+          <h1 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">{collection.title}</h1>
           {collection.descriptionHtml ? (
             <div
-              className="mt-4 text-base leading-relaxed text-muted-foreground [&_a]:underline"
+              className="mt-4 text-sm md:text-base leading-relaxed text-muted-foreground [&_a]:underline"
               dangerouslySetInnerHTML={{ __html: collection.descriptionHtml }}
             />
           ) : null}
         </header>
 
         {collection.products.length === 0 ? (
-          <p className="mt-12 text-base text-muted-foreground">
+          <p className="mt-12 text-center text-base text-muted-foreground">
             No products in this collection yet. Please check back soon.
           </p>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
+          <div className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
             {collection.products.map((product, i) => (
               <ProductCard key={product.id} product={product} priority={i < 4} />
             ))}
