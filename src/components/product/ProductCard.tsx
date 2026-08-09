@@ -155,7 +155,7 @@ export function ProductCard({
             <span 
               key={badge.key}
               className={cn(
-                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-normal text-[#1d4d43]",
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#1d4d43] leading-none whitespace-nowrap",
                 idx === 0 ? "bg-[#EDE9D2]" : idx === 1 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
               )}
             >
