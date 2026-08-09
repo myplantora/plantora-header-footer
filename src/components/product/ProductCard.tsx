@@ -134,23 +134,23 @@ export function ProductCard({
 
       <div className="flex flex-1 flex-col pt-3 pb-2">
         {/* Reviews Row - Exact Judge.me style from reference */}
-        <div className="flex items-center gap-1.5 mb-1">
+        <div className="flex items-center h-4 mb-1.5">
           {product.reviews ? (
             <ProductRating reviews={product.reviews} />
           ) : (
-            <div className="flex items-center gap-1 opacity-60">
-              <div className="flex gap-0.5">
+            <div className="flex items-center gap-1.5 leading-none opacity-60">
+              <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="size-3 text-[#ccc]">★</span>
+                  <span key={i} className="text-[14px] text-[#ccc] leading-none">★</span>
                 ))}
               </div>
-              <span className="text-[11px] text-[#707070]">0 reviews</span>
+              <span className="text-[12px] font-medium text-[#707070] leading-none pt-[1px]">0 | 0</span>
             </div>
           )}
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference */}
-        <div className="flex flex-wrap gap-1 mb-1.5 md:mb-2">
+        <div className="flex flex-wrap gap-1 mb-2 h-[22px]">
           {product.badges.slice(0, 3).map((badge, idx) => (
             <span 
               key={badge.key}
