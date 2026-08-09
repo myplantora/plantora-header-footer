@@ -224,25 +224,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               </div>
             )}
           </div>
-          <div className="px-0">
-            <div className="mt-3 flex gap-3 overflow-x-auto">
-              {product.gallery.map((img) => (
-                <button
-                  key={img.url}
-                  type="button"
-                  onClick={() => setActiveImage(img.url)}
-                  className={cn(
-                    "size-20 shrink-0 overflow-hidden rounded-md border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                    activeImage === img.url ? "border-primary" : "border-border",
-                  )}
-                >
-                  <img src={img.url} alt={img.altText} loading="lazy" className="size-full object-cover" />
-                </button>
-              ))}
-            </div>
-          ) : null}
           {product.gallery.length > 1 ? (
-            <div className="mt-3 flex gap-3 overflow-x-auto">
+            <div className="mt-3 flex gap-3 overflow-x-auto px-2.5 sm:px-0">
               {product.gallery.map((img) => (
                 <button
                   key={img.url}
@@ -258,7 +241,6 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               ))}
             </div>
           ) : null}
-          </div>
         </div>
 
         <div className="min-w-0 flex flex-col gap-3 px-2.5 sm:px-0">
