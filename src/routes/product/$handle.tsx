@@ -489,7 +489,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
         </div>
       ) : null}
-    </main>
+    </SectionContainer>
   );
 }
 
