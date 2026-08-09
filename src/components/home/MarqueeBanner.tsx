@@ -11,7 +11,7 @@ export const MarqueeBanner = () => {
   const repeatedItems = [...items, ...items, ...items, ...items, ...items, ...items];
 
   return (
-    <div className="w-full bg-[#F9F9F9] border-y border-[#E8E8E8] overflow-hidden py-3 lg:py-4 select-none">
+    <div className="w-full bg-[#FFFF00] border-y border-[#E8E8E8] overflow-hidden py-3 lg:py-4 select-none">
       <div className="flex whitespace-nowrap animate-marquee">
         {repeatedItems.map((item, index) => (
           <div
