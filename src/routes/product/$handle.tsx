@@ -243,22 +243,24 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
         </div>
 
-        <div className="min-w-0 flex flex-col gap-2">
+        <div className="min-w-0 flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex flex-wrap items-center gap-3">
-              {product.badges.map((badge) => (
-                <BadgeItem key={badge.key} badge={badge} />
-              ))}
-            </div>
-            {product.reviews ? <ProductRating reviews={product.reviews} /> : null}
+            {product.badges.map((badge) => (
+              <BadgeItem key={badge.key} badge={badge} />
+            ))}
           </div>
 
           <h1 className="font-serif text-4xl leading-tight text-primary sm:text-5xl">
             {product.title}
           </h1>
 
+          {product.reviews ? (
+            <div className="flex items-center gap-2">
+              <ProductRating reviews={product.reviews} />
+            </div>
+          ) : null}
 
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span className="font-serif text-2xl font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
@@ -287,6 +289,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               />
             </button>
           </div>
+
 
           <div className="inline-flex items-center gap-2 self-start rounded-md bg-[#8CD4DC] px-3 py-2 text-sm font-medium text-primary">
             <img
