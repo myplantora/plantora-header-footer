@@ -8,6 +8,7 @@ import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
 import { MediaMentions } from "@/components/home/MediaMentions";
+import { BrandMission } from "@/components/home/BrandMission";
 
 
 const HOME_COLLECTION_ID = "659339542821";
@@ -46,6 +47,7 @@ function Index() {
         <CollectionScroller collectionId="659339542821" />
         <WhyChooseKyari />
         <MediaMentions />
+        <BrandMission />
         
         
       </main>
