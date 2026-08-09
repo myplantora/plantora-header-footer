@@ -8,17 +8,17 @@ export const MarqueeBanner = () => {
   ];
 
   // Repeat items to ensure smooth infinite loop
-  const repeatedItems = [...items, ...items, ...items, ...items];
+  const repeatedItems = [...items, ...items, ...items, ...items, ...items, ...items];
 
   return (
-    <div className="w-full bg-white border-y border-[#E8E8E8] overflow-hidden py-4 lg:py-6 select-none">
+    <div className="w-full bg-[#F9F9F9] border-y border-[#E8E8E8] overflow-hidden py-3 lg:py-4 select-none">
       <div className="flex whitespace-nowrap animate-marquee">
         {repeatedItems.map((item, index) => (
           <div
             key={index}
-            className="flex items-center px-8 lg:px-12"
+            className="flex items-center px-10 lg:px-14"
           >
-            <span className="text-[#333333] text-sm lg:text-base font-medium tracking-wide">
+            <span className="text-[#333333] text-sm lg:text-base font-normal tracking-wide uppercase">
               {item}
             </span>
           </div>
@@ -27,3 +27,4 @@ export const MarqueeBanner = () => {
     </div>
   );
 };
+
