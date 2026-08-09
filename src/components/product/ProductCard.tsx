@@ -151,13 +151,11 @@ export function ProductCard({
 
         {/* Feature Tags - Exact spacing and styling from reference */}
         <div className="flex gap-1 mb-2 h-[22px] overflow-hidden items-start">
-          {product.badges.map((badge, idx) => (
+          {product.badges.map((badge) => (
             <span 
               key={badge.key}
-              className={cn(
-                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#1d4d43] leading-none whitespace-nowrap",
-                idx === 0 ? "bg-[#EDE9D2]" : idx === 1 ? "bg-[#C3E8E8]" : "bg-[#F2E8C2]"
-              )}
+              style={{ backgroundColor: badge.backgroundColor || '#EDE9D2' }}
+              className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#1d4d43] leading-none whitespace-nowrap"
             >
               {badge.iconUrl && (
                 <img src={badge.iconUrl} alt="" className="size-3 object-contain" />

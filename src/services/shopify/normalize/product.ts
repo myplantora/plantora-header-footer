@@ -63,9 +63,9 @@ function fallbackReviews(seed: string): PlantoraReviews {
 const badgeGif = (key: string): string | undefined =>
   (metafieldConfig.badges as { key: string; gifUrl?: string }[]).find((b) => b.key === key)?.gifUrl;
 
-const chip = (key: string, label: string, gifKey: string): PlantoraBadge => {
+const chip = (key: string, label: string, gifKey: string, backgroundColor: string): PlantoraBadge => {
   const iconUrl = badgeGif(gifKey);
-  return iconUrl ? { key, label, iconUrl } : { key, label };
+  return iconUrl ? { key, label, iconUrl, backgroundColor } : { key, label, backgroundColor };
 };
 
 /** Deterministic feature chips based on product info. */
@@ -73,18 +73,18 @@ function generateFeatureChips(seed: string, productType?: string, tags: string[]
   const chips: PlantoraBadge[] = [];
   const hash = hashString(seed);
 
+  // Background colors as defined in reference: idx 0: #EDE9D2, idx 1: #C3E8E8, idx 2: #F2E8C2
   if (tags.includes('Air Purifying') || productType?.toLowerCase().includes('plant')) {
-    chips.push(chip('air-purifying', 'Air Purifying', 'fast_growing'));
+    chips.push(chip('air-purifying', 'Air Purifying', 'fast_growing', '#EDE9D2'));
   }
 
   const pool: PlantoraBadge[] = [
-    chip('vastu', 'Indoor Plant', 'indoor_plant'),
-    chip('gift', 'Perfect Gift', 'perfect_gift'),
-    chip('pet', 'Pet Friendly', 'pet_safe'),
-    chip('low-maint', 'Low Maintenance', 'low_maintenance'),
-    chip('beginner', 'Fast Growing', 'fast_growing'),
+    chip('vastu', 'Indoor Plant', 'indoor_plant', '#C3E8E8'),
+    chip('gift', 'Perfect Gift', 'perfect_gift', '#F2E8C2'),
+    chip('pet', 'Pet Friendly', 'pet_safe', '#EDE9D2'),
+    chip('low-maint', 'Low Maintenance', 'low_maintenance', '#C3E8E8'),
+    chip('beginner', 'Fast Growing', 'fast_growing', '#F2E8C2'),
   ];
-
 
   if (chips.length < 2) {
     const second = pool[hash % pool.length];
