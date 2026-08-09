@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import { Footer } from '@/components/layout/Footer';
 
