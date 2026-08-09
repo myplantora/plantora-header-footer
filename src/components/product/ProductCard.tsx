@@ -174,7 +174,7 @@ export function ProductCard({
 
         {/* Price Row - Exact layout and colours from Reference HTML */}
         <div className="flex items-center gap-2 mt-auto">
-          <span className="text-[18px] font-bold text-[#1D4D44]">
+          <span className="text-[16px] md:text-[18px] font-bold text-[#1D4D44]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
