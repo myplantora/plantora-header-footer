@@ -150,7 +150,7 @@ export function ProductCard({
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference */}
-        <div className="flex flex-wrap gap-1 mb-2 h-[22px]">
+        <div className="flex flex-wrap gap-1 mb-2 h-[22px] overflow-hidden">
           {product.badges.slice(0, 3).map((badge, idx) => (
             <span 
               key={badge.key}
@@ -173,7 +173,7 @@ export function ProductCard({
         </h3>
 
         {/* Price Row - Exact layout and colours from Reference HTML */}
-        <div className="flex items-center gap-2 mt-auto">
+        <div className="flex items-center gap-2 mt-auto h-6">
           <span className="text-[16px] md:text-[18px] font-bold text-[#1D4D44]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
