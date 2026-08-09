@@ -53,6 +53,8 @@ function ReturnsPage() {
               </ul>
             </section>
 
+            <ReplacementRequestForm />
+
             <section className="border-t pt-8">
               <h2 className="font-serif text-xl text-primary mb-2">Return Address:</h2>
               <address className="not-italic text-sm leading-relaxed">
