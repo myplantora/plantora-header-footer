@@ -70,23 +70,23 @@ export function CartDrawer() {
               ) : (
                 <div className="w-full space-y-8">
                   <div className="flex flex-col items-center text-center">
-                    <div className="mb-6 grid size-16 place-items-center rounded-full bg-accent/10">
-                      <ShoppingBag className="size-8 text-accent" />
+                    <div className="mb-6 grid size-16 place-items-center rounded-full bg-[#F1F8EE]">
+                      <ShoppingBag className="size-8 text-[#74A84A]" />
                     </div>
-                    <h3 className="text-2xl font-serif text-primary">Your cart is currently empty</h3>
+                    <h3 className="text-2xl font-serif text-[#1D4D44]">Your cart is currently empty</h3>
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
                   <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-[#1D4D44]">
-                    <CheckCircle2 className="size-4 text-accent" />
+                    <CheckCircle2 className="size-4 text-[#74A84A]" />
                     30 DAY PLANT REPLACEMENT GUARANTEE
                   </div>
 
                   <button
                     onClick={closeCart}
-                    className="w-full rounded-full bg-accent py-3 font-button text-sm font-bold text-white transition-all hover:shadow-md"
+                    className="w-full rounded-full bg-[#74A84A] py-4 font-button text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
                   >
-                    RETURN TO SHOP
+                    Return to Shop
                   </button>
                 </div>
               )}
