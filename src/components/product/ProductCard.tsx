@@ -187,17 +187,17 @@ export function ProductCard({
         </h3>
 
         {/* Price Row - Updated colours and font to match reference */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-auto min-h-6">
-          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] font-sans">
+        <div className="flex flex-nowrap items-center gap-x-1.5 gap-y-1 mt-auto min-h-6 overflow-hidden">
+          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] font-sans whitespace-nowrap">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && currentVariant.compareAtPrice.amount > currentVariant.price.amount && (
             <>
-              <span className="text-[13px] text-[#707070] line-through font-normal font-sans">
+              <span className="text-[13px] text-[#707070] line-through font-normal font-sans whitespace-nowrap">
                 {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
               </span>
-              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-2 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
-                SAVE {formatMoney(currentVariant.compareAtPrice.amount - currentVariant.price.amount, currentVariant.price.currency)}
+              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
+                SAVE {formatMoney(Math.round(currentVariant.compareAtPrice.amount - currentVariant.price.amount), currentVariant.price.currency)}
               </span>
             </>
           )}
