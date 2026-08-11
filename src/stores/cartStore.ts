@@ -56,6 +56,7 @@ const CART_FRAGMENT = `
               title
               image { url altText }
               price { amount currencyCode }
+              compareAtPrice { amount currencyCode }
               product { title handle }
             }
           }
