@@ -211,11 +211,6 @@ export function CartDrawer() {
               </div>
             </button>
 
-            <button
-              className="flex h-[44px] w-full items-center justify-center rounded-full border border-border bg-white font-button text-sm font-normal text-primary transition-all duration-300 hover:bg-secondary"
-            >
-              APPLY DISCOUNT AT CHECKOUT
-            </button>
           </div>
         </footer>
       </aside>
