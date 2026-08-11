@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { storefrontApiRequest } from "@/services/shopify/client";
+import { toast } from "sonner";
 import { triggerHaptic } from "@/utils/haptics";
 
 export type CartLine = {
@@ -72,6 +73,7 @@ const CART_CREATE = `${CART_FRAGMENT}
     cartCreate(input: { lines: $lines }) {
       cart { ...CartFields }
       userErrors { message }
+      warnings { code message target }
     }
   }`;
 
@@ -80,6 +82,7 @@ const CART_LINES_ADD = `${CART_FRAGMENT}
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart { ...CartFields }
       userErrors { message }
+      warnings { code message target }
     }
   }`;
 
@@ -88,6 +91,7 @@ const CART_LINES_UPDATE = `${CART_FRAGMENT}
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart { ...CartFields }
       userErrors { message }
+      warnings { code message target }
     }
   }`;
 
@@ -96,6 +100,7 @@ const CART_LINES_REMOVE = `${CART_FRAGMENT}
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart { ...CartFields }
       userErrors { message }
+      warnings { code message target }
     }
   }`;
 
@@ -104,6 +109,7 @@ const CART_DISCOUNT_CODES_UPDATE = `${CART_FRAGMENT}
     cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
       cart { ...CartFields }
       userErrors { message }
+      warnings { code message target }
     }
   }`;
 
@@ -111,6 +117,17 @@ const CART_QUERY = `${CART_FRAGMENT}
   query Cart($id: ID!) {
     cart(id: $id) { ...CartFields }
   }`;
+
+function notifyWarnings(warnings: any[] | undefined) {
+  if (!warnings?.length) return;
+  const outOfStock = warnings.filter((w) => w?.code === "MERCHANDISE_OUT_OF_STOCK");
+  if (outOfStock.length) {
+    toast.error("Some items are sold out", {
+      description: outOfStock.map((w) => w.message).join(" "),
+      position: "top-center",
+    });
+  }
+}
 
 function mapCart(cart: any) {
   return {
@@ -203,6 +220,9 @@ export const useCartStore = create<CartState>()(
           const data = cartId
             ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
             : await storefrontApiRequest<any>(CART_CREATE, { lines });
+          notifyWarnings(
+            data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
+          );
           const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
           if (cart) {
             set({ ...mapCart(cart), isOpen: true });
@@ -227,6 +247,7 @@ export const useCartStore = create<CartState>()(
             cartId,
             lines: [{ id: lineId, quantity }],
           });
+          notifyWarnings(data?.data?.cartLinesUpdate?.warnings);
           const cart = data?.data?.cartLinesUpdate?.cart;
           if (cart) {
             set(mapCart(cart));
