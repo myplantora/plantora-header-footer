@@ -103,7 +103,7 @@ export function Header() {
           <Menu className="pointer-events-none h-5 w-5" aria-hidden="true" />
         </button>
 
-        <div className="flex flex-1 justify-center lg:flex-none lg:justify-start">
+        <div className="flex flex-1 justify-center lg:flex-none">
           <Logo />
         </div>
 
