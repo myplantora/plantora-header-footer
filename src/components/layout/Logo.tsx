@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoAsset from "@/assets/logo-plantora.png.asset.json";
 
 export function Logo({ className, tone = "dark" }: { className?: string; tone?: "dark" | "light" }) {
   return (
