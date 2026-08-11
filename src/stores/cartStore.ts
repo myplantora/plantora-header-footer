@@ -12,6 +12,7 @@ export type CartLine = {
   variantTitle: string;
   imageUrl: string | null;
   amount: number;
+  compareAtAmount: number | null;
   currency: string;
 };
 
@@ -55,6 +56,7 @@ const CART_FRAGMENT = `
               title
               image { url altText }
               price { amount currencyCode }
+              compareAtPrice { amount currencyCode }
               product { title handle }
             }
           }
@@ -134,6 +136,9 @@ function mapCart(cart: any) {
       variantTitle: edge.node.merchandise?.title ?? "",
       imageUrl: edge.node.merchandise?.image?.url ?? null,
       amount: Number(edge.node.merchandise?.price?.amount ?? 0),
+      compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
+        ? Number(edge.node.merchandise.compareAtPrice.amount)
+        : null,
       currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
     })) as CartLine[],
   };
