@@ -164,51 +164,59 @@ export function CartDrawer() {
               {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : formatMoney(0)}
             </span>
           </div>
-          <button
-            onClick={() => {
-              if (lines.length === 0) return;
-              trackInitiateCheckout({ lines, subtotal, totalQuantity });
-              const url = buildCheckoutUrl(
-                checkoutUrl,
-                resolveRewardState(subtotal?.amount ?? 0).bestCode
-              );
-              if (url && url !== "#") {
-                window.open(url, "_blank", "noopener,noreferrer");
-              }
-            }}
-            className="relative mt-4 flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 font-button text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-          >
-            <div className="flex items-center gap-[10px]">
-              <span className="tracking-widest">CHECKOUT</span>
-              
-              <div className="flex items-center -space-x-2">
-                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
-                  <img
-                    src={paypalAsset.url}
-                    alt="PayPal"
-                    className="size-full scale-125 object-contain"
-                  />
+
+          <div className="mt-4 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                if (lines.length === 0) return;
+                trackInitiateCheckout({ lines, subtotal, totalQuantity });
+                const url = buildCheckoutUrl(
+                  checkoutUrl,
+                  resolveRewardState(subtotal?.amount ?? 0).bestCode
+                );
+                if (url && url !== "#") {
+                  window.open(url, "_blank", "noopener,noreferrer");
+                }
+              }}
+              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 font-button text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            >
+              <div className="flex items-center gap-[10px]">
+                <span className="tracking-widest">CHECKOUT</span>
+                
+                <div className="flex items-center -space-x-2">
+                  <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                    <img
+                      src={paypalAsset.url}
+                      alt="PayPal"
+                      className="size-full scale-125 object-contain"
+                    />
+                  </div>
+                  <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                    <img
+                      src={gpayAsset.url}
+                      alt="Google Pay"
+                      className="size-full scale-125 object-contain"
+                    />
+                  </div>
+                  <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                    <img
+                      src={mastercardAsset.url}
+                      alt="Mastercard"
+                      className="size-full scale-125 object-contain"
+                    />
+                  </div>
                 </div>
-                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
-                  <img
-                    src={gpayAsset.url}
-                    alt="Google Pay"
-                    className="size-full scale-125 object-contain"
-                  />
-                </div>
-                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
-                  <img
-                    src={mastercardAsset.url}
-                    alt="Mastercard"
-                    className="size-full scale-125 object-contain"
-                  />
-                </div>
+
+                <ChevronRight className="size-5 shrink-0" />
               </div>
+            </button>
 
-              <ChevronRight className="size-5 shrink-0" />
-            </div>
-          </button>
-
+            <button
+              className="flex h-[44px] w-full items-center justify-center rounded-full border border-border bg-white font-button text-sm font-normal text-primary transition-all duration-300 hover:bg-secondary"
+            >
+              APPLY DISCOUNT AT CHECKOUT
+            </button>
+          </div>
         </footer>
       </aside>
     </div>
