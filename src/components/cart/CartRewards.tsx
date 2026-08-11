@@ -119,11 +119,11 @@ export function CartRewards() {
         role="list"
         aria-label="Reward milestones"
       >
-        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary ml-8 mr-8" />
+        <div className="absolute inset-x-0 top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary ml-[calc(100%/8)] mr-[calc(100%/8)]" />
         <div
-          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none ml-8"
+          className="absolute left-0 top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none ml-[calc(100%/8)]"
           style={{ 
-            width: `calc(${Math.min(fill, 100)}% - 64px)`,
+            width: `calc((${Math.min(fill, 100)}% - ${100/4}%) * 1)`,
             backgroundColor: `oklch(from var(--reward-success) calc(l - ${Math.min(fill / 400, 0.15)}) c h)`
           }}
         />
