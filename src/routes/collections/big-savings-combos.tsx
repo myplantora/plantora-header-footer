@@ -55,7 +55,6 @@ function BigSavingsPage() {
   if (!collection) throw notFound();
 
   return (
-  return (
     <div className="min-h-screen bg-[#F8F8F8]">
       <main className="mx-auto max-w-[1400px] px-2.5 pb-10 lg:pb-16">
         <header className="mb-6 flex flex-col gap-6 pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -78,7 +77,5 @@ function BigSavingsPage() {
       </main>
       <Footer />
     </div>
-  );
-}
   );
 }
