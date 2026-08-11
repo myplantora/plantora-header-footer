@@ -73,7 +73,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
           {isBigSavings ? (
             <Link
               to="/collections/big-savings-combos"
-              className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px]  text-white transition-all hover:opacity-90"
+              className="flex items-center gap-2 rounded-full bg-[#1D4D44] px-8 py-3 text-[14px] text-white transition-all hover:opacity-90"
             >
               View more product
             </Link>
@@ -81,7 +81,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
             <Link
               to="/collections/$handle"
               params={{ handle: collection.handle || "all" }}
-              className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px]  text-white transition-all hover:opacity-90"
+              className="flex items-center gap-2 rounded-full bg-[#1D4D44] px-8 py-3 text-[14px] text-white transition-all hover:opacity-90"
             >
               View more product
             </Link>
