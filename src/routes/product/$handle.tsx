@@ -94,25 +94,20 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const footer = Array.from(document.querySelectorAll('footer')).find((element) => {
+      const mainButton = document.getElementById("main-add-to-basket");
+      const footer = Array.from(document.querySelectorAll("footer")).find((element) => {
         const rect = element.getBoundingClientRect();
         return rect.height > 0 && window.getComputedStyle(element).display !== "none";
       });
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // Keep the purchase action available once the customer starts browsing.
-      // This does not depend on the main button's position because it may still
-      // be below the viewport while the customer scrolls through product media.
-      setShowFloatingButton(currentScrollY > 80);
+      // Show the floating bar only when the main Add to basket button scrolls out of view.
+      const mainButtonRect = mainButton?.getBoundingClientRect();
+      setShowFloatingButton((mainButtonRect?.bottom ?? 0) < 0);
 
       // Hide if near footer to avoid overlap
-      if (footerTop < windowHeight + 20) {
-        setIsNearFooter(true);
-      } else {
-        setIsNearFooter(false);
-      }
+      setIsNearFooter(footerTop < windowHeight + 20);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -457,14 +452,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             ) : null}
           </div>
 
-          {/* Floating Mobile Add to Basket (Matches reference HTML structure) */}
+          {/* Floating Add to Basket */}
           <div 
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out sm:hidden",
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+            <div className="mx-auto max-w-[1400px] rounded-t-[20px] bg-[#F8F8F8] px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-sm font-medium text-[#1D4D44] line-clamp-1 flex-1">
