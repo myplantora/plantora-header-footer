@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { storefrontApiRequest } from "@/services/shopify/client";
+import { triggerHaptic } from "@/utils/haptics";
 
 export type CartLine = {
   id: string;
@@ -196,7 +197,10 @@ export const useCartStore = create<CartState>()(
             ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
             : await storefrontApiRequest<any>(CART_CREATE, { lines });
           const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
-          if (cart) set({ ...mapCart(cart), isOpen: true });
+          if (cart) {
+            set({ ...mapCart(cart), isOpen: true });
+            triggerHaptic('medium');
+          }
         } finally {
           set({ isLoading: false });
         }
@@ -212,7 +216,10 @@ export const useCartStore = create<CartState>()(
             lines: [{ id: lineId, quantity }],
           });
           const cart = data?.data?.cartLinesUpdate?.cart;
-          if (cart) set(mapCart(cart));
+          if (cart) {
+            set(mapCart(cart));
+            triggerHaptic('light');
+          }
         } finally {
           set({ isLoading: false });
         }
@@ -228,7 +235,10 @@ export const useCartStore = create<CartState>()(
             lineIds: [lineId],
           });
           const cart = data?.data?.cartLinesRemove?.cart;
-          if (cart) set(mapCart(cart));
+          if (cart) {
+            set(mapCart(cart));
+            triggerHaptic('heavy');
+          }
         } finally {
           set({ isLoading: false });
         }
