@@ -285,9 +285,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
                 <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2.5 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap">
-                  {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
+                  SAVE {formatMoney(compareAt.amount - price.amount, price.currency)}
                 </span>
               ) : null}
+
             </div>
             <button
               type="button"
