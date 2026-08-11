@@ -103,7 +103,7 @@ export function ProductCard({
     <article
       onClick={handleNavigate}
       className={cn(
-        "group relative flex w-full cursor-pointer flex-col overflow-hidden transition-all duration-300 rounded-[15px]",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden transition-all duration-300 rounded-[20px]",
         className
       )}
     >
