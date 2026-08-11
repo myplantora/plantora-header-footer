@@ -251,10 +251,25 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         </div>
 
         <div className="min-w-0 flex flex-col gap-3 px-2.5">
-          <div className="flex flex-wrap items-center gap-3">
-            {product.badges.map((badge) => (
-              <BadgeItem key={badge.key} badge={badge} />
-            ))}
+          <div className="flex flex-wrap items-center gap-x-1 gap-y-1.5">
+            {product.badges.map((badge, index) => {
+              const tagColors = ['#B8D334', '#F0D2D2', '#C2E8E8', '#EEE9D1'];
+              const baseIndex = product.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              const bgColor = tagColors[(baseIndex + index) % tagColors.length];
+              
+              return (
+                <span 
+                  key={badge.key}
+                  style={{ backgroundColor: bgColor }}
+                  className="flex items-center gap-1 rounded-full px-1.5 py-1 text-[9px] md:text-[11px] font-normal text-[#254838] leading-none whitespace-nowrap"
+                >
+                  {badge.iconUrl && (
+                    <img src={badge.iconUrl} alt="" className="size-3 object-contain shrink-0" />
+                  )}
+                  {badge.label}
+                </span>
+              );
+            })}
           </div>
 
           <h1 className="text-2xl leading-tight text-primary sm:text-3xl ">
