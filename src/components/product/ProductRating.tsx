@@ -31,7 +31,7 @@ export function ProductRating({
           );
         })}
       </span>
-      <span className="text-[12px] font-medium text-[#707070] pt-[1px]">
+      <span className="text-[12px] font-bold text-[#707070] pt-[1px]">
         {rounded.toFixed(1)} | {reviews.total}
       </span>
     </div>
