@@ -103,12 +103,12 @@ export function ProductCard({
     <article
       onClick={handleNavigate}
       className={cn(
-        "group relative flex w-full cursor-pointer flex-col overflow-hidden transition-all duration-300",
+        "group relative flex w-full cursor-pointer flex-col overflow-hidden transition-all duration-300 rounded-[15px]",
         className
       )}
     >
       {/* Image Section - Pixel Perfect 1:1 Aspect Ratio */}
-      <div className="relative aspect-square w-full overflow-hidden bg-[#F5F5F5]">
+      <div className="relative aspect-square w-full overflow-hidden bg-[#F5F5F5] rounded-t-[15px]">
         <img
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
@@ -135,7 +135,7 @@ export function ProductCard({
 
       {/* Combo Offer Banner - Rendered below image, not overlapping */}
       {product.tags?.includes("Combo") && (
-        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-1.5 bg-[#8CD4DC] px-2.5 -mx-px">
+        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-1.5 bg-[#8CD4DC] px-2.5 -mx-px rounded-b-md">
           <img 
             src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
             alt="" 
