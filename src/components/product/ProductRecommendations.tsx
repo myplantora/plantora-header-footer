@@ -60,7 +60,7 @@ export function ProductRecommendations({
         <Link
           to="/collections/$handle"
           params={{ handle: collection.handle }}
-          className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:hidden"
+          className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-full bg-[#C3754C] px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:hidden"
         >
           View all products
         </Link>
