@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, Minus, Plus, Info, X } from "lucide-react";
+import { Minus, Plus, Info, X } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
@@ -188,16 +188,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
-      await addLine(variantId, quantity);
+      const ok = await addLine(variantId, quantity);
+      if (!ok) {
+        toast.error("Could not add to basket. Please try again.");
+        return;
+      }
       trackAddToCart(product, quantity);
-
-      toast.success(`${product.title} added to basket`, {
-        icon: <Check className="size-4" />,
-      });
+      // Open the cart slider only after Shopify confirmed the cart + checkout URL
+      useCartStore.getState().openCart();
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
   }
+
 
   function decreaseQty() {
     setQuantity((q) => Math.max(1, q - 1));
