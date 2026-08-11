@@ -162,6 +162,23 @@ function mapCart(cart: any) {
   };
 }
 
+async function addLineToCart(
+  cartId: string | null,
+  merchandiseId: string,
+  quantity = 1,
+) {
+  const lines = [{ merchandiseId, quantity }];
+  const data = cartId
+    ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
+    : await storefrontApiRequest<any>(CART_CREATE, { lines });
+  notifyWarnings(
+    data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
+  );
+  const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
+  if (!cart) return null;
+  return mapCart(cart);
+}
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
