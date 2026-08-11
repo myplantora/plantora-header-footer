@@ -77,14 +77,14 @@ export function CartDrawer() {
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-[#254838]">
+                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px]  text-[#254838]">
                     <CheckCircle2 className="size-4 text-[#74A84A]" />
                     30 DAY PLANT REPLACEMENT GUARANTEE
                   </div>
 
                   <button
                     onClick={closeCart}
-                    className="w-full rounded-full bg-[#74A84A] py-4 text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
+                    className="w-full rounded-full bg-[#74A84A] py-4 text-sm  text-white transition-all hover:shadow-md uppercase tracking-wider"
                   >
                     Return to Shop
                   </button>
@@ -160,7 +160,7 @@ export function CartDrawer() {
         <footer className={cn("border-t border-border p-4", lines.length === 0 && "hidden")}>
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">SUBTOTAL</span>
-            <span className="text-lg font-bold text-primary">
+            <span className="text-lg  text-primary">
               {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : formatMoney(0)}
             </span>
           </div>

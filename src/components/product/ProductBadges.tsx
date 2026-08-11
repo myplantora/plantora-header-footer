@@ -16,7 +16,7 @@ export function ProductBadges({
       {badges.slice(0, 2).map((badge) => (
         <span
           key={badge.key}
-          className="inline-flex items-center gap-1 rounded-full bg-[#D1E8E2] px-2.5 py-1 text-[11px] font-semibold text-[#1D4D44]"
+          className="inline-flex items-center gap-1 rounded-full bg-[#D1E8E2] px-2.5 py-1 text-[11px]  text-[#1D4D44]"
         >
           {badge.label}
         </span>

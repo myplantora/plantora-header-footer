@@ -160,7 +160,7 @@ export function ProductCard({
                   <span key={i} className="text-[14px] text-[#ccc] leading-none">★</span>
                 ))}
               </div>
-              <span className="text-[12px] font-bold text-[#707070] leading-none pt-[1px]">0 | 0</span>
+              <span className="text-[12px]  text-[#707070] leading-none pt-[1px]">0 | 0</span>
             </div>
           )}
         </div>
@@ -196,7 +196,7 @@ export function ProductCard({
 
         {/* Price Row - Updated colours and font to match reference */}
         <div className="flex flex-nowrap items-center gap-x-1.5 gap-y-1 mt-auto min-h-6 overflow-hidden">
-          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] whitespace-nowrap">
+          <span className="text-[15px] md:text-[18px]  text-[#1D4D44] whitespace-nowrap">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && currentVariant.compareAtPrice.amount > currentVariant.price.amount && (
@@ -204,7 +204,7 @@ export function ProductCard({
               <span className="text-[13px] text-[#707070] line-through font-normal whitespace-nowrap">
                 {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
               </span>
-              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
+              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px]  leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
                 SAVE {formatMoney(Math.round(currentVariant.compareAtPrice.amount - currentVariant.price.amount), currentVariant.price.currency)}
               </span>
             </>
