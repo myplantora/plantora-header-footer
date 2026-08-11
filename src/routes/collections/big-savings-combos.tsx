@@ -1,11 +1,12 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 import { Footer } from "@/components/layout/Footer";
-import { ProductCard } from "@/components/product/ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
+import { CollectionSort } from "@/components/collection/CollectionSort";
+import { PaginationGrid } from "@/components/collection/PaginationGrid";
 
 const BIG_SAVINGS_ID = "659519504677";
 
@@ -42,6 +43,13 @@ export const Route = createFileRoute("/collections/big-savings-combos")({
 function BigSavingsPage() {
   const { data: collection } = useSuspenseQuery(collectionQuery);
   const { track } = useMetaTracking();
+  const [sortedProducts, setSortedProducts] = useState(collection?.products || []);
+
+  useEffect(() => {
+    if (collection?.products) {
+      setSortedProducts(collection.products);
+    }
+  }, [collection?.products]);
 
   useEffect(() => {
     if (collection) {
@@ -61,18 +69,15 @@ function BigSavingsPage() {
           <div className="text-center sm:text-left">
             <h1 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">{collection.title}</h1>
           </div>
+          <CollectionSort products={collection.products} onSortChange={setSortedProducts} />
         </header>
 
-        {collection.products.length === 0 ? (
+        {sortedProducts.length === 0 ? (
           <p className="mt-12 text-center text-base text-muted-foreground">
             No products in this collection yet. Please check back soon.
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
-            {collection.products.map((product, i) => (
-              <ProductCard key={product.id} product={product} priority={i < 4} />
-            ))}
-          </div>
+          <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
       <Footer />
