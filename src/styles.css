@@ -110,8 +110,11 @@
   --card-foreground: oklch(0.3843 0.0543 179.01);
   --popover: oklch(0.977 0 0);
   --popover-foreground: oklch(0.3843 0.0543 179.01);
-  --primary: oklch(0.3843 0.0543 179.01);
-  --primary-foreground: oklch(0.977 0 0);
+  /* Brand core (footer + primary/selected surfaces) */
+  --brand: #1D4D44;
+  --brand-foreground: #ffffff;
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
   --secondary: oklch(0.958 0.004 106.4);
   --secondary-foreground: oklch(0.3843 0.0543 179.01);
   --muted: oklch(0.958 0.004 106.4);
@@ -132,10 +135,6 @@
   --berry-muted: oklch(0.58 0.13 21.5);
   --gold: oklch(0.78 0.15 85);
   --gold-foreground: oklch(0.25 0.05 85);
-
-  /* Brand core (footer + primary/selected surfaces) */
-  --brand: #1D4D44;
-  --brand-foreground: #ffffff;
 
   /* Cart rewards */
   --reward-success: var(--brand);

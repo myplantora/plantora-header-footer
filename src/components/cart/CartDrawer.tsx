@@ -77,14 +77,14 @@ export function CartDrawer() {
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-brand py-3 text-[12px] text-white">
-                    <CheckCircle2 className="size-4 text-white" />
+                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-primary py-3 text-[12px] text-primary-foreground">
+                    <CheckCircle2 className="size-4 text-primary-foreground" />
                     30 DAY PLANT REPLACEMENT GUARANTEE
                   </div>
 
                   <button
                     onClick={closeCart}
-                    className="w-full rounded-full bg-brand py-4 text-sm text-white transition-all hover:shadow-md uppercase tracking-wider"
+                    className="w-full rounded-full bg-primary py-4 text-sm text-primary-foreground transition-all hover:shadow-md uppercase tracking-wider"
                   >
                     Return to Shop
                   </button>
@@ -178,7 +178,7 @@ export function CartDrawer() {
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-brand px-8 text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-primary px-8 text-sm font-normal text-primary-foreground transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <div className="flex items-center gap-[10px]">
                 <span className="tracking-widest">CHECKOUT</span>
