@@ -45,9 +45,9 @@ export function CartDrawer() {
         "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft transition-transform duration-300 sm:rounded-l-md",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4">
+        <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-2">
           <div className="w-9" /> {/* Spacer to help center the title */}
-          <h2 className="text-center font-serif text-2xl text-primary">Your basket</h2>
+          <h2 className="text-center font-serif text-xl text-primary">Your basket</h2>
           <button
             type="button"
             onClick={closeCart}
@@ -58,11 +58,11 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="border-b border-border px-5 py-4">
+        <div className="border-b border-border px-5 py-2">
           <CartRewards />
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex-1 overflow-y-auto px-5 py-2">
           {lines.length === 0 ? (
             <div className="flex flex-col items-center py-4">
               {isLoading ? (
