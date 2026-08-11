@@ -422,22 +422,38 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          {/* Floating Mobile Add to Basket */}
+          {/* Floating Mobile Add to Basket (Matches reference HTML structure) */}
           <div 
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out sm:hidden",
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out sm:hidden",
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-8 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
-              <button
-                type="button"
-                onClick={handleAdd}
-                disabled={soldOut || isLoading}
-                className="flex h-14 w-full items-center justify-center rounded-full bg-[#1D4D44] text-[15px] font-bold tracking-widest text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
-              >
-                {soldOut ? "SOLD OUT" : "ADD TO BASKET"}
-              </button>
+            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm font-medium text-primary line-clamp-1 flex-1 mr-4">
+                    {product.title}
+                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-sm font-bold text-primary">{formatMoney(price.amount, price.currency)}</span>
+                    {compareAt && (
+                      <span className="text-xs text-muted-foreground line-through">
+                        {formatMoney(compareAt.amount, compareAt.currency)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  disabled={soldOut || isLoading}
+                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-sm font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                >
+                  <span className="uppercase">{soldOut ? "SOLD OUT" : "Add to Basket"}</span>
+                </button>
+              </div>
             </div>
           </div>
 
