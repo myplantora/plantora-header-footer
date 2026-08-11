@@ -171,7 +171,7 @@ export function ProductCard({
         </h3>
 
         {/* Price Row - Updated colours and font to match reference */}
-        <div className="flex items-center gap-2 mt-auto h-6">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-auto min-h-6">
           <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
