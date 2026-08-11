@@ -93,65 +93,94 @@ export function CartDrawer() {
               )}
             </div>
           ) : (
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-3">
               {lines.map((line) => (
-                <li key={line.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3">
-                  <Link 
-                    to="/product/$handle" 
+                <li
+                  key={line.id}
+                  className="grid grid-cols-[88px_minmax(0,1fr)] gap-3 rounded-[20px] bg-white p-3 shadow-sm"
+                >
+                  <Link
+                    to="/product/$handle"
                     params={{ handle: line.handle }}
                     onClick={closeCart}
-                    className="size-16 shrink-0 overflow-hidden rounded-md bg-secondary transition-opacity hover:opacity-80"
+                    className="size-[88px] shrink-0 overflow-hidden rounded-[15px] bg-secondary transition-opacity hover:opacity-80"
                   >
                     {line.imageUrl ? (
-                      <img src={line.imageUrl} alt="" loading="lazy" className="size-full object-cover" />
+                      <img
+                        src={line.imageUrl}
+                        alt=""
+                        loading="lazy"
+                        className="size-full object-cover"
+                      />
                     ) : null}
                   </Link>
-                  <div className="min-w-0">
-                    <Link 
-                      to="/product/$handle" 
-                      params={{ handle: line.handle }}
-                      onClick={closeCart}
-                      className="truncate text-sm font-medium text-primary hover:text-accent transition-colors block"
-                    >
-                      {line.title}
-                    </Link>
+                  <div className="flex min-w-0 flex-col justify-between py-0.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <Link
+                        to="/product/$handle"
+                        params={{ handle: line.handle }}
+                        onClick={closeCart}
+                        className="line-clamp-1 text-sm font-medium text-primary hover:text-accent transition-colors"
+                      >
+                        {line.title}
+                      </Link>
+                    </div>
+
                     {line.variantTitle && line.variantTitle !== "Default Title" ? (
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
-                    <p className="mt-1 text-sm text-primary">
-                      {formatMoney(line.amount * line.quantity, line.currency)}
-                    </p>
-                    <div className="mt-2 flex items-center justify-between">
+
+                    <div className="flex items-end justify-between gap-2">
                       <div className="flex items-center gap-2">
+                        <div className="flex items-center rounded-full border border-border px-1 py-1">
+                          <button
+                            type="button"
+                            aria-label="Decrease quantity"
+                            disabled={isLoading}
+                            onClick={() => updateLine(line.id, line.quantity - 1)}
+                            className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          >
+                            <Minus className="size-3" />
+                          </button>
+                          <span className="min-w-[1.5rem] text-center text-sm text-primary">
+                            {line.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label="Increase quantity"
+                            disabled={isLoading}
+                            onClick={() => updateLine(line.id, line.quantity + 1)}
+                            className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          >
+                            <Plus className="size-3" />
+                          </button>
+                        </div>
+
                         <button
                           type="button"
-                          aria-label="Decrease quantity"
-                          disabled={isLoading}
-                          onClick={() =>
-                            updateLine(line.id, line.quantity - 1)
-                          }
-                          className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          onClick={() => removeLine(line.id)}
+                          aria-label="Remove item"
+                          className="grid size-8 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         >
-                          <Minus className="size-3.5" />
-                        </button>
-                        <span className="text-sm text-primary">{line.quantity}</span>
-                        <button
-                          type="button"
-                          aria-label="Increase quantity"
-                          disabled={isLoading}
-                          onClick={() => updateLine(line.id, line.quantity + 1)}
-                          className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                        >
-                          <Plus className="size-3.5" />
+                          <img
+                            src={BIN_CDN}
+                            alt=""
+                            className="size-5 object-contain"
+                            loading="lazy"
+                          />
                         </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeLine(line.id)}
-                        className="text-xs text-muted-foreground underline hover:text-primary"
-                      >
-                        Remove
-                      </button>
+
+                      <div className="text-right">
+                        <p className="text-base font-medium text-[#1D4D44]">
+                          {formatMoney(line.amount * line.quantity, line.currency)}
+                        </p>
+                        {line.compareAtAmount && line.compareAtAmount > line.amount ? (
+                          <p className="text-xs text-[#C3754C] line-through">
+                            {formatMoney(line.compareAtAmount * line.quantity, line.currency)}
+                          </p>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </li>
