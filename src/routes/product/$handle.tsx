@@ -220,7 +220,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                     src={product.tagMedia.url} 
                     alt="" 
                     aria-hidden="true"
-                    className="relative h-auto w-[60px] sm:w-[100px] transition-opacity duration-300"
+                    className="relative h-auto w-[80px] sm:w-[120px] transition-opacity duration-300"
                     loading="lazy"
                     onLoad={(e) => {
                       (e.currentTarget as HTMLImageElement).parentElement?.firstElementChild?.remove();
