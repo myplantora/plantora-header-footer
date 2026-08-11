@@ -244,8 +244,12 @@ export const useCartStore = create<CartState>()(
       },
 
       addLineAndOpen: async (merchandiseId, quantity = 1) => {
+        set({ isLoading: true });
         const mapped = await addLineToCart(get().cartId, merchandiseId, quantity);
-        if (!mapped || !mapped.checkoutUrl) return false;
+        if (!mapped || !mapped.checkoutUrl) {
+          set({ isLoading: false });
+          return false;
+        }
         // Open the slider and render the freshly mapped API data in one atomic update
         set({ ...mapped, isOpen: true, isLoading: false });
         return true;
