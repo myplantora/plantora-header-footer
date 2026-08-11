@@ -178,7 +178,7 @@ export function CartDrawer() {
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#1D4D44] px-8 text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <div className="flex items-center gap-[10px]">
                 <span className="tracking-widest">CHECKOUT</span>
