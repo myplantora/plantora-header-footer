@@ -172,11 +172,11 @@ export function ProductCard({
 
         {/* Price Row - Updated colours and font to match reference */}
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-auto min-h-6">
-          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44]">
+          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] font-sans">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
-            <span className="text-[13px] text-[#707070] line-through font-normal">
+            <span className="text-[13px] text-[#707070] line-through font-normal font-sans">
               {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
             </span>
           )}
