@@ -130,6 +130,12 @@ export function CartDrawer() {
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
 
+                    {line.quantity === 0 ? (
+                      <p className="text-xs font-medium text-[#C3754C]">
+                        Sold out &mdash; unavailable for checkout
+                      </p>
+                    ) : null}
+
                     <div className="flex items-end justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center rounded-full border border-border px-1 py-1">
@@ -173,11 +179,14 @@ export function CartDrawer() {
 
                       <div className="text-right">
                         <p className="text-base font-medium text-[#1D4D44]">
-                          {formatMoney(line.amount * line.quantity, line.currency)}
+                          {formatMoney(line.amount * Math.max(line.quantity, 1), line.currency)}
                         </p>
                         {line.compareAtAmount && line.compareAtAmount > line.amount ? (
                           <p className="text-xs text-[#C3754C] line-through">
-                            {formatMoney(line.compareAtAmount * line.quantity, line.currency)}
+                            {formatMoney(
+                              line.compareAtAmount * Math.max(line.quantity, 1),
+                              line.currency,
+                            )}
                           </p>
                         ) : null}
                       </div>
