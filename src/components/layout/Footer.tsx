@@ -32,7 +32,7 @@ function FooterLinks({ title, links }: { title: string; links: { label: string; 
 
 export function Footer() {
   return (
-    <footer style={{ backgroundColor: '#1D4D44' }} className="w-full text-white font-normal">
+    <footer style={{ backgroundColor: '#254838' }} className="w-full text-white font-normal">
       <div className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 lg:px-10 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr] lg:gap-10">
           <div className="max-w-md">

@@ -155,7 +155,7 @@ export function ProductCard({
             <span 
               key={badge.key}
               style={{ backgroundColor: badge.backgroundColor || '#EDE9D2' }}
-              className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#1d4d43] leading-none whitespace-nowrap"
+              className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#254838] leading-none whitespace-nowrap"
             >
               {badge.iconUrl && (
                 <img src={badge.iconUrl} alt="" className="size-3 object-contain" />
@@ -166,13 +166,13 @@ export function ProductCard({
         </div>
 
         {/* Product Title - Fraunces 500, line-height matching reference */}
-        <h3 className="line-clamp-2 text-[14px] md:text-[15px] font-bold leading-[1.3] text-[#1D4D44] font-sans mb-2 min-h-[2.6em] flex items-start">
+        <h3 className="line-clamp-2 text-[14px] md:text-[15px] font-bold leading-[1.3] text-[#254838] font-sans mb-2 min-h-[2.6em] flex items-start">
           {product.title}
         </h3>
 
         {/* Price Row - Exact layout and colours from Reference HTML */}
         <div className="flex items-center gap-2 mt-auto h-6">
-          <span className="text-[16px] md:text-[18px] font-bold text-[#1D4D44]">
+          <span className="text-[16px] md:text-[18px] font-bold text-[#254838]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
@@ -181,7 +181,7 @@ export function ProductCard({
             </span>
           )}
           {product.discountPercent && product.discountPercent > 0 && (
-            <span className="bg-[#F5C439] text-[#1d4d43] text-[11px] px-2 py-0.5 rounded-full font-medium">
+            <span className="bg-[#F5C439] text-[#254838] text-[11px] px-2 py-0.5 rounded-full font-medium">
               {product.discountPercent}% OFF
             </span>
           )}
@@ -197,7 +197,7 @@ export function ProductCard({
               "flex h-[38px] md:h-[42px] w-full items-center justify-center rounded-full font-sans text-[12px] md:text-[13px] font-medium transition-all",
               soldOut
                 ? "bg-[#f2f2f2] text-[#999]"
-                : "bg-[#1D4D44] text-white active:scale-[0.98]"
+                : "bg-[#254838] text-white active:scale-[0.98]"
             )}
           >
             {pending ? "ADDING..." : soldOut ? "SOLD OUT" : "ADD TO BASKET"}
