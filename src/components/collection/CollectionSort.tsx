@@ -53,13 +53,13 @@ export function CollectionSort({ products, onSortChange }: CollectionSortProps) 
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="manual">Featured</SelectItem>
-          <SelectItem value="best-sellers">Best Sellers</SelectItem>
-          <SelectItem value="newest">Newest</SelectItem>
-          <SelectItem value="alpha-asc">Alphabetically, A-Z</SelectItem>
-          <SelectItem value="alpha-desc">Alphabetically, Z-A</SelectItem>
-          <SelectItem value="price-asc">Price, low to high</SelectItem>
-          <SelectItem value="price-desc">Price, high to low</SelectItem>
+          <SelectItem value="manual" className="font-bold">Featured</SelectItem>
+          <SelectItem value="best-sellers" className="font-bold">Best Sellers</SelectItem>
+          <SelectItem value="newest" className="font-bold">Newest</SelectItem>
+          <SelectItem value="alpha-asc" className="font-bold">Alphabetically, A-Z</SelectItem>
+          <SelectItem value="alpha-desc" className="font-bold">Alphabetically, Z-A</SelectItem>
+          <SelectItem value="price-asc" className="font-bold">Price, low to high</SelectItem>
+          <SelectItem value="price-desc" className="font-bold">Price, high to low</SelectItem>
         </SelectContent>
       </Select>
     </div>
