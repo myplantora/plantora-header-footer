@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export function Logo({ className, tone = "dark" }: { className?: string; tone?: "dark" | "light" }) {
   return (
@@ -13,11 +13,14 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
         className,
       )}
     >
-      <Leaf
-        className="h-5 w-5 shrink-0 text-accent transition-transform duration-300 group-hover:-rotate-12"
+      <img 
+        src={logoAsset.url} 
+        alt="Plantora Logo" 
+        className="h-8 w-8 shrink-0 object-contain transition-transform duration-300 group-hover:scale-110"
         aria-hidden="true"
       />
       <span className="font-serif text-2xl leading-none tracking-tight">Plantora</span>
     </Link>
   );
 }
+
