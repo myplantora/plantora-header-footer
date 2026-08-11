@@ -170,9 +170,9 @@ export function ProductCard({
           {product.title}
         </h3>
 
-        {/* Price Row - Exact layout and colours from Reference HTML */}
+        {/* Price Row - Updated colours and font to match reference */}
         <div className="flex items-center gap-2 mt-auto h-6">
-          <span className="text-[16px] md:text-[18px] font-bold text-[#254838]">
+          <span className="text-[16px] md:text-[18px] font-bold text-[#C3754C]">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && (
@@ -181,7 +181,7 @@ export function ProductCard({
             </span>
           )}
           {product.discountPercent && product.discountPercent > 0 && (
-            <span className="bg-[#F5C439] text-[#254838] text-[11px] px-2 py-0.5 rounded-full font-medium">
+            <span className="bg-[#F4C439] text-[#254838] text-[11px] px-2 py-0.5 rounded-full font-bold">
               {product.discountPercent}% OFF
             </span>
           )}
