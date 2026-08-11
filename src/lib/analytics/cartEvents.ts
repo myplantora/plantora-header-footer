@@ -100,7 +100,7 @@ export function sendCartViewed(input: CartEventInput): void {
  * `event_name: "checkout_started"`.
  */
 export function sendCheckoutStarted(
-  input: CartEventInput & { currency?: string },
+  input: CartEventInput & { currency?: string | undefined },
 ): void {
   if (typeof window === "undefined") return;
   if (input.lineItemsCount === 0) return;
