@@ -47,6 +47,7 @@ function Index() {
       <main>
         <BannerSection />
         <CollectionScroller collectionId="659339542821" />
+        <CollectionScroller collectionId="659519504677" />
         <WhyChooseKyari />
         <MediaMentions />
         <BrandMission />
