@@ -211,6 +211,11 @@ export const useCartStore = create<CartState>()(
       updateLine: async (lineId, quantity) => {
         const cartId = get().cartId;
         if (!cartId) return;
+
+        if (quantity <= 0) {
+          return get().removeLine(lineId);
+        }
+
         set({ isLoading: true });
         try {
           const data = await storefrontApiRequest<any>(CART_LINES_UPDATE, {
