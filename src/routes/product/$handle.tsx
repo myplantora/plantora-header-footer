@@ -298,7 +298,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 <span 
                   key={badge.key}
                   style={{ backgroundColor: bgColor }}
-                  className="flex items-center gap-1 rounded-full px-1.5 py-1 text-[9px] md:text-[11px] font-normal text-[#254838] leading-none whitespace-nowrap"
+                  className="flex items-center gap-1 rounded-full px-2 py-1.5 text-[10px] md:text-[12px] font-normal text-[#254838] leading-none whitespace-nowrap"
                 >
                   {badge.iconUrl && (
                     <img src={badge.iconUrl} alt="" className="size-3 object-contain shrink-0" />
