@@ -28,7 +28,7 @@ export function WhyChooseKyari() {
   return (
     <SectionContainer className="bg-[#F8F8F8] py-8 md:py-12">
       <div className="mb-4 text-center md:mb-8">
-        <h2 className="font-fraunces text-[22px] font-medium tracking-tight text-[#1D4D44] md:text-3xl">
+        <h2 className="font-fraunces text-[22px] font-medium tracking-tight text-[#254838] md:text-3xl">
           Why Choose Plantora?
         </h2>
       </div>
@@ -49,12 +49,12 @@ export function WhyChooseKyari() {
             </div>
             
             <div className="space-y-0.5 px-1">
-              <h3 className="font-sans text-[13px] font-bold leading-tight text-[#1D4D44] md:text-[15px]">
+              <h3 className="font-sans text-[13px] font-bold leading-tight text-[#254838] md:text-[15px]">
                 <span className="relative inline-block">
                   {feature.title}
                 </span>
               </h3>
-              <p className="font-sans text-[11px] leading-relaxed text-[#1D4D44]/70 md:text-[12px]">
+              <p className="font-sans text-[11px] leading-relaxed text-[#254838]/70 md:text-[12px]">
                 {feature.description}
               </p>
             </div>
