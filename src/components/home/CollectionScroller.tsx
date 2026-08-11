@@ -54,7 +54,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center">
+      <div className="flex flex-col items-center">
         <ul className="grid w-full grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
           {(collection.products || []).map((product, i) => (
             <li 
