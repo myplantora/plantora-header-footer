@@ -108,7 +108,7 @@ export function ProductCard({
       )}
     >
       {/* Image Section - Pixel Perfect 1:1 Aspect Ratio */}
-      <div className="relative aspect-square w-full overflow-hidden bg-[#F5F5F5] rounded-t-[15px]">
+      <div className="relative aspect-square w-full overflow-hidden bg-[#F5F5F5]">
         <img
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
