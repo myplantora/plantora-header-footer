@@ -210,6 +210,20 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               </div>
             )}
 
+            {/* Combo Offer Banner - PDP Version */}
+            {product.tags?.includes("Combo") && (
+              <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4">
+                <img 
+                  src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
+                  alt="" 
+                  className="size-5 object-contain md:size-6"
+                />
+                <span className="font-quicksand text-[13px] font-bold text-[#1D4D44] md:text-[15px]">
+                  Grab it for just {formatMoney(price.amount, price.currency)}
+                </span>
+              </div>
+            )}
+
 
             {activeImage ? (
               <img
