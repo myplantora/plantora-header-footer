@@ -18,6 +18,7 @@ const HOME_COLLECTION_ID = "659339542821";
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(collectionByIdQuery(HOME_COLLECTION_ID));
+    context.queryClient.ensureQueryData(collectionByIdQuery("659519504677"));
   },
   head: () => ({
     meta: [
@@ -47,6 +48,7 @@ function Index() {
       <main>
         <BannerSection />
         <CollectionScroller collectionId="659339542821" />
+        <CollectionScroller collectionId="659519504677" />
         <WhyChooseKyari />
         <MediaMentions />
         <BrandMission />
