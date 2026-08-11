@@ -118,7 +118,7 @@ export function ProductCard({
         
         {/* Product Tag GIF (Top Left) - Precisely positioned */}
         {product.tagMedia?.url && !tagMediaError && (
-          <div className="absolute -left-1 -top-1 z-10 md:-left-2 md:-top-2 pointer-events-none">
+          <div className="absolute left-0 top-0 z-10 pointer-events-none">
             <img 
               src={product.tagMedia.url} 
               alt="" 
@@ -166,7 +166,7 @@ export function ProductCard({
         </div>
 
         {/* Product Title - Fraunces 500, line-height matching reference */}
-        <h3 className="line-clamp-2 text-[14px] md:text-[15px] font-bold leading-[1.3] text-[#1D4D44] font-sans mb-2 min-h-[0px]">
+        <h3 className="line-clamp-2 text-[14px] md:text-[15px] font-bold leading-[1.3] text-[#1D4D44] font-sans mb-2 min-h-[2.6em] flex items-start">
           {product.title}
         </h3>
 
