@@ -48,7 +48,7 @@ export function CartDrawer() {
       )}>
         <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-1.5">
           <div className="w-9" /> {/* Spacer to help center the title */}
-          <h2 className="text-center font-serif text-lg text-primary">Your basket</h2>
+          <h2 className="text-center text-lg text-primary">Your basket</h2>
           <button
             type="button"
             onClick={closeCart}
@@ -73,7 +73,7 @@ export function CartDrawer() {
                     <div className="mb-6 grid size-16 place-items-center rounded-full bg-[#F1F8EE]">
                       <ShoppingBag className="size-8 text-[#74A84A]" />
                     </div>
-                    <h3 className="text-2xl font-serif text-[#254838]">Your cart is currently empty</h3>
+                    <h3 className="text-2xl text-[#254838]">Your cart is currently empty</h3>
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 

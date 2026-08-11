@@ -13,7 +13,7 @@ const socials = [
 function FooterLinks({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
-      <h3 className="font-serif text-xl text-white font-normal">{title}</h3>
+      <h3 className="text-xl text-white font-normal">{title}</h3>
       <ul className="mt-5 space-y-3">
         {links.map((link) => (
           <li key={link.label}>
@@ -37,7 +37,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr] lg:gap-10">
           <div className="max-w-md">
             <Logo tone="light" />
-            <h2 className="mt-6 font-serif text-3xl leading-tight font-normal">Bring Nature Home.</h2>
+            <h2 className="mt-6 text-3xl leading-tight font-normal">Bring Nature Home.</h2>
             <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-white/70">
               <p>
                 Inspired by the timeless beauty of nature, Plantora was created to help people build
