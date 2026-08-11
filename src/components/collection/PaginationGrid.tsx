@@ -31,7 +31,7 @@ export function PaginationGrid({ products, pageSize = 20 }: PaginationGridProps)
           onClick={handleLoadMore}
           className="rounded-full bg-[#C3754C] px-10 py-6 text-[15px] font-bold text-white hover:opacity-90 h-auto"
         >
-          Load More Products
+          <span className="font-bold">Load More Products</span>
         </Button>
       )}
     </div>
