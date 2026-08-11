@@ -458,7 +458,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               aria-label="Close size chart"
               onClick={() => setChartOpen(false)}
-              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-accent text-accent-foreground shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+              className="absolute -top-3 -right-3 z-10 grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
             >
               <X className="size-5" />
             </button>
@@ -487,7 +487,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               aria-label="Close replacement guarantee details"
               onClick={() => setGuaranteeOpen(false)}
-              className="absolute top-3 right-3 grid size-8 place-items-center rounded-full bg-accent text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+              className="absolute top-3 right-3 grid size-8 place-items-center rounded-full bg-primary text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
             >
               <X className="size-4" />
             </button>
