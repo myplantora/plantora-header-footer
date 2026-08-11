@@ -43,6 +43,16 @@ export type PageViewExtras = Partial<ShopifyPageViewPayload> & {
 
 export type { ShopifyAnalyticsProduct };
 
+/**
+ * Last page view extras, so the heartbeat can re-emit the same schema/payload
+ * shape for the page the visitor is currently on.
+ */
+let lastPageViewExtras: PageViewExtras = { pageType: "page" };
+
+export function getLastPageViewExtras(): PageViewExtras {
+  return lastPageViewExtras;
+}
+
 function gidParts(gid?: string): { id: string; resource: string | null } {
   if (typeof gid !== "string") return { id: "", resource: null };
   const parts = gid.split("/");
@@ -189,6 +199,9 @@ function buildEvents(payload: ShopifyPageViewPayload & BrowserParams): MonorailE
  */
 export async function sendShopifyPageView(extras: PageViewExtras): Promise<void> {
   if (typeof window === "undefined") return;
+
+  lastPageViewExtras = extras;
+
 
   try {
     const payload = {

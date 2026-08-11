@@ -8,6 +8,7 @@ import {
   type ShopifyAnalyticsProduct,
 } from "@/services/shopify/analytics";
 import type { PlantoraProduct, PlantoraCollection } from "@/services/shopify/types";
+import { useHeartbeat } from "@/lib/analytics/useHeartbeat";
 
 function toProductGid(id: string): string {
   return id.startsWith("gid://") ? id : `gid://shopify/Product/${id}`;
@@ -37,6 +38,10 @@ function analyticsProduct(product: PlantoraProduct): ShopifyAnalyticsProduct {
  * Mount once at the app root.
  */
 export function useShopifyPageView() {
+  // Keeps the Live View session alive: re-fires page_viewed every 15s while
+  // the tab is visible, restarting on each route change.
+  useHeartbeat();
+
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const search = useRouterState({ select: (s) => s.location.searchStr });
