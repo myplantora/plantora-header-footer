@@ -270,7 +270,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center rounded-md bg-[#F4C439] px-2 py-0.5 text-[10px] font-bold text-[#254838]">
+                <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2.5 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap">
                   {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
                 </span>
               ) : null}
