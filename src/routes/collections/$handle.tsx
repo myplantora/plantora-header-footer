@@ -1,19 +1,12 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 import { Footer } from "@/components/layout/Footer";
-
-import { ProductCard } from "@/components/product/ProductCard";
 import { getCollection } from "@/services/shopify/collection.service";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CollectionSort } from "@/components/collection/CollectionSort";
+import { PaginationGrid } from "@/components/collection/PaginationGrid";
 
 const collectionQuery = (handle: string) =>
   queryOptions({
@@ -54,40 +47,13 @@ function CollectionPage() {
   const { handle } = Route.useParams();
   const { data: collection } = useSuspenseQuery(collectionQuery(handle));
   const { track } = useMetaTracking();
-  const [sortBy, setSortBy] = useState("manual");
+  const [sortedProducts, setSortedProducts] = useState(collection?.products || []);
 
   useEffect(() => {
-    if (collection) {
-      track('ViewCategory', {
-        content_name: collection.title,
-        content_category: collection.title
-      });
+    if (collection?.products) {
+      setSortedProducts(collection.products);
     }
-  }, [collection, track]);
-
-  const sortedProducts = useMemo(() => {
-    if (!collection?.products) return [];
-    const products = [...collection.products];
-    
-    switch (sortBy) {
-      case "alpha-asc":
-        return products.sort((a, b) => a.title.localeCompare(b.title));
-      case "alpha-desc":
-        return products.sort((a, b) => b.title.localeCompare(a.title));
-      case "price-asc":
-        return products.sort((a, b) => Number(a.price) - Number(b.price));
-      case "price-desc":
-        return products.sort((a, b) => Number(b.price) - Number(a.price));
-      case "newest":
-        // Fallback to Shopify's default order
-        return products;
-      case "best-sellers":
-        // Fallback to Shopify's default order
-        return products;
-      default:
-        return products;
-    }
-  }, [collection?.products, sortBy]);
+  }, [collection?.products]);
 
   if (!collection) throw notFound();
 
@@ -98,23 +64,7 @@ function CollectionPage() {
           <div className="text-center sm:text-left">
             <h1 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">{collection.title}</h1>
           </div>
-
-          <div className="flex justify-center sm:justify-end">
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px] bg-white">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="manual">Featured</SelectItem>
-                <SelectItem value="best-sellers">Best Sellers</SelectItem>
-                <SelectItem value="newest">Newest</SelectItem>
-                <SelectItem value="alpha-asc">Alphabetically, A-Z</SelectItem>
-                <SelectItem value="alpha-desc">Alphabetically, Z-A</SelectItem>
-                <SelectItem value="price-asc">Price, low to high</SelectItem>
-                <SelectItem value="price-desc">Price, high to low</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <CollectionSort products={collection.products} onSortChange={setSortedProducts} />
         </header>
 
         {sortedProducts.length === 0 ? (
@@ -122,11 +72,7 @@ function CollectionPage() {
             No products in this collection yet. Please check back soon.
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
-            {sortedProducts.map((product, i) => (
-              <ProductCard key={product.id} product={product} priority={i < 4} />
-            ))}
-          </div>
+          <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
       <Footer />

@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { Footer } from "@/components/layout/Footer";
-import { ProductCard } from "@/components/product/ProductCard";
 import { getProductCards } from "@/services/shopify/collection.service";
+import { CollectionSort } from "@/components/collection/CollectionSort";
+import { PaginationGrid } from "@/components/collection/PaginationGrid";
 
 const allProductsQuery = queryOptions({
   queryKey: ["all-products", 48],
@@ -44,29 +46,22 @@ export const Route = createFileRoute("/collections/")({
 
 function AllProducts() {
   const { data } = useSuspenseQuery(allProductsQuery);
+  const [sortedProducts, setSortedProducts] = useState(data.products);
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
-      <main className="mx-auto max-w-[1400px] px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
-        <h1 className="font-serif text-3xl text-primary sm:text-5xl">All products</h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          {data.products.length} plants and planters ready to ship.
-        </p>
+      <main className="mx-auto max-w-[1400px] px-2.5 pb-16 pt-4 sm:px-6 lg:px-10">
+        <header className="mb-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-center sm:text-left">
+            <h1 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">All Products</h1>
+          </div>
+          <CollectionSort products={data.products} onSortChange={setSortedProducts} />
+        </header>
 
-        {data.products.length === 0 ? (
+        {sortedProducts.length === 0 ? (
           <p className="mt-16 text-center text-muted-foreground">No products found.</p>
         ) : (
-          <ul className="mt-10 grid grid-cols-2 gap-[15px] md:grid-cols-4 md:gap-8">
-            {data.products.map((product, i) => (
-              <li key={product.id}>
-                <ProductCard
-                  product={product}
-                  priority={i < 4}
-                  tone={i % 4 === 0 ? "berry" : "default"}
-                />
-              </li>
-            ))}
-          </ul>
+          <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
       <Footer />
