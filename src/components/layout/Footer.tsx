@@ -1,13 +1,20 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 import { helpLinks, shopLinks } from "@/config/navigation";
 import { Logo } from "./Logo";
 import { PaymentIcons } from "./PaymentIcons";
 
 const socials = [
-  { label: "Facebook", href: "https://facebook.com", Icon: Facebook },
-  { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
-  { label: "YouTube", href: "https://youtube.com", Icon: Youtube },
+  { 
+    label: "Instagram", 
+    href: "https://www.instagram.com/myplantora/", 
+    Icon: Instagram 
+  },
+  { 
+    label: "Facebook", 
+    href: "https://www.facebook.com/profile.php?id=61593023340334", 
+    Icon: Facebook 
+  },
 ];
 
 function FooterLinks({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -64,32 +71,10 @@ export function Footer() {
                     aria-label={label}
                     className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white transition-all duration-300 hover:scale-110 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
-                    <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                    <Icon className="h-[22px] w-[22px]" aria-hidden="true" />
                   </a>
                 </li>
               ))}
-              <li>
-                <a
-                  href="https://pinterest.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Pinterest"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-[13px] font-semibold text-white transition-all duration-300 hover:scale-110 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Pi
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://tiktok.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="TikTok"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-[13px] font-semibold text-white transition-all duration-300 hover:scale-110 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Tk
-                </a>
-              </li>
             </ul>
           </div>
 
