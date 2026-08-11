@@ -139,7 +139,42 @@ export function MobileNav({ open, onClose }: Props) {
                 ))}
               </ul>
             </div>
+
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
+                SETTINGS
+              </p>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-[15px] text-foreground">Haptic feedback</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={hapticsOn}
+                  aria-label="Haptic feedback"
+                  onClick={() => {
+                    if (!hapticsOn) triggerHaptic("light");
+                    toggleHaptics();
+                  }}
+                  className={cn(
+                    "relative h-6 w-11 shrink-0 rounded-full transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    hapticsOn ? "bg-primary" : "bg-muted-foreground/30",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow transition-transform",
+                      hapticsOn && "translate-x-5",
+                    )}
+                  />
+                </button>
+              </div>
+              <p className="mt-2 text-[12px] text-muted-foreground">
+                Vibration on add to basket and cart actions (supported devices only).
+              </p>
+            </div>
           </div>
+
         </nav>
       </div>
     </div>
