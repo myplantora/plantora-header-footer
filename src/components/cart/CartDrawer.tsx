@@ -59,7 +59,7 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-5 py-1">
+        <div className="flex-1 overflow-y-auto px-5 pt-5 pb-1">
           <div className="mb-2 border-b border-border pb-2">
             <CartRewards />
           </div>
