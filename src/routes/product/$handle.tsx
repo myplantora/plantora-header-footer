@@ -421,9 +421,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
+              aria-busy={isLoading}
               className="inline-flex h-12 w-full sm:w-auto sm:min-w-56 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              {soldOut ? "Sold out" : "Add to basket"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />
+                  Adding...
+                </>
+              ) : soldOut ? (
+                "Sold out"
+              ) : (
+                "Add to basket"
+              )}
             </button>
             {addError ? (
               <p className="text-sm text-destructive" role="alert" aria-live="polite">
@@ -459,9 +469,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   type="button"
                   onClick={handleAdd}
                   disabled={soldOut || isLoading}
+                  aria-busy={isLoading}
                   className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-[15px] font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
                 >
-                  {soldOut ? "SOLD OUT" : "Add to Basket"}
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />
+                      Adding...
+                    </>
+                  ) : soldOut ? (
+                    "SOLD OUT"
+                  ) : (
+                    "Add to Basket"
+                  )}
                 </button>
               </div>
             </div>
