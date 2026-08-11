@@ -160,7 +160,7 @@ export function ProductCard({
                   <span key={i} className="text-[14px] text-[#ccc] leading-none">★</span>
                 ))}
               </div>
-              <span className="text-[12px] font-medium text-[#707070] leading-none pt-[1px]">0 | 0</span>
+              <span className="text-[12px] font-bold text-[#707070] leading-none pt-[1px]">0 | 0</span>
             </div>
           )}
         </div>
