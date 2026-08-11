@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { X, ChevronRight, Plus, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems, helpLinks } from "@/config/navigation";
+import { usePreferencesStore } from "@/stores/preferencesStore";
+import { triggerHaptic } from "@/utils/haptics";
 
 type Props = {
   open: boolean;
@@ -12,6 +14,8 @@ type Props = {
 export function MobileNav({ open, onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const hapticsOn = usePreferencesStore((s) => s.hapticsEnabled);
+  const toggleHaptics = usePreferencesStore((s) => s.toggleHaptics);
 
   useEffect(() => {
     if (open) {
