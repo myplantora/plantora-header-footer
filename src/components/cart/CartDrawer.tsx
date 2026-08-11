@@ -21,6 +21,11 @@ export function CartDrawer() {
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate, totalQuantity } =
     useCartStore();
   const { trackInitiateCheckout } = useMetaTracking();
+  const cartId = useCartStore((s) => s.cartId);
+
+  // Monorail cart activity (browser-only, debounced, mount-skipped).
+  useCartAnalytics({ id: cartId, totalQuantity, totalPrice: subtotal?.amount ?? null });
+  useCartViewed(isOpen, { id: cartId, totalQuantity });
 
   useEffect(() => {
     // Only fetch when the drawer opens with no locally known lines; otherwise
