@@ -26,7 +26,7 @@ export const CART_SCHEMA_ID = "custom_storefront_customer_tracking/1.2";
 /** `gid://shopify/Cart/abc123` -> `abc123` (also strips any `?key=` suffix). */
 export function extractCartToken(cartId: string): string {
   if (typeof cartId !== "string" || cartId.length === 0) return "";
-  const [gid] = cartId.split("?");
+  const gid = cartId.split("?")[0] ?? "";
   const parts = gid.split("/");
   return parts[parts.length - 1] ?? "";
 }
