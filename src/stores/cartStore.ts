@@ -235,6 +235,12 @@ export const useCartStore = create<CartState>()(
         }
       },
 
+      addLineAndOpen: async (merchandiseId, quantity = 1) => {
+        const ok = await get().addLine(merchandiseId, quantity);
+        if (ok) get().openCart();
+        return ok;
+      },
+
       updateLine: async (lineId, quantity) => {
         const cartId = get().cartId;
         if (!cartId) return;

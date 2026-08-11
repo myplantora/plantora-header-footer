@@ -178,7 +178,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
         {sizeOption ? (
           <div className="flex flex-col gap-2">
             <span className="text-xs font-medium text-berry-foreground/80">
-              Still clicking on the cart slider is not working please help me {sizeOption.name}
+              {sizeOption.name}
             </span>
             <div className="flex flex-wrap items-center gap-2">
               {sizeOption.values.map((value) => {
@@ -202,7 +202,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
                         })
                       );
                       if (matchingVariant) {
-                        useCartStore.getState().addLine(matchingVariant.id, 1);
+                        useCartStore.getState().addLineAndOpen(matchingVariant.id, 1);
                       }
                     }}
                     style={{ touchAction: "manipulation" }}
