@@ -48,7 +48,7 @@ export function CollectionSort({ products, onSortChange }: CollectionSortProps) 
   }, [sortedProducts, onSortChange]);
 
   return (
-    <div className="flex justify-end">
+    <div className="hidden justify-end">
       <Select value={sortBy} onValueChange={handleValueChange}>
         <SelectTrigger className="w-auto border-none bg-transparent p-0 font-bold text-[#254838] shadow-none focus:ring-0">
           <SelectValue placeholder="Sort by" />
