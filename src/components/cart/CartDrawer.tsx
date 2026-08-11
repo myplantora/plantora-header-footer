@@ -77,7 +77,7 @@ export function CartDrawer() {
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-primary">
+                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-[#1D4D44]">
                     <CheckCircle2 className="size-4 text-accent" />
                     30 DAY PLANT REPLACEMENT GUARANTEE
                   </div>
