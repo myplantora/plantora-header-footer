@@ -162,6 +162,23 @@ function mapCart(cart: any) {
   };
 }
 
+async function addLineToCart(
+  cartId: string | null,
+  merchandiseId: string,
+  quantity = 1,
+) {
+  const lines = [{ merchandiseId, quantity }];
+  const data = cartId
+    ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
+    : await storefrontApiRequest<any>(CART_CREATE, { lines });
+  notifyWarnings(
+    data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
+  );
+  const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
+  if (!cart) return null;
+  return mapCart(cart);
+}
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
@@ -216,17 +233,8 @@ export const useCartStore = create<CartState>()(
       addLine: async (merchandiseId, quantity = 1) => {
         set({ isLoading: true });
         try {
-          const cartId = get().cartId;
-          const lines = [{ merchandiseId, quantity }];
-          const data = cartId
-            ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
-            : await storefrontApiRequest<any>(CART_CREATE, { lines });
-          notifyWarnings(
-            data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
-          );
-          const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
-          if (!cart) return false;
-          const mapped = mapCart(cart);
+          const mapped = await addLineToCart(get().cartId, merchandiseId, quantity);
+          if (!mapped) return false;
           set(mapped);
           // Only signal success once Shopify returned a cart with a checkout URL
           return Boolean(mapped.checkoutUrl);
@@ -236,9 +244,11 @@ export const useCartStore = create<CartState>()(
       },
 
       addLineAndOpen: async (merchandiseId, quantity = 1) => {
-        const ok = await get().addLine(merchandiseId, quantity);
-        if (ok) get().openCart();
-        return ok;
+        const mapped = await addLineToCart(get().cartId, merchandiseId, quantity);
+        if (!mapped || !mapped.checkoutUrl) return false;
+        // Open the slider and render the freshly mapped API data in one atomic update
+        set({ ...mapped, isOpen: true, isLoading: false });
+        return true;
       },
 
       updateLine: async (lineId, quantity) => {
