@@ -32,7 +32,9 @@ export function extractCartToken(cartId: string): string {
 }
 
 function numericShopId(): number {
-  const parsed = parseInt(String(analyticsConfig.shopId ?? ""), 10);
+  const shopId = String(analyticsConfig.shopId ?? "");
+  const match = shopId.match(/\d+/);
+  const parsed = match ? parseInt(match[0], 10) : 0;
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
