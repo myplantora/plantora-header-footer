@@ -108,7 +108,7 @@ export function ProductCard({
       )}
     >
       {/* Image Section - Pixel Perfect 1:1 Aspect Ratio */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-[15px] md:rounded-[20px] bg-[#F5F5F5]">
+      <div className="relative aspect-square w-full overflow-hidden rounded-t-[15px] md:rounded-t-[20px] bg-[#F5F5F5]">
         <img
           src={currentVariant?.image?.url || product.featuredImage?.url}
           alt={product.title}
@@ -135,13 +135,13 @@ export function ProductCard({
 
       {/* Combo Offer Banner - Rendered below image, not overlapping */}
       {product.tags?.includes("Combo") && (
-        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-2 bg-[#8CD4DC] px-3 mt-1.5 rounded-[5px]">
+        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-1.5 bg-[#8CD4DC] px-2.5 mt-1.5 rounded-b-[15px] md:rounded-b-[20px] -mx-px">
           <img 
             src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
             alt="" 
-            className="size-4 object-contain md:size-5"
+            className="size-3.5 object-contain md:size-4 shrink-0 opacity-80"
           />
-          <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px]">
+          <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px] whitespace-nowrap">
             Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
         </div>
