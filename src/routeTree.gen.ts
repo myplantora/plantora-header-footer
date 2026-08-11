@@ -21,6 +21,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrackOrderRouteImport } from './routes/track-order'
 import { Route as CollectionsIndexRouteImport } from './routes/collections/index'
 import { Route as CollectionsHandleRouteImport } from './routes/collections/$handle'
+import { Route as CollectionsBigSavingsCombosRouteImport } from './routes/collections/big-savings-combos'
 import { Route as ProductHandleRouteImport } from './routes/product/$handle'
 
 const IndexRoute = IndexRouteImport.update({
@@ -83,6 +84,12 @@ const CollectionsHandleRoute = CollectionsHandleRouteImport.update({
   path: '/collections/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollectionsBigSavingsCombosRoute =
+  CollectionsBigSavingsCombosRouteImport.update({
+    id: '/collections/big-savings-combos',
+    path: '/collections/big-savings-combos',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProductHandleRoute = ProductHandleRouteImport.update({
   id: '/product/$handle',
   path: '/product/$handle',
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
   '/collections/$handle': typeof CollectionsHandleRoute
+  '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
   '/collections/$handle': typeof CollectionsHandleRoute
+  '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections': typeof CollectionsIndexRoute
 }
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
   '/collections/$handle': typeof CollectionsHandleRoute
+  '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/track-order'
     | '/collections/$handle'
+    | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections/'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/track-order'
     | '/collections/$handle'
+    | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections'
   id:
@@ -179,6 +191,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/track-order'
     | '/collections/$handle'
+    | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections/'
   fileRoutesById: FileRoutesById
@@ -195,6 +208,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TrackOrderRoute: typeof TrackOrderRoute
   CollectionsHandleRoute: typeof CollectionsHandleRoute
+  CollectionsBigSavingsCombosRoute: typeof CollectionsBigSavingsCombosRoute
   ProductHandleRoute: typeof ProductHandleRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
 }
@@ -285,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollectionsHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collections/big-savings-combos': {
+      id: '/collections/big-savings-combos'
+      path: '/collections/big-savings-combos'
+      fullPath: '/collections/big-savings-combos'
+      preLoaderRoute: typeof CollectionsBigSavingsCombosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$handle': {
       id: '/product/$handle'
       path: '/product/$handle'
@@ -307,9 +328,20 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TrackOrderRoute: TrackOrderRoute,
   CollectionsHandleRoute: CollectionsHandleRoute,
+  CollectionsBigSavingsCombosRoute: CollectionsBigSavingsCombosRoute,
   ProductHandleRoute: ProductHandleRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
