@@ -8,6 +8,7 @@ export type CartLine = {
   quantity: number;
   merchandiseId: string;
   title: string;
+  handle: string;
   variantTitle: string;
   imageUrl: string | null;
   amount: number;
@@ -54,7 +55,7 @@ const CART_FRAGMENT = `
               title
               image { url altText }
               price { amount currencyCode }
-              product { title }
+              product { title handle }
             }
           }
         }
@@ -129,6 +130,7 @@ function mapCart(cart: any) {
       quantity: edge.node.quantity,
       merchandiseId: edge.node.merchandise?.id,
       title: edge.node.merchandise?.product?.title ?? "",
+      handle: edge.node.merchandise?.product?.handle ?? "",
       variantTitle: edge.node.merchandise?.title ?? "",
       imageUrl: edge.node.merchandise?.image?.url ?? null,
       amount: Number(edge.node.merchandise?.price?.amount ?? 0),

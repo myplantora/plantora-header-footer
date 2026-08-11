@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 import { X, Minus, Plus, ChevronRight, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
@@ -94,13 +95,25 @@ export function CartDrawer() {
             <ul className="flex flex-col gap-4">
               {lines.map((line) => (
                 <li key={line.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3">
-                  <div className="size-16 shrink-0 overflow-hidden rounded-md bg-secondary">
+                  <Link 
+                    to="/product/$handle" 
+                    params={{ handle: line.handle }}
+                    onClick={closeCart}
+                    className="size-16 shrink-0 overflow-hidden rounded-md bg-secondary transition-opacity hover:opacity-80"
+                  >
                     {line.imageUrl ? (
                       <img src={line.imageUrl} alt="" loading="lazy" className="size-full object-cover" />
                     ) : null}
-                  </div>
+                  </Link>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-primary">{line.title}</p>
+                    <Link 
+                      to="/product/$handle" 
+                      params={{ handle: line.handle }}
+                      onClick={closeCart}
+                      className="truncate text-sm font-medium text-primary hover:text-accent transition-colors block"
+                    >
+                      {line.title}
+                    </Link>
                     {line.variantTitle && line.variantTitle !== "Default Title" ? (
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
