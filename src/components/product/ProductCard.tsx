@@ -222,7 +222,7 @@ export function ProductCard({
               "flex h-[38px] md:h-[42px] w-full items-center justify-center rounded-full text-[12px] md:text-[13px] font-medium transition-all",
               soldOut
                 ? "bg-[#f2f2f2] text-[#999]"
-                : "bg-[#254838] text-white active:scale-[0.98]"
+                : "bg-brand text-white active:scale-[0.98]"
             )}
           >
             {pending ? "ADDING..." : soldOut ? "SOLD OUT" : "ADD TO BASKET"}
