@@ -176,7 +176,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     <SectionContainer as="main" noPadding className="sm:py-8 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md">
+          <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md rounded-b-[15px]">
             {/* Product Tag GIF (Top Left) */}
             {product.tagMedia?.url && !tagMediaError && (
               <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
