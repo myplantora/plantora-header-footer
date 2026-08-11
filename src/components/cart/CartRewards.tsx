@@ -40,7 +40,7 @@ function CouponPill({ code }: { code: string }) {
         type="button"
         onClick={copy}
         aria-label={`Copy coupon code ${code}`}
-        className="inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[#A8622A] px-1.5 py-0.5 font-button text-[10px] font-semibold tracking-wide text-[#A8622A] transition-colors duration-300 hover:bg-[#A8622A]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none"
+        className="inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[#A8622A] px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-[#A8622A] transition-colors duration-300 hover:bg-[#A8622A]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none"
       >
         <svg fill="none" height="7" width="12" viewBox="0 0 12 7" aria-hidden="true">
           <g fill="#A8622A">
@@ -171,7 +171,7 @@ export function CartRewards() {
         })}
       </div>
 
-      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 font-button text-base font-medium text-white">
+      <div className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E9AD20] px-4 text-base font-medium text-white">
         <img
           src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Discount.webp?v=1786051899"
           alt=""

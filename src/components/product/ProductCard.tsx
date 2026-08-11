@@ -141,7 +141,7 @@ export function ProductCard({
             alt="" 
             className="size-3.5 object-contain md:size-4 shrink-0 opacity-80"
           />
-          <span className="font-quicksand text-[11px] font-normal text-[#1D4D44] md:text-[13px] whitespace-nowrap">
+          <span className="text-[11px] font-normal text-[#1D4D44] md:text-[13px] whitespace-nowrap">
             Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
         </div>
@@ -190,18 +190,18 @@ export function ProductCard({
         </div>
 
         {/* Product Title - Fraunces 500, line-height matching reference */}
-        <h3 className="line-clamp-2 text-[14px] md:text-[16px] font-normal leading-[1.3] text-[#254838] font-quicksand mb-2 min-h-[2.6em] flex items-start">
+        <h3 className="line-clamp-2 text-[14px] md:text-[16px] font-normal leading-[1.3] text-[#254838] mb-2 min-h-[2.6em] flex items-start">
           {product.title}
         </h3>
 
         {/* Price Row - Updated colours and font to match reference */}
         <div className="flex flex-nowrap items-center gap-x-1.5 gap-y-1 mt-auto min-h-6 overflow-hidden">
-          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] font-sans whitespace-nowrap">
+          <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] whitespace-nowrap">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && currentVariant.compareAtPrice.amount > currentVariant.price.amount && (
             <>
-              <span className="text-[13px] text-[#707070] line-through font-normal font-sans whitespace-nowrap">
+              <span className="text-[13px] text-[#707070] line-through font-normal whitespace-nowrap">
                 {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
               </span>
               <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
@@ -219,7 +219,7 @@ export function ProductCard({
             onClick={handleAdd}
             disabled={soldOut || pending}
             className={cn(
-              "flex h-[38px] md:h-[42px] w-full items-center justify-center rounded-full font-sans text-[12px] md:text-[13px] font-medium transition-all",
+              "flex h-[38px] md:h-[42px] w-full items-center justify-center rounded-full text-[12px] md:text-[13px] font-medium transition-all",
               soldOut
                 ? "bg-[#f2f2f2] text-[#999]"
                 : "bg-[#254838] text-white active:scale-[0.98]"

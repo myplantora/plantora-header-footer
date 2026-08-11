@@ -48,7 +48,7 @@ export function CartDrawer() {
       )}>
         <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-1.5">
           <div className="w-9" /> {/* Spacer to help center the title */}
-          <h2 className="text-center font-serif text-lg text-primary">Your basket</h2>
+          <h2 className="text-center text-lg text-primary">Your basket</h2>
           <button
             type="button"
             onClick={closeCart}
@@ -73,7 +73,7 @@ export function CartDrawer() {
                     <div className="mb-6 grid size-16 place-items-center rounded-full bg-[#F1F8EE]">
                       <ShoppingBag className="size-8 text-[#74A84A]" />
                     </div>
-                    <h3 className="text-2xl font-serif text-[#254838]">Your cart is currently empty</h3>
+                    <h3 className="text-2xl text-[#254838]">Your cart is currently empty</h3>
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
@@ -84,7 +84,7 @@ export function CartDrawer() {
 
                   <button
                     onClick={closeCart}
-                    className="w-full rounded-full bg-[#74A84A] py-4 font-button text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
+                    className="w-full rounded-full bg-[#74A84A] py-4 text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
                   >
                     Return to Shop
                   </button>
@@ -178,7 +178,7 @@ export function CartDrawer() {
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 font-button text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 text-sm font-normal text-white transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <div className="flex items-center gap-[10px]">
                 <span className="tracking-widest">CHECKOUT</span>

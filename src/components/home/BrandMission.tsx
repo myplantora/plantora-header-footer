@@ -20,7 +20,7 @@ export const BrandMission = () => {
 
         {/* Right Side: Text Content */}
         <div className="max-w-xl text-center md:text-left">
-          <p className="font-serif font-[500] text-2xl lg:text-3xl text-[#333333] leading-snug">
+          <p className="font-[500] text-2xl lg:text-3xl text-[#333333] leading-snug">
             At Plantora, we're on a mission to make greenery{" "}
             <span className="text-[#C3754C]">accessible</span> and{" "}
             <span className="text-[#C3754C]">stylish</span>. Discover our story and

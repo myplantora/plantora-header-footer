@@ -257,7 +257,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             ))}
           </div>
 
-          <h1 className="font-quicksand text-2xl leading-tight text-primary sm:text-3xl font-bold">
+          <h1 className="text-2xl leading-tight text-primary sm:text-3xl font-bold">
             {product.title}
           </h1>
 
@@ -269,9 +269,9 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
           <div className="flex items-center justify-between gap-2 mt-1">
             <div className="flex flex-nowrap items-center gap-2 overflow-hidden">
-              <span className="text-2xl font-bold text-[#1D4D44] font-sans whitespace-nowrap">{formatMoney(price.amount, price.currency)}</span>
+              <span className="text-2xl font-bold text-[#1D4D44] whitespace-nowrap">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
-                <span className="text-xl text-[#707070] line-through font-normal font-sans whitespace-nowrap">
+                <span className="text-xl text-[#707070] line-through font-normal whitespace-nowrap">
                   {formatMoney(compareAt.amount, compareAt.currency)}
                 </span>
               ) : null}
@@ -387,7 +387,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:min-w-56"
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:min-w-56"
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
@@ -404,7 +404,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
             />
             <div className="flex flex-1 flex-col gap-0.5">
-              <span className="font-button text-sm font-bold text-[#1D4D44] sm:text-base">
+              <span className="text-sm font-bold text-[#1D4D44] sm:text-base">
                 10-Day Damage Replacement Guarantee
               </span>
               <span className="text-xs text-[#1D4D44]/80 sm:text-sm">
