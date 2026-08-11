@@ -165,20 +165,27 @@ export function ProductCard({
           )}
         </div>
 
-        {/* Feature Tags - Exact spacing and styling from reference, showing max 2 tags */}
+        {/* Feature Tags - Random background colors from specified list */}
         <div className="flex flex-wrap gap-x-1 gap-y-1.5 mb-2 min-h-[22px] items-start">
-          {product.badges.slice(0, 2).map((badge) => (
-            <span 
-              key={badge.key}
-              style={{ backgroundColor: badge.backgroundColor || '#EDE9D2' }}
-              className="flex items-center gap-1 rounded-full px-1.5 py-1 text-[9px] md:text-[11px] font-medium text-[#254838] leading-none whitespace-nowrap"
-            >
-              {badge.iconUrl && (
-                <img src={badge.iconUrl} alt="" className="size-3 object-contain shrink-0" />
-              )}
-              {badge.label}
-            </span>
-          ))}
+          {product.badges.slice(0, 2).map((badge, index) => {
+            const tagColors = ['#B8D334', '#F0D2D2', '#C2E8E8', '#EEE9D1'];
+            // Use product ID and index to derive a stable but "random" color from the set
+            const colorIndex = (product.id.length + index) % tagColors.length;
+            const bgColor = tagColors[colorIndex];
+            
+            return (
+              <span 
+                key={badge.key}
+                style={{ backgroundColor: bgColor }}
+                className="flex items-center gap-1 rounded-full px-1.5 py-1 text-[9px] md:text-[11px] font-medium text-[#254838] leading-none whitespace-nowrap"
+              >
+                {badge.iconUrl && (
+                  <img src={badge.iconUrl} alt="" className="size-3 object-contain shrink-0" />
+                )}
+                {badge.label}
+              </span>
+            );
+          })}
         </div>
 
         {/* Product Title - Fraunces 500, line-height matching reference */}
