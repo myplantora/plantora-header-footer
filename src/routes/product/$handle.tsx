@@ -93,25 +93,23 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [isNearFooter, setIsNearFooter] = useState(false);
   
   useEffect(() => {
-    const mainButton = document.getElementById('main-add-to-basket');
-    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const mainButton = document.getElementById('main-add-to-basket');
       const footer = document.querySelector('footer');
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // 1. Show only when the main "Add to Basket" button is out of view (scrolled past it)
+      // Show when user has scrolled down significantly (e.g., past the first fold)
+      // or if we can specifically detect the main button is out of view
       if (mainButton) {
         const rect = mainButton.getBoundingClientRect();
-        // If bottom of main button is above top of viewport
         setShowFloatingButton(rect.bottom < 0);
       } else {
-        // Fallback if button not found
-        setShowFloatingButton(currentScrollY > 400);
+        setShowFloatingButton(currentScrollY > 600);
       }
 
-      // 2. Hide if near footer to avoid overlap
+      // Hide if near footer to avoid overlap
       if (footerTop < windowHeight + 20) {
         setIsNearFooter(true);
       } else {
@@ -120,9 +118,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial check
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Initial check after a short delay to ensure elements are rendered
+    const timeoutId = setTimeout(handleScroll, 100);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const handleTagMediaError = () => {
@@ -410,13 +411,13 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </div>
           ) : null}
 
-          <div className="hidden sm:flex flex-wrap items-center gap-2 mt-1">
+          <div className="flex flex-wrap items-center gap-2 mt-1">
             <button
               id="main-add-to-basket"
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:min-w-56"
+              className="inline-flex h-12 w-full sm:w-auto sm:min-w-56 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
@@ -429,16 +430,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-sm font-medium text-primary line-clamp-1 flex-1 mr-4">
+            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-sm font-medium text-[#1D4D44] line-clamp-1 flex-1">
                     {product.title}
                   </span>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-sm font-bold text-primary">{formatMoney(price.amount, price.currency)}</span>
+                    <span className="text-base font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
                     {compareAt && (
-                      <span className="text-xs text-muted-foreground line-through">
+                      <span className="text-sm text-[#707070] line-through font-normal">
                         {formatMoney(compareAt.amount, compareAt.currency)}
                       </span>
                     )}
@@ -449,9 +450,9 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   type="button"
                   onClick={handleAdd}
                   disabled={soldOut || isLoading}
-                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-sm font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-[15px] font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
                 >
-                  <span className="uppercase">{soldOut ? "SOLD OUT" : "Add to Basket"}</span>
+                  {soldOut ? "SOLD OUT" : "Add to Basket"}
                 </button>
               </div>
             </div>
