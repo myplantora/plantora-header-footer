@@ -95,19 +95,17 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const mainButton = document.getElementById('main-add-to-basket');
-      const footer = document.querySelector('footer');
+      const footer = Array.from(document.querySelectorAll('footer')).find((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.height > 0 && window.getComputedStyle(element).display !== "none";
+      });
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // Show when user has scrolled down significantly (e.g., past the first fold)
-      // or if we can specifically detect the main button is out of view
-      if (mainButton) {
-        const rect = mainButton.getBoundingClientRect();
-        setShowFloatingButton(rect.bottom < 0);
-      } else {
-        setShowFloatingButton(currentScrollY > 600);
-      }
+      // Keep the purchase action available once the customer starts browsing.
+      // This does not depend on the main button's position because it may still
+      // be below the viewport while the customer scrolls through product media.
+      setShowFloatingButton(currentScrollY > 80);
 
       // Hide if near footer to avoid overlap
       if (footerTop < windowHeight + 20) {
