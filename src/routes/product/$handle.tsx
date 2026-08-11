@@ -374,30 +374,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </div>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-2 mt-1">
-            <div className="inline-flex items-center overflow-hidden rounded-md border border-border bg-background">
-              <button
-                type="button"
-                aria-label="Decrease quantity"
-                onClick={decreaseQty}
-                disabled={quantity <= 1 || soldOut}
-                className="grid h-10 w-10 place-items-center text-primary transition-colors hover:bg-secondary disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Minus className="size-3.5" />
-              </button>
-              <span className="grid h-10 w-10 place-items-center text-sm  text-primary">
-                {quantity}
-              </span>
-              <button
-                type="button"
-                aria-label="Increase quantity"
-                onClick={increaseQty}
-                disabled={soldOut}
-                className="grid h-10 w-10 place-items-center text-primary transition-colors hover:bg-secondary disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Plus className="size-3.5" />
-              </button>
-            </div>
+          <div className="hidden sm:flex flex-wrap items-center gap-2 mt-1">
             <button
               type="button"
               onClick={handleAdd}
@@ -406,6 +383,20 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
+          </div>
+
+          {/* Floating Mobile Add to Basket */}
+          <div className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:hidden">
+            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F4F1E1] px-4 pb-8 pt-4 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+              <button
+                type="button"
+                onClick={handleAdd}
+                disabled={soldOut || isLoading}
+                className="flex h-14 w-full items-center justify-center rounded-full bg-[#1D4D44] text-[15px] font-bold tracking-widest text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
+              >
+                {soldOut ? "SOLD OUT" : "ADD TO BASKET"}
+              </button>
+            </div>
           </div>
 
           <DeliveryEstimator />
