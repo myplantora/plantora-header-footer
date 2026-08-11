@@ -55,8 +55,10 @@ export function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     if (!currentVariant || soldOut || pending) return;
-    
+
+    triggerHaptic("medium"); // must fire inside the gesture, before any await
     setPending(true);
+
     try {
       await addLine(currentVariant.id, 1);
       openCart();
