@@ -169,9 +169,8 @@ export function ProductCard({
         <div className="flex flex-wrap gap-x-1 gap-y-1.5 mb-2 min-h-[22px] items-start">
           {product.badges.slice(0, 2).map((badge, index) => {
             const tagColors = ['#B8D334', '#F0D2D2', '#C2E8E8', '#EEE9D1'];
-            // Use product ID and index to derive a stable but "random" color from the set
-            const colorIndex = (product.id.length + index) % tagColors.length;
-            const bgColor = tagColors[colorIndex];
+            // Assign colors in the exact order provided, cycling if more than 4 tags
+            const bgColor = tagColors[index % tagColors.length];
             
             return (
               <span 
