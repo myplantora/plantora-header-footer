@@ -145,6 +145,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [quantity, setQuantity] = useState(1);
   const [chartOpen, setChartOpen] = useState(false);
   const [guaranteeOpen, setGuaranteeOpen] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
   const [activeImage, setActiveImage] = useState(() => {
     const v = product.variants.find(v => v.id === (search.variant || product.defaultVariantId));
     return v?.image?.url ?? product.featuredImage?.url ?? product.gallery[0]?.url ?? null;
@@ -154,6 +155,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     const v = product.variants.find(v => v.id === variantId);
     if (v?.image?.url) setActiveImage(v.image.url);
   }, [variantId, product.variants]);
+
+  useEffect(() => {
+    setAddError(null);
+  }, [variantId, quantity]);
 
   useEffect(() => {
     if (chartOpen) {
@@ -186,16 +191,17 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
   async function handleAdd() {
     if (!variantId || soldOut) return;
+    setAddError(null);
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
       const ok = await addLineAndOpen(variantId, quantity);
       if (!ok) {
-        toast.error("Could not add to basket. Please try again.");
+        setAddError("Could not add to basket. Please try again.");
         return;
       }
       trackAddToCart(product, quantity);
     } catch {
-      toast.error("Could not add to basket. Please try again.");
+      setAddError("Could not add to basket. Please try again.");
     }
   }
 
@@ -410,7 +416,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </div>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-2 mt-1">
+          <div className="flex flex-col gap-2 mt-1">
             <button
               id="main-add-to-basket"
               type="button"
@@ -420,6 +426,11 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             >
               {soldOut ? "Sold out" : "Add to basket"}
             </button>
+            {addError ? (
+              <p className="text-sm text-destructive" role="alert" aria-live="polite">
+                {addError}
+              </p>
+            ) : null}
           </div>
 
           {/* Floating Mobile Add to Basket (Matches reference HTML structure) */}
