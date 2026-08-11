@@ -210,19 +210,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               </div>
             )}
 
-            {/* Combo Offer Banner - PDP Version */}
-            {product.tags?.includes("Combo") && (
-              <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4">
-                <img 
-                  src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
-                  alt="" 
-                  className="size-5 object-contain md:size-6"
-                />
-                <span className="font-quicksand text-[13px] font-bold text-[#1D4D44] md:text-[15px]">
-                  Grab it for just {formatMoney(price.amount, price.currency)}
-                </span>
-              </div>
-            )}
+            {/* Removed absolute banner */}
+
 
 
             {activeImage ? (
@@ -239,6 +228,21 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               </div>
             )}
           </div>
+          
+          {/* Combo Offer Banner - PDP Version - Rendered below image */}
+          {product.tags?.includes("Combo") && (
+            <div className="flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4 mt-3 rounded-md">
+              <img 
+                src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
+                alt="" 
+                className="size-5 object-contain md:size-6"
+              />
+              <span className="font-quicksand text-[13px] font-bold text-[#1D4D44] md:text-[15px]">
+                Grab it for just {formatMoney(price.amount, price.currency)}
+              </span>
+            </div>
+          )}
+
           {product.gallery.length > 1 ? (
             <div className="mt-3 flex gap-3 overflow-x-auto px-2.5">
               {product.gallery.map((img) => (
@@ -285,9 +289,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
                 <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2.5 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap">
-                  {Math.round(((compareAt.amount - price.amount) / compareAt.amount) * 100)}% OFF
+                  SAVE {formatMoney(compareAt.amount - price.amount, price.currency)}
                 </span>
               ) : null}
+
             </div>
             <button
               type="button"

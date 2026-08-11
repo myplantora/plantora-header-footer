@@ -131,20 +131,22 @@ export function ProductCard({
           </div>
         )}
 
-        {/* Combo Offer Banner - Only for products with "Combo" tag */}
-        {product.tags?.includes("Combo") && (
-          <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[32px] md:h-[38px] items-center justify-start gap-2 bg-[#8CD4DC] px-3">
-            <img 
-              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
-              alt="" 
-              className="size-4 object-contain md:size-5"
-            />
-            <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px]">
-              Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
-            </span>
-          </div>
-        )}
       </div>
+
+      {/* Combo Offer Banner - Rendered below image, not overlapping */}
+      {product.tags?.includes("Combo") && (
+        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-2 bg-[#8CD4DC] px-3 mt-1.5 rounded-[5px]">
+          <img 
+            src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
+            alt="" 
+            className="size-4 object-contain md:size-5"
+          />
+          <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px]">
+            Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
+          </span>
+        </div>
+      )}
+
 
       <div className="flex flex-1 flex-col pt-3 pb-2">
         {/* Reviews Row - Exact Judge.me style from reference */}
@@ -189,17 +191,18 @@ export function ProductCard({
           <span className="text-[15px] md:text-[18px] font-bold text-[#1D4D44] font-sans">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
-          {currentVariant.compareAtPrice && (
-            <span className="text-[13px] text-[#707070] line-through font-normal font-sans">
-              {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
-            </span>
-          )}
-          {product.discountPercent && product.discountPercent > 0 && (
-            <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-2 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
-              {product.discountPercent}% OFF
-            </span>
+          {currentVariant.compareAtPrice && currentVariant.compareAtPrice.amount > currentVariant.price.amount && (
+            <>
+              <span className="text-[13px] text-[#707070] line-through font-normal font-sans">
+                {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
+              </span>
+              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-2 py-1 rounded-[10px] font-bold leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
+                SAVE {formatMoney(currentVariant.compareAtPrice.amount - currentVariant.price.amount, currentVariant.price.currency)}
+              </span>
+            </>
           )}
         </div>
+
 
         {/* Add to Basket Button - Matching Kyari's exact mobile padding and style */}
         <div className="mt-3 md:mt-4">
