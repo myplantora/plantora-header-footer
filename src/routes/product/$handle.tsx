@@ -404,7 +404,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
             />
             <div className="flex flex-1 flex-col gap-0.5">
-              <span className="font-button text-sm font-bold text-[#1D4D44] sm:text-base">
+              <span className="text-sm font-bold text-[#1D4D44] sm:text-base">
                 10-Day Damage Replacement Guarantee
               </span>
               <span className="text-xs text-[#1D4D44]/80 sm:text-sm">
