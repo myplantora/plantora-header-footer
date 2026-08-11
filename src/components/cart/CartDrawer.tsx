@@ -182,21 +182,21 @@ export function CartDrawer() {
               <span className="tracking-widest">CHECKOUT</span>
               
               <div className="flex items-center -space-x-2">
-                <div className="size-[32px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                   <img
                     src={paypalAsset.url}
                     alt="PayPal"
                     className="size-full scale-125 object-contain"
                   />
                 </div>
-                <div className="size-[32px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                   <img
                     src={gpayAsset.url}
                     alt="Google Pay"
                     className="size-full scale-125 object-contain"
                   />
                 </div>
-                <div className="size-[32px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
+                <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                   <img
                     src={mastercardAsset.url}
                     alt="Mastercard"
