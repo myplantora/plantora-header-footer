@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { storefrontApiRequest } from "@/services/shopify/client";
 import { toast } from "sonner";
-import { triggerHaptic } from "@/utils/haptics";
 
 export type CartLine = {
   id: string;
@@ -224,10 +223,7 @@ export const useCartStore = create<CartState>()(
             data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
           );
           const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
-          if (cart) {
-            set({ ...mapCart(cart), isOpen: true });
-            triggerHaptic('medium');
-          }
+          if (cart) set({ ...mapCart(cart), isOpen: true });
         } finally {
           set({ isLoading: false });
         }
@@ -249,10 +245,7 @@ export const useCartStore = create<CartState>()(
           });
           notifyWarnings(data?.data?.cartLinesUpdate?.warnings);
           const cart = data?.data?.cartLinesUpdate?.cart;
-          if (cart) {
-            set(mapCart(cart));
-            triggerHaptic('light');
-          }
+          if (cart) set(mapCart(cart));
         } finally {
           set({ isLoading: false });
         }
@@ -268,10 +261,7 @@ export const useCartStore = create<CartState>()(
             lineIds: [lineId],
           });
           const cart = data?.data?.cartLinesRemove?.cart;
-          if (cart) {
-            set(mapCart(cart));
-            triggerHaptic('heavy');
-          }
+          if (cart) set(mapCart(cart));
         } finally {
           set({ isLoading: false });
         }
