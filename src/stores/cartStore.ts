@@ -12,6 +12,7 @@ export type CartLine = {
   variantTitle: string;
   imageUrl: string | null;
   amount: number;
+  compareAtAmount: number | null;
   currency: string;
 };
 
