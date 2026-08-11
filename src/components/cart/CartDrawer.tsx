@@ -58,11 +58,10 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="border-b border-border px-5 py-1">
-          <CartRewards />
-        </div>
-
         <div className="flex-1 overflow-y-auto px-5 py-1">
+          <div className="mb-2 border-b border-border pb-2">
+            <CartRewards />
+          </div>
           {lines.length === 0 ? (
             <div className="flex flex-col items-center py-4">
               {isLoading ? (
