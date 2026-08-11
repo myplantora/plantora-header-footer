@@ -430,16 +430,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-sm font-medium text-primary line-clamp-1 flex-1 mr-4">
+            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-sm font-medium text-[#1D4D44] line-clamp-1 flex-1">
                     {product.title}
                   </span>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-sm font-bold text-primary">{formatMoney(price.amount, price.currency)}</span>
+                    <span className="text-base font-bold text-[#1D4D44]">{formatMoney(price.amount, price.currency)}</span>
                     {compareAt && (
-                      <span className="text-xs text-muted-foreground line-through">
+                      <span className="text-sm text-[#707070] line-through font-normal">
                         {formatMoney(compareAt.amount, compareAt.currency)}
                       </span>
                     )}
@@ -450,9 +450,9 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   type="button"
                   onClick={handleAdd}
                   disabled={soldOut || isLoading}
-                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-sm font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-[15px] font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
                 >
-                  <span className="uppercase">{soldOut ? "SOLD OUT" : "Add to Basket"}</span>
+                  {soldOut ? "SOLD OUT" : "Add to Basket"}
                 </button>
               </div>
             </div>
