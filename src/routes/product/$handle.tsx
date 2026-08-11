@@ -95,7 +95,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const footer = document.querySelector('footer');
+      const footer = Array.from(document.querySelectorAll('footer')).find((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.height > 0 && window.getComputedStyle(element).display !== "none";
+      });
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
