@@ -86,11 +86,14 @@ function generateFeatureChips(seed: string, productType?: string, tags: string[]
     chip('beginner', 'Fast Growing', 'fast_growing', '#F2E8C2'),
   ];
 
-  if (chips.length < 2) {
-    const second = pool[hash % pool.length];
-    if (second && second.key !== chips[0]?.key) {
-      chips.push(second);
+  // Ensure we have at least 2 chips by picking from the pool if needed
+  let poolIndex = hash % pool.length;
+  while (chips.length < 2) {
+    const candidate = pool[poolIndex];
+    if (candidate && !chips.some(c => c.key === candidate.key)) {
+      chips.push(candidate);
     }
+    poolIndex = (poolIndex + 1) % pool.length;
   }
 
   return chips.slice(0, 2);
