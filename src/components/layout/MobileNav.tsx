@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { X, ChevronRight } from "lucide-react";
+import { X, ChevronRight, Plus, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { navItems } from "@/config/navigation";
+import { navItems, helpLinks } from "@/config/navigation";
 
 type Props = {
   open: boolean;
@@ -11,6 +11,7 @@ type Props = {
 
 export function MobileNav({ open, onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (open) {
@@ -24,6 +25,10 @@ export function MobileNav({ open, onClose }: Props) {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const toggleExpand = (label: string) => {
+    setExpandedItems(prev => ({ ...prev, [label]: !prev[label] }));
+  };
 
   return (
     <div
@@ -60,29 +65,55 @@ export function MobileNav({ open, onClose }: Props) {
         </div>
 
         <nav className="h-[calc(100vh-64px)] overflow-y-auto px-5 pb-10">
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col">
             {navItems.map((item) => {
-              // Only render valid TanStack Start routes to avoid build errors
-              const isValidRoute = ["/", "/collections", "/collections/$handle", "/product/$handle"].some(
-                (route) => item.href === route || item.href.startsWith("/collections/") || item.href.startsWith("/product/")
-              );
-
+              const hasSubmenu = item.mega && item.mega.length > 0;
+              const isExpanded = expandedItems[item.label];
+              
               return (
-                <li key={item.label}>
-                  {isValidRoute ? (
+                <li key={item.label} className="border-b border-border/50 last:border-0">
+                  <div className="flex items-center justify-between">
                     <Link
                       to={item.href as any}
                       onClick={onClose}
-                      className="flex items-center justify-between py-4 text-lg font-medium text-black transition-colors hover:text-black/70"
+                      className="flex-1 py-4 text-[17px] font-medium text-black transition-colors hover:text-accent"
                     >
                       {item.label}
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </Link>
-                  ) : (
-                    <span className="flex items-center justify-between py-4 text-lg font-medium text-black/50">
-                      {item.label}
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
-                    </span>
+                    {hasSubmenu && (
+                      <button 
+                        onClick={() => toggleExpand(item.label)}
+                        className="p-4 text-muted-foreground hover:text-primary transition-colors"
+                        aria-expanded={isExpanded}
+                      >
+                        {isExpanded ? <Minus className="size-4" /> : <Plus className="size-4" />}
+                      </button>
+                    )}
+                    {!hasSubmenu && (
+                      <div className="p-4 text-muted-foreground/30">
+                        <ChevronRight className="size-4" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {hasSubmenu && isExpanded && (
+                    <ul className="bg-secondary/30 pb-4 rounded-xl mb-2">
+                      {item.mega!.map((column) => (
+                        <div key={column.title} className="px-4 pt-3">
+                          {column.links.map((link) => (
+                            <li key={link.label}>
+                              <Link
+                                to={link.href as any}
+                                onClick={onClose}
+                                className="block py-2.5 text-[15px] text-muted-foreground hover:text-accent"
+                              >
+                                {link.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </div>
+                      ))}
+                    </ul>
                   )}
                 </li>
               );
@@ -91,13 +122,21 @@ export function MobileNav({ open, onClose }: Props) {
 
           <div className="mt-10 space-y-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                Support
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+                SUPPORT
               </p>
-              <ul className="mt-4 space-y-4">
-                <li className="text-[15px] text-black/50">Contact Us</li>
-                <li className="text-[15px] text-black/50">Shipping Policy</li>
-                <li className="text-[15px] text-black/50">Returns & Refunds</li>
+              <ul className="space-y-4">
+                {helpLinks.slice(0, 3).map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href as any}
+                      onClick={onClose}
+                      className="text-[15px] text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -106,3 +145,4 @@ export function MobileNav({ open, onClose }: Props) {
     </div>
   );
 }
+
