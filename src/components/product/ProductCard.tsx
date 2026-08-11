@@ -166,7 +166,7 @@ export function ProductCard({
         </div>
 
         {/* Product Title - Fraunces 500, line-height matching reference */}
-        <h3 className="line-clamp-2 text-[13px] md:text-[15px] font-bold leading-[1.3] text-[#254838] font-sans mb-2 min-h-[2.6em] flex items-start">
+        <h3 className="line-clamp-2 text-[14px] md:text-[16px] font-bold leading-[1.3] text-[#254838] font-quicksand mb-2 min-h-[2.6em] flex items-start">
           {product.title}
         </h3>
 
