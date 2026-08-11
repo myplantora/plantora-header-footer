@@ -34,8 +34,8 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
           {heading ?? collection.title}
         </h2>
         <Link
-          to="/collections/$handle"
-          params={{ handle: collection.handle || "all" }}
+          to={collection.handle === "big-savings-combos" ? "/collections/big-savings-combos" : "/collections/$handle"}
+          params={collection.handle === "big-savings-combos" ? {} : { handle: collection.handle || "all" }}
           className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
         >
           View all
@@ -59,8 +59,8 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
         <div className="mt-10">
           <Link
-            to="/collections/$handle"
-            params={{ handle: collection.handle || "all" }}
+            to={collection.handle === "big-savings-combos" ? "/collections/big-savings-combos" : "/collections/$handle"}
+            params={collection.handle === "big-savings-combos" ? {} : { handle: collection.handle || "all" }}
             className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
           >
             View more product
