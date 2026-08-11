@@ -251,7 +251,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             ))}
           </div>
 
-          <h1 className="font-serif text-4xl leading-tight text-primary sm:text-5xl">
+          <h1 className="font-quicksand text-5xl leading-tight text-primary sm:text-6xl font-bold">
             {product.title}
           </h1>
 
