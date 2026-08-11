@@ -280,16 +280,16 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           ) : null}
 
           <div className="flex items-center justify-between gap-2 mt-1">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-[#1D4D44] font-sans">{formatMoney(price.amount, price.currency)}</span>
+            <div className="flex flex-nowrap items-center gap-2 overflow-hidden">
+              <span className="text-2xl font-bold text-[#1D4D44] font-sans whitespace-nowrap">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
-                <span className="text-xl text-[#707070] line-through font-normal font-sans">
+                <span className="text-xl text-[#707070] line-through font-normal font-sans whitespace-nowrap">
                   {formatMoney(compareAt.amount, compareAt.currency)}
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2.5 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap">
-                  SAVE {formatMoney(compareAt.amount - price.amount, price.currency)}
+                <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap shrink-0">
+                  SAVE {formatMoney(Math.round(compareAt.amount - price.amount), price.currency)}
                 </span>
               ) : null}
 
