@@ -200,6 +200,9 @@ function buildEvents(payload: ShopifyPageViewPayload & BrowserParams): MonorailE
 export async function sendShopifyPageView(extras: PageViewExtras): Promise<void> {
   if (typeof window === "undefined") return;
 
+  lastPageViewExtras = extras;
+
+
   try {
     const payload = {
       ...getClientBrowserParameters(),
