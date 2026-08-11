@@ -46,7 +46,7 @@ export function CartDrawer() {
         "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-soft transition-transform duration-300 sm:rounded-l-md",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-1.5 py-1.5">
+        <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-1.5">
           <div className="w-9" /> {/* Spacer to help center the title */}
           <h2 className="text-center font-serif text-lg text-primary">Your basket</h2>
           <button
@@ -59,7 +59,7 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-1.5 pt-5 pb-1">
+        <div className="flex-1 overflow-y-auto px-4 pt-5 pb-1">
           <div className="mb-2 border-b border-border pb-2">
             <CartRewards />
           </div>
@@ -157,7 +157,7 @@ export function CartDrawer() {
           )}
         </div>
 
-        <footer className={cn("border-t border-border p-1.5", lines.length === 0 && "hidden")}>
+        <footer className={cn("border-t border-border p-4", lines.length === 0 && "hidden")}>
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">SUBTOTAL</span>
             <span className="text-lg font-bold text-primary">
