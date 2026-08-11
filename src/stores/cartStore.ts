@@ -30,7 +30,7 @@ type CartState = {
   isDiscountLoading: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addLine: (merchandiseId: string, quantity?: number) => Promise<void>;
+  addLine: (merchandiseId: string, quantity?: number) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   setDiscountCodes: (codes: string[]) => Promise<boolean>;
@@ -223,7 +223,11 @@ export const useCartStore = create<CartState>()(
             data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
           );
           const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
-          if (cart) set({ ...mapCart(cart), isOpen: true });
+          if (!cart) return false;
+          const mapped = mapCart(cart);
+          set(mapped);
+          // Only signal success once Shopify returned a cart with a checkout URL
+          return Boolean(mapped.checkoutUrl);
         } finally {
           set({ isLoading: false });
         }
