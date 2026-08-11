@@ -85,7 +85,7 @@ function ReplacementRequestForm() {
         <button
           type="submit"
           disabled={!emailOrPhone.trim() || !acceptedTerms}
-          className="h-11 w-full rounded-lg bg-[#1D4D44] px-6 text-sm font-medium text-white transition-colors hover:bg-[#1D4D44]/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-11 w-full rounded-lg bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Submit Request
         </button>
