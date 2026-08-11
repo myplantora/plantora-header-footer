@@ -51,7 +51,10 @@ export function sendMonorailEvent({ schema_id, payload }: MonorailEvent): void {
   const body = JSON.stringify({
     schema_id,
     payload,
-    metadata: { event_created_at_ms: createdAtMs },
+    metadata: {
+      event_created_at_ms: createdAtMs,
+      event_sent_at_ms: createdAtMs,
+    },
   });
 
   try {
