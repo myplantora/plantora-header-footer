@@ -10,6 +10,7 @@ import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { useCartAnalytics } from "@/lib/analytics/useCartAnalytics";
 import { useCartViewed } from "@/lib/analytics/useCartViewed";
+import { useCheckoutStarted } from "@/lib/analytics/useCheckoutStarted";
 
 const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
 const GPAY_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gpay.webp?v=1786466039";
@@ -21,6 +22,7 @@ export function CartDrawer() {
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate, totalQuantity } =
     useCartStore();
   const { trackInitiateCheckout } = useMetaTracking();
+  const handleCheckout = useCheckoutStarted();
   const cartId = useCartStore((s) => s.cartId);
 
   // Monorail cart activity (browser-only, debounced, mount-skipped).
@@ -224,7 +226,10 @@ export function CartDrawer() {
                   resolveRewardState(subtotal?.amount ?? 0).bestCode
                 );
                 if (url && url !== "#") {
-                  window.open(url, "_blank", "noopener,noreferrer");
+                  // Fires checkout_started (once, keepalive) then navigates.
+                  handleCheckout(url, (target) =>
+                    window.open(target, "_blank", "noopener,noreferrer")
+                  );
                 }
               }}
               className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 text-sm font-normal text-primary-foreground transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"

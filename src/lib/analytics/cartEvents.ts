@@ -93,3 +93,23 @@ export function sendCartViewed(input: CartEventInput): void {
     payload: baseCartPayload(input, "cart_viewed"),
   });
 }
+
+/**
+ * Fires the moment the visitor initiates checkout, before navigation.
+ * Same schema as the other storefront customer events, distinguished by
+ * `event_name: "checkout_started"`.
+ */
+export function sendCheckoutStarted(
+  input: CartEventInput & { currency?: string },
+): void {
+  if (typeof window === "undefined") return;
+  if (input.lineItemsCount === 0) return;
+  sendMonorailEvent({
+    schema_id: CART_SCHEMA_ID,
+    payload: {
+      ...baseCartPayload(input, "checkout_started"),
+      currency: input.currency ?? analyticsConfig.currency,
+      total_price: input.totalPrice ?? "0.00",
+    },
+  });
+}
