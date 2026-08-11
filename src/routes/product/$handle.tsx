@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Check, Minus, Plus, Info, X } from "lucide-react";
+import { Minus, Plus, Info, X } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
