@@ -33,15 +33,15 @@ export function ProductRecommendations({
 
   return (
     <SectionContainer className="bg-[#F8F8F8] pt-12 pb-8 sm:pt-16 sm:pb-12 lg:pt-20 lg:pb-16">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <h2 className="font-serif text-2xl text-primary sm:text-3xl lg:text-4xl">
+      <div className="relative flex items-center justify-center">
+        <h2 className="text-center font-serif text-2xl text-primary sm:text-3xl lg:text-4xl">
           {heading}
         </h2>
         {collection?.handle ? (
           <Link
             to="/collections/$handle"
             params={{ handle: collection.handle }}
-            className="hidden text-sm font-medium text-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:inline"
+            className="absolute right-0 hidden text-sm font-medium text-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:inline"
           >
             View all
           </Link>
