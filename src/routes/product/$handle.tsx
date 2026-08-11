@@ -89,7 +89,38 @@ function boughtCountFromSeed(seed: string) {
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const [tagMediaError, setTagMediaError] = useState(false);
+  const [showFloatingButton, setShowFloatingButton] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isNearFooter, setIsNearFooter] = useState(false);
   
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const footer = document.querySelector('footer');
+      const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
+      const windowHeight = window.innerHeight;
+
+      // Hide if near footer
+      if (footerTop < windowHeight + 20) {
+        setIsNearFooter(true);
+      } else {
+        setIsNearFooter(false);
+      }
+
+      // Scroll logic: show on scroll up, hide on scroll down
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowFloatingButton(false);
+      } else {
+        setShowFloatingButton(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   const handleTagMediaError = () => {
     setTagMediaError(true);
     console.error(`[Plantora] Failed to load Product Tag GIF for product: "${product.title}"`, {
@@ -98,6 +129,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
       timestamp: new Date().toISOString()
     });
   };
+
   const addLine = useCartStore((s) => s.addLine);
   const isLoading = useCartStore((s) => s.isLoading);
   const search = Route.useSearch() as any;
@@ -386,8 +418,13 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
 
           {/* Floating Mobile Add to Basket */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden">
-            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-4 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+          <div 
+            className={cn(
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out sm:hidden",
+              (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+            )}
+          >
+            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-8 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
               <button
                 type="button"
                 onClick={handleAdd}
