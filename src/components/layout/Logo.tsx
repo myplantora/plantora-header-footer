@@ -17,13 +17,20 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
         src={logoUrl} 
         alt="Plantora Logo" 
         className={cn(
-          "h-8 w-auto shrink-0 object-contain transition-transform duration-300 group-hover:scale-105",
+          "h-10 w-auto shrink-0 object-contain transition-transform duration-300 group-hover:scale-105",
           tone === "light" && "brightness-0 invert"
         )}
         aria-hidden="true"
       />
+      <span className={cn(
+        "font-serif text-2xl leading-none tracking-tight transition-colors duration-300",
+        tone === "light" ? "text-white" : "text-black"
+      )}>
+        Plantora
+      </span>
     </Link>
   );
 }
+
 
 
