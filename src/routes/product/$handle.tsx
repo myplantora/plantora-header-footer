@@ -399,8 +399,13 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
 
           {/* Floating Mobile Add to Basket */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden">
-            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-4 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+          <div 
+            className={cn(
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out sm:hidden",
+              (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+            )}
+          >
+            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-8 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
               <button
                 type="button"
                 onClick={handleAdd}
