@@ -20,7 +20,15 @@ type Props = {
 export function CollectionScroller({ collectionId, limit = 12, heading }: Props) {
   const { data: collection } = useSuspenseQuery(collectionByIdQuery(collectionId, limit));
 
-  if (!collection || collection.products.length === 0) return null;
+  if (!collection) {
+    console.log(`[Plantora] Collection not found for ID: ${collectionId}`);
+    return null;
+  }
+
+  if (collection.products.length === 0) {
+    console.log(`[Plantora] Collection empty for ID: ${collectionId} (${collection.title})`);
+    return null;
+  }
 
   // Use the ID as handle if it's the Big Savings collection
   const isBigSavings = collectionId === "659519504677";
