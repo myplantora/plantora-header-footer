@@ -436,9 +436,24 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               )}
             </button>
             {addError ? (
-              <p className="text-sm text-destructive" role="alert" aria-live="polite">
-                {addError}
-              </p>
+              <div
+                className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive"
+                role="alert"
+                aria-live="polite"
+              >
+                <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                <div className="flex flex-1 flex-col gap-1">
+                  <span>{addError}</span>
+                  <button
+                    type="button"
+                    onClick={handleAdd}
+                    disabled={isLoading}
+                    className="self-start text-sm font-medium underline underline-offset-4 transition-colors hover:text-destructive/80 disabled:opacity-50"
+                  >
+                    Try again
+                  </button>
+                </div>
+              </div>
             ) : null}
           </div>
 
