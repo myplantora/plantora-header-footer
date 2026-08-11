@@ -48,7 +48,7 @@ export function CartDrawer() {
       )}>
         <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-1.5">
           <div className="w-9" /> {/* Spacer to help center the title */}
-          <h2 className="text-center text-lg text-primary">Your basket</h2>
+          <h2 className="text-center text-lg font-bold text-primary">Your basket</h2>
           <button
             type="button"
             onClick={closeCart}
