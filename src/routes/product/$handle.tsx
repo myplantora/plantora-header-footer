@@ -188,16 +188,19 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
-      await addLine(variantId, quantity);
+      const ok = await addLine(variantId, quantity);
+      if (!ok) {
+        toast.error("Could not add to basket. Please try again.");
+        return;
+      }
       trackAddToCart(product, quantity);
-
-      toast.success(`${product.title} added to basket`, {
-        icon: <Check className="size-4" />,
-      });
+      // Open the cart slider only after Shopify confirmed the cart + checkout URL
+      useCartStore.getState().openCart();
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }
   }
+
 
   function decreaseQty() {
     setQuantity((q) => Math.max(1, q - 1));
