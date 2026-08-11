@@ -126,9 +126,7 @@ export function CartDrawer() {
                         aria-label="Decrease quantity"
                         disabled={isLoading}
                         onClick={() =>
-                          line.quantity > 1
-                            ? updateLine(line.id, line.quantity - 1)
-                            : removeLine(line.id)
+                          updateLine(line.id, line.quantity - 1)
                         }
                         className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       >
