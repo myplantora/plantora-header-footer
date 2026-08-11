@@ -157,7 +157,7 @@ export function CartDrawer() {
           )}
         </div>
 
-        <footer className={cn("border-t border-border p-1.5", lines.length === 0 && "hidden")}>
+        <footer className={cn("border-t border-border p-4", lines.length === 0 && "hidden")}>
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">SUBTOTAL</span>
             <span className="text-lg font-bold text-primary">
