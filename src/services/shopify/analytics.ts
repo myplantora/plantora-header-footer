@@ -96,27 +96,29 @@ function formatProducts(products?: ShopifyAnalyticsProduct[]): string[] {
 
 type BrowserParams = ReturnType<typeof getClientBrowserParameters>;
 
-function buildEvents(payload: ShopifyPageViewPayload & BrowserParams): MonorailEvent[] {
+export function buildPageViewPayload(
+  payload: ShopifyPageViewPayload & BrowserParams,
+): Record<string, unknown> {
   const clientId = getClientId();
   const sessionToken = getSessionToken();
+  const microSessionId = getMicroSessionId();
   const { id: resourceNumericId, resource } = gidParts(payload.resourceId);
+  const customerNumericId = numericId(payload.customerId);
 
-  const trekkie: MonorailEvent = {
-    schema_id: TREKKIE_SCHEMA,
-    payload: withoutEmpty({
+  return {
+    ...withoutEmpty({
       pageType: payload.pageType,
-      customerId: numericId(payload.customerId),
       resourceType: resource ? resource.toLowerCase() : undefined,
       resourceId: resourceNumericId ? parseInt(resourceNumericId, 10) : undefined,
       appClientId: HEADLESS_APP_ID,
       isMerchantRequest: false,
       hydrogenSubchannelId: payload.storefrontId || "0",
       isPersistentCookie: payload.hasUserConsent,
-      // Identity: browser-persisted tokens, never generated on a server.
-      uniqToken: payload.uniqueToken || clientId,
-      visitToken: payload.visitToken || sessionToken,
-      microSessionId: sessionToken,
-      microSessionCount: 1,
+      // Identity: browser-persisted lowercase UUIDs, never generated per-event.
+      uniqToken: (payload.uniqueToken || clientId).toLowerCase(),
+      visitToken: (payload.visitToken || sessionToken).toLowerCase(),
+      microSessionId: microSessionId,
+      microSessionCount: getMicroSessionCount(),
       url: payload.url,
       path: payload.path,
       search: payload.search,
@@ -126,7 +128,20 @@ function buildEvents(payload: ShopifyPageViewPayload & BrowserParams): MonorailE
       currency: payload.currency,
       contentLanguage: payload.acceptedLanguage || "en",
     }),
+    // Monorail rejects integer 0 for guests: null, or a numeric string.
+    customerId: customerNumericId ? String(customerNumericId) : null,
   };
+}
+
+function buildEvents(payload: ShopifyPageViewPayload & BrowserParams): MonorailEvent[] {
+  const clientId = getClientId();
+  const sessionToken = getSessionToken();
+
+  const trekkie: MonorailEvent = {
+    schema_id: TREKKIE_SCHEMA,
+    payload: buildPageViewPayload(payload),
+  };
+
 
   const base = withoutEmpty({
     source: payload.shopifySalesChannel || "headless",
