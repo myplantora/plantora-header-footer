@@ -73,11 +73,11 @@ export function CartDrawer() {
                     <div className="mb-6 grid size-16 place-items-center rounded-full bg-[#F1F8EE]">
                       <ShoppingBag className="size-8 text-[#74A84A]" />
                     </div>
-                    <h3 className="text-2xl font-serif text-[#1D4D44]">Your cart is currently empty</h3>
+                    <h3 className="text-2xl font-serif text-[#254838]">Your cart is currently empty</h3>
                     <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-[#1D4D44]">
+                  <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-3 text-[12px] font-bold text-[#254838]">
                     <CheckCircle2 className="size-4 text-[#74A84A]" />
                     30 DAY PLANT REPLACEMENT GUARANTEE
                   </div>

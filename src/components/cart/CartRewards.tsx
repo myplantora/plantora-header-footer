@@ -124,7 +124,7 @@ export function CartRewards() {
           className="absolute left-[calc(100%/8)] top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none"
           style={{ 
             width: `calc((${Math.min(fill, 100)} / 100 * (100% - 100%/4)))`,
-            backgroundColor: `#1D4D44`,
+            backgroundColor: `#254838`,
             maxWidth: 'calc(100% - 100%/4)'
           }}
         />
@@ -142,7 +142,7 @@ export function CartRewards() {
               <div className="flex flex-col items-center min-w-[64px]">
                 <span
                   className={`relative flex size-9 sm:size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
-                    tier.unlocked ? "bg-[#1D4D44]" : "bg-secondary"
+                    tier.unlocked ? "bg-[#254838]" : "bg-secondary"
                   }`}
                   aria-hidden="true"
                 >
