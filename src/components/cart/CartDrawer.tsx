@@ -68,13 +68,13 @@ export function CartDrawer() {
               {isLoading ? (
                 <p className="text-sm text-muted-foreground">Loading your basket…</p>
               ) : (
-                <div className="w-full space-y-6">
+                <div className="w-full space-y-8">
                   <div className="flex flex-col items-center text-center">
-                    <div className="mb-4 grid size-12 place-items-center rounded-full bg-accent/10">
-                      <ShoppingBag className="size-6 text-accent" />
+                    <div className="mb-6 grid size-16 place-items-center rounded-full bg-accent/10">
+                      <ShoppingBag className="size-8 text-accent" />
                     </div>
-                    <h3 className="text-xl font-bold text-primary">Your cart is currently empty</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Explore our wide collections</p>
+                    <h3 className="text-2xl font-serif text-primary">Your cart is currently empty</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">Looks like you haven&apos;t added anything to your cart yet.</p>
                   </div>
 
                   <div className="flex items-center justify-center gap-2 rounded-[5px] bg-[#F1F8EE] py-2 text-[11px] font-bold text-primary">
