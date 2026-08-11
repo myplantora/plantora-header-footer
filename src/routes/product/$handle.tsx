@@ -93,25 +93,23 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
   const [isNearFooter, setIsNearFooter] = useState(false);
   
   useEffect(() => {
-    const mainButton = document.getElementById('main-add-to-basket');
-    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const mainButton = document.getElementById('main-add-to-basket');
       const footer = document.querySelector('footer');
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // 1. Show only when the main "Add to Basket" button is out of view (scrolled past it)
+      // Show when user has scrolled down significantly (e.g., past the first fold)
+      // or if we can specifically detect the main button is out of view
       if (mainButton) {
         const rect = mainButton.getBoundingClientRect();
-        // If bottom of main button is above top of viewport
         setShowFloatingButton(rect.bottom < 0);
       } else {
-        // Fallback if button not found
-        setShowFloatingButton(currentScrollY > 400);
+        setShowFloatingButton(currentScrollY > 600);
       }
 
-      // 2. Hide if near footer to avoid overlap
+      // Hide if near footer to avoid overlap
       if (footerTop < windowHeight + 20) {
         setIsNearFooter(true);
       } else {
@@ -120,9 +118,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial check
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Initial check after a short delay to ensure elements are rendered
+    const timeoutId = setTimeout(handleScroll, 100);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const handleTagMediaError = () => {
