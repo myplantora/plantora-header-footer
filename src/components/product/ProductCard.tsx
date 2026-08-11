@@ -150,7 +150,7 @@ export function ProductCard({
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference, showing max 2 tags */}
-        <div className="flex flex-wrap gap-1 mb-2 min-h-[22px] items-start">
+        <div className="flex flex-wrap gap-x-1 gap-y-1.5 mb-2 min-h-[22px] items-start">
           {product.badges.slice(0, 2).map((badge) => (
             <span 
               key={badge.key}
