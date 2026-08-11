@@ -181,8 +181,9 @@ export function ProductCard({
             </span>
           )}
           {product.discountPercent && product.discountPercent > 0 && (
-            <span className="bg-[#F4C439] text-[#254838] text-[11px] px-2 py-0.5 rounded-full font-bold">
-              {product.discountPercent}% OFF
+            <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px] font-bold leading-tight inline-flex flex-col items-center justify-center min-w-[36px] ml-auto shrink-0">
+              <span>{product.discountPercent}%</span>
+              <span>OFF</span>
             </span>
           )}
         </div>
