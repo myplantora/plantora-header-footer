@@ -138,7 +138,7 @@ export function ProductCard({
 
       {/* Combo Offer Banner - Rendered below image, not overlapping */}
       {product.tags?.includes("Combo") && (
-        <div className="flex h-[32px] md:h-[38px] items-center justify-start gap-1.5 bg-[#8CD4DC] px-2.5 -mx-px rounded-b-[20px]">
+        <div className="flex h-[32px] md:h-[38px] items-center justify-center gap-1.5 bg-[#8CD4DC] px-2.5 -mx-px rounded-b-[20px]">
           <img 
             src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
             alt="" 
