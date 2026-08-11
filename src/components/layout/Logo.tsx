@@ -17,7 +17,7 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
         src={logoUrl} 
         alt="Plantora Logo" 
         className={cn(
-          "h-10 w-auto shrink-0 object-contain transition-transform duration-300 group-hover:scale-105",
+          "h-12 w-auto shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 translate-x-0.5",
           tone === "light" && "brightness-0 invert"
         )}
         aria-hidden="true"
