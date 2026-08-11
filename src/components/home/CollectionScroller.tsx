@@ -24,9 +24,6 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
   // Use the ID as handle if it's the Big Savings collection
   const isBigSavings = collectionId === "659519504677";
-  const handle = isBigSavings ? "big-savings-combos" : (collection.handle || "all");
-  const to = isBigSavings ? "/collections/big-savings-combos" : ("/collections/$handle" as any);
-  const params = isBigSavings ? {} : { handle };
 
   return (
     <SectionContainer className="bg-[#FFFFFF] pt-6 pb-10 lg:pt-10 lg:pb-16">
@@ -34,13 +31,22 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         <h2 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">
           {heading ?? collection.title}
         </h2>
-        <Link
-          to={to}
-          params={params}
-          className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
-        >
-          View all
-        </Link>
+        {isBigSavings ? (
+          <Link
+            to="/collections/big-savings-combos"
+            className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
+          >
+            View all
+          </Link>
+        ) : (
+          <Link
+            to="/collections/$handle"
+            params={{ handle: collection.handle || "all" }}
+            className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
+          >
+            View all
+          </Link>
+        )}
       </div>
 
       <div className="mt-8 flex flex-col items-center">
@@ -59,13 +65,22 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
         </ul>
 
         <div className="mt-10">
-          <Link
-            to={to}
-            params={params}
-            className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
-          >
-            View more product
-          </Link>
+          {isBigSavings ? (
+            <Link
+              to="/collections/big-savings-combos"
+              className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
+            >
+              View more product
+            </Link>
+          ) : (
+            <Link
+              to="/collections/$handle"
+              params={{ handle: collection.handle || "all" }}
+              className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
+            >
+              View more product
+            </Link>
+          )}
         </div>
       </div>
     </SectionContainer>
