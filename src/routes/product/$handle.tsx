@@ -169,14 +169,6 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     trackViewContent(product);
   }, [product, trackViewContent]);
 
-  useEffect(() => {
-    if (chartOpen) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [chartOpen]);
 
   const variant = (product.variants.find((v) => v.id === variantId) ?? product.variants[0])!;
   const price = variant.price;
