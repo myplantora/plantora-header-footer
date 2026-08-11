@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { RecommendationCard } from "./RecommendationCard";
+import { ProductCard } from "./ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 
-const RECOMMENDATION_COLLECTION_ID = "collections/659339542821";
+const RECOMMENDATION_COLLECTION_ID = "659519504677";
 
 const recommendationsQuery = (limit = 8) =>
   queryOptions({
@@ -51,7 +51,7 @@ export function ProductRecommendations({
       <ul className="mt-6 grid grid-cols-2 gap-[15px] sm:grid-cols-3 lg:grid-cols-4 lg:gap-8">
         {products.map((product, i) => (
           <li key={product.id}>
-            <RecommendationCard product={product} priority={i < 2} />
+            <ProductCard product={product} priority={i < 2} />
           </li>
         ))}
       </ul>
