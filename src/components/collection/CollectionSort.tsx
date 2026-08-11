@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -49,17 +50,17 @@ export function CollectionSort({ products, onSortChange }: CollectionSortProps) 
   return (
     <div className="flex justify-center sm:justify-end">
       <Select value={sortBy} onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[180px] bg-white border-[#e5e7eb]">
+        <SelectTrigger className="w-[180px] bg-white border-[#e5e7eb] font-bold text-[#254838]">
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="manual">Featured</SelectItem>
-          <SelectItem value="best-sellers">Best Sellers</SelectItem>
-          <SelectItem value="newest">Newest</SelectItem>
-          <SelectItem value="alpha-asc">Alphabetically, A-Z</SelectItem>
-          <SelectItem value="alpha-desc">Alphabetically, Z-A</SelectItem>
-          <SelectItem value="price-asc">Price, low to high</SelectItem>
-          <SelectItem value="price-desc">Price, high to low</SelectItem>
+          <SelectItem value="manual" className={cn(sortBy === "manual" && "font-bold")}>Featured</SelectItem>
+          <SelectItem value="best-sellers" className={cn(sortBy === "best-sellers" && "font-bold")}>Best Sellers</SelectItem>
+          <SelectItem value="newest" className={cn(sortBy === "newest" && "font-bold")}>Newest</SelectItem>
+          <SelectItem value="alpha-asc" className={cn(sortBy === "alpha-asc" && "font-bold")}>Alphabetically, A-Z</SelectItem>
+          <SelectItem value="alpha-desc" className={cn(sortBy === "alpha-desc" && "font-bold")}>Alphabetically, Z-A</SelectItem>
+          <SelectItem value="price-asc" className={cn(sortBy === "price-asc" && "font-bold")}>Price, low to high</SelectItem>
+          <SelectItem value="price-desc" className={cn(sortBy === "price-desc" && "font-bold")}>Price, high to low</SelectItem>
         </SelectContent>
       </Select>
     </div>
