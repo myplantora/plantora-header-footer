@@ -176,7 +176,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     <SectionContainer as="main" noPadding className="sm:py-8 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
         <div className="min-w-0">
-          <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md">
+          <div className="relative aspect-square w-full max-w-full overflow-hidden bg-secondary sm:rounded-md rounded-b-[15px]">
             {/* Product Tag GIF (Top Left) */}
             {product.tagMedia?.url && !tagMediaError && (
               <div className="absolute left-2 top-2 z-10 sm:left-4 sm:top-4 pointer-events-none">
@@ -207,6 +207,20 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                   className="h-auto w-[40px] sm:w-[60px] rounded-full object-cover aspect-square border-2 border-white/50"
                   loading="lazy"
                 />
+              </div>
+            )}
+
+            {/* Combo Offer Banner - PDP Version */}
+            {product.tags?.includes("Combo") && (
+              <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4">
+                <img 
+                  src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
+                  alt="" 
+                  className="size-5 object-contain md:size-6"
+                />
+                <span className="font-quicksand text-[13px] font-bold text-[#1D4D44] md:text-[15px]">
+                  Grab it for just {formatMoney(price.amount, price.currency)}
+                </span>
               </div>
             )}
 

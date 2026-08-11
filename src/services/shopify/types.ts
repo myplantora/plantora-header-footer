@@ -53,6 +53,7 @@ export type PlantoraProductCard = {
   options: PlantoraOption[];
   variants: PlantoraVariant[];
   defaultVariantId: string | null;
+  tags?: string[];
 };
 
 export type PlantoraVariant = {
