@@ -136,6 +136,9 @@ function mapCart(cart: any) {
       variantTitle: edge.node.merchandise?.title ?? "",
       imageUrl: edge.node.merchandise?.image?.url ?? null,
       amount: Number(edge.node.merchandise?.price?.amount ?? 0),
+      compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
+        ? Number(edge.node.merchandise.compareAtPrice.amount)
+        : null,
       currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
     })) as CartLine[],
   };
