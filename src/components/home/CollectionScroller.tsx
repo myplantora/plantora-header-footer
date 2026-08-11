@@ -17,15 +17,16 @@ type Props = {
   heading?: string;
 };
 
-/** Deterministic highlight: every 4th card gets the berry treatment. */
-function toneFor(index: number) {
-  return index % 4 === 0 ? ("berry" as const) : ("default" as const);
-}
-
 export function CollectionScroller({ collectionId, limit = 12, heading }: Props) {
   const { data: collection } = useSuspenseQuery(collectionByIdQuery(collectionId, limit));
 
   if (!collection || collection.products.length === 0) return null;
+
+  // Use the ID as handle if it's the Big Savings collection
+  const isBigSavings = collectionId === "659519504677";
+  const handle = isBigSavings ? "big-savings-combos" : (collection.handle || "all");
+  const to = isBigSavings ? "/collections/big-savings-combos" : ("/collections/$handle" as any);
+  const params = isBigSavings ? {} : { handle };
 
   return (
     <SectionContainer className="bg-[#FFFFFF] pt-6 pb-10 lg:pt-10 lg:pb-16">
@@ -34,8 +35,8 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
           {heading ?? collection.title}
         </h2>
         <Link
-          to={collection.handle === "big-savings-combos" ? "/collections/big-savings-combos" : "/collections/$handle"}
-          params={collection.handle === "big-savings-combos" ? {} : { handle: collection.handle || "all" }}
+          to={to}
+          params={params}
           className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
         >
           View all
@@ -59,8 +60,8 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
         <div className="mt-10">
           <Link
-            to={collection.handle === "big-savings-combos" ? "/collections/big-savings-combos" : "/collections/$handle"}
-            params={collection.handle === "big-savings-combos" ? {} : { handle: collection.handle || "all" }}
+            to={to}
+            params={params}
             className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] font-bold text-white transition-all hover:opacity-90"
           >
             View more product
