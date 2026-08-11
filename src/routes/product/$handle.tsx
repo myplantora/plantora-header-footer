@@ -452,14 +452,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             ) : null}
           </div>
 
-          {/* Floating Mobile Add to Basket (Matches reference HTML structure) */}
+          {/* Floating Add to Basket */}
           <div 
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out sm:hidden",
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+            <div className="mx-auto max-w-[1400px] rounded-t-[20px] bg-[#F8F8F8] px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-sm font-medium text-[#1D4D44] line-clamp-1 flex-1">
