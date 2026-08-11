@@ -187,6 +187,7 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     options: featureFlags.variantSelectors ? options : [],
     variants,
     defaultVariantId: firstVariant?.id ?? null,
+    tags: node?.tags ?? [],
   };
 }
 
