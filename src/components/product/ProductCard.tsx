@@ -141,7 +141,7 @@ export function ProductCard({
             alt="" 
             className="size-3.5 object-contain md:size-4 shrink-0 opacity-80"
           />
-          <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px] whitespace-nowrap">
+          <span className="font-quicksand text-[11px] font-normal text-[#1D4D44] md:text-[13px] whitespace-nowrap">
             Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
         </div>
