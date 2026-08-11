@@ -19,6 +19,7 @@ import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/services/shopify/product.service";
 import { useCartStore } from "@/stores/cartStore";
+import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 const productQuery = (handle: string) =>
@@ -185,12 +186,11 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
   async function handleAdd() {
     if (!variantId || soldOut) return;
+    triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
       await addLine(variantId, quantity);
       trackAddToCart(product, quantity);
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        navigator.vibrate(80);
-      }
+
       toast.success(`${product.title} added to basket`, {
         icon: <Check className="size-4" />,
       });

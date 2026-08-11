@@ -6,6 +6,7 @@ import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
+import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
@@ -143,7 +144,7 @@ export function CartDrawer() {
                             type="button"
                             aria-label="Decrease quantity"
                             disabled={isLoading}
-                            onClick={() => updateLine(line.id, line.quantity - 1)}
+                            onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity - 1); }}
                             className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                           >
                             <Minus className="size-3" />
@@ -155,7 +156,7 @@ export function CartDrawer() {
                             type="button"
                             aria-label="Increase quantity"
                             disabled={isLoading}
-                            onClick={() => updateLine(line.id, line.quantity + 1)}
+                            onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity + 1); }}
                             className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                           >
                             <Plus className="size-3" />
@@ -164,7 +165,7 @@ export function CartDrawer() {
 
                         <button
                           type="button"
-                          onClick={() => removeLine(line.id)}
+                          onClick={() => { triggerHaptic('heavy'); removeLine(line.id); }}
                           aria-label="Remove item"
                           className="grid size-8 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         >

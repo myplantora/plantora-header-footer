@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
+import { triggerHaptic } from "@/utils/haptics";
+
 import type { PlantoraProductCard, PlantoraVariant } from "@/services/shopify/types";
 import { ProductRating } from "./ProductRating";
 
@@ -55,8 +57,10 @@ export function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     if (!currentVariant || soldOut || pending) return;
-    
+
+    triggerHaptic("medium"); // must fire inside the gesture, before any await
     setPending(true);
+
     try {
       await addLine(currentVariant.id, 1);
       openCart();
