@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
 import { cn } from "@/lib/utils";
 import { SectionContainer } from "@/components/layout/SectionContainer";
+import { ChevronRight } from "lucide-react";
 
 export const collectionByIdQuery = (id: string, limit = 12) =>
   queryOptions({
@@ -27,26 +28,30 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
 
   return (
     <SectionContainer className="bg-[#FFFFFF] pt-6 pb-10 lg:pt-10 lg:pb-16">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">
+      <div className="flex items-center justify-center relative mb-6 lg:mb-8">
+        <h2 className="text-[20px] sm:text-2xl font-medium text-[#254838] text-center px-12">
           {heading ?? collection.title}
         </h2>
-        {isBigSavings ? (
-          <Link
-            to="/collections/big-savings-combos"
-            className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
-          >
-            View all
-          </Link>
-        ) : (
-          <Link
-            to="/collections/$handle"
-            params={{ handle: collection.handle || "all" }}
-            className="text-sm font-medium text-primary underline underline-offset-4 hover:opacity-70 transition-opacity"
-          >
-            View all
-          </Link>
-        )}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          {isBigSavings ? (
+            <Link
+              to="/collections/big-savings-combos"
+              className="flex items-center gap-0.5 text-[14px] font-medium text-[#254838] hover:opacity-70 transition-opacity"
+            >
+              View all
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          ) : (
+            <Link
+              to="/collections/$handle"
+              params={{ handle: collection.handle || "all" }}
+              className="flex items-center gap-0.5 text-[14px] font-medium text-[#254838] hover:opacity-70 transition-opacity"
+            >
+              View all
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="mt-8 flex flex-col items-center">
