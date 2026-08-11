@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Minus, Plus, Info, X, Loader2 } from "lucide-react";
+import { Minus, Plus, Info, X, Loader2, AlertCircle } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
@@ -436,9 +436,24 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               )}
             </button>
             {addError ? (
-              <p className="text-sm text-destructive" role="alert" aria-live="polite">
-                {addError}
-              </p>
+              <div
+                className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive"
+                role="alert"
+                aria-live="polite"
+              >
+                <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                <div className="flex flex-1 flex-col gap-1">
+                  <span>{addError}</span>
+                  <button
+                    type="button"
+                    onClick={handleAdd}
+                    disabled={isLoading}
+                    className="self-start text-sm font-medium underline underline-offset-4 transition-colors hover:text-destructive/80 disabled:opacity-50"
+                  >
+                    Try again
+                  </button>
+                </div>
+              </div>
             ) : null}
           </div>
 
@@ -483,6 +498,26 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
                     "Add to Basket"
                   )}
                 </button>
+                {addError ? (
+                  <div
+                    className="flex items-start gap-2 rounded-md bg-red-50 p-2.5 text-sm text-red-700"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                    <div className="flex flex-1 flex-col gap-1">
+                      <span>{addError}</span>
+                      <button
+                        type="button"
+                        onClick={handleAdd}
+                        disabled={isLoading}
+                        className="self-start font-medium underline underline-offset-4 transition-colors hover:text-red-900 disabled:opacity-50"
+                      >
+                        Try again
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
