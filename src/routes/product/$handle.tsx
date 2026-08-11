@@ -134,7 +134,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     });
   };
 
-  const addLine = useCartStore((s) => s.addLine);
+  const addLineAndOpen = useCartStore((s) => s.addLineAndOpen);
   const isLoading = useCartStore((s) => s.isLoading);
   const search = Route.useSearch() as any;
   const [variantId, setVariantId] = useState(() => {
@@ -188,14 +188,12 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     if (!variantId || soldOut) return;
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
-      const ok = await addLine(variantId, quantity);
+      const ok = await addLineAndOpen(variantId, quantity);
       if (!ok) {
         toast.error("Could not add to basket. Please try again.");
         return;
       }
       trackAddToCart(product, quantity);
-      // Open the cart slider only after Shopify confirmed the cart + checkout URL
-      useCartStore.getState().openCart();
     } catch {
       toast.error("Could not add to basket. Please try again.");
     }

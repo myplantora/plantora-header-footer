@@ -32,8 +32,7 @@ export function ProductCard({
       timestamp: new Date().toISOString()
     });
   };
-  const addLine = useCartStore((s) => s.addLine);
-  const openCart = useCartStore((s) => s.openCart);
+  const addLineAndOpen = useCartStore((s) => s.addLineAndOpen);
   const navigate = useNavigate();
   
   const [pending, setPending] = useState(false);
@@ -62,8 +61,8 @@ export function ProductCard({
     setPending(true);
 
     try {
-      await addLine(currentVariant.id, 1);
-      openCart();
+      const ok = await addLineAndOpen(currentVariant.id, 1);
+      if (!ok) toast.error("Could not add to basket");
     } catch {
       toast.error("Could not add to basket");
     } finally {
