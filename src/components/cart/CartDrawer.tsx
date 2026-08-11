@@ -11,6 +11,7 @@ import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
 const GPAY_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gpay.webp?v=1786466039";
 const MASTER_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Master.jpg?v=1786466040";
+const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?v=1786470456";
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
