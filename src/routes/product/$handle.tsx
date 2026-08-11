@@ -386,8 +386,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           </div>
 
           {/* Floating Mobile Add to Basket */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:hidden">
-            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F4F1E1] px-4 pb-8 pt-4 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+          <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden">
+            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F1EEE0] px-4 pb-8 pt-4 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
               <button
                 type="button"
                 onClick={handleAdd}
