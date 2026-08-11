@@ -27,7 +27,20 @@ export function AnnouncementBar() {
               key={`${text}-${i}`}
               className="inline-flex shrink-0 items-center text-[13px] font-medium tracking-[0.01em]"
             >
-              {text}
+              {text.includes("★") ? (
+                <>
+                  {text.split("★").map((part, index, array) => (
+                    <span key={index}>
+                      {part}
+                      {index < array.length - 1 && (
+                        <span className="text-[#E9AD20]">★</span>
+                      )}
+                    </span>
+                  ))}
+                </>
+              ) : (
+                text
+              )}
             </p>
           ))}
         </div>
