@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
+import { triggerHaptic } from "@/utils/haptics";
+
 import type { PlantoraProductCard, PlantoraVariant } from "@/services/shopify/types";
 import { ProductRating } from "./ProductRating";
 
