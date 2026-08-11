@@ -231,7 +231,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           
           {/* Combo Offer Banner - PDP Version - Rendered below image */}
           {product.tags?.includes("Combo") && (
-            <div className="flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4 mt-px rounded-b-md">
+            <div className="flex h-[38px] md:h-[48px] items-center justify-start gap-2 bg-[#8CD4DC] px-4 rounded-b-md">
               <img 
                 src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
                 alt="" 
