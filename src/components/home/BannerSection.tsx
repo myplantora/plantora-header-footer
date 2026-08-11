@@ -10,7 +10,7 @@ export function BannerSection() {
   return (
     <SectionContainer noPadding>
       <Link
-        to="/collections"
+        to="/collections/big-savings-combos"
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
       >
         {/* Mobile banner: shown below md */}
