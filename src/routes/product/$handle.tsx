@@ -19,6 +19,7 @@ import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/services/shopify/product.service";
 import { useCartStore } from "@/stores/cartStore";
+import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
 const productQuery = (handle: string) =>
