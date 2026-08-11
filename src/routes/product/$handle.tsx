@@ -107,8 +107,9 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         setIsNearFooter(false);
       }
 
-      // Scroll logic: show on scroll up, hide on scroll down
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Scroll logic: Hide only when user scrolls deep and continues scrolling down
+      // But ensure it stays visible if they are scrolling back up or stopped
+      if (currentScrollY > lastScrollY && currentScrollY > 400) {
         setShowFloatingButton(false);
       } else {
         setShowFloatingButton(true);
