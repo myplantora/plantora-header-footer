@@ -89,38 +89,41 @@ function boughtCountFromSeed(seed: string) {
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const [tagMediaError, setTagMediaError] = useState(false);
-  const [showFloatingButton, setShowFloatingButton] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
   const [isNearFooter, setIsNearFooter] = useState(false);
   
   useEffect(() => {
+    const mainButton = document.getElementById('main-add-to-basket');
+    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const footer = document.querySelector('footer');
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // Hide if near footer
+      // 1. Show only when the main "Add to Basket" button is out of view (scrolled past it)
+      if (mainButton) {
+        const rect = mainButton.getBoundingClientRect();
+        // If bottom of main button is above top of viewport
+        setShowFloatingButton(rect.bottom < 0);
+      } else {
+        // Fallback if button not found
+        setShowFloatingButton(currentScrollY > 400);
+      }
+
+      // 2. Hide if near footer to avoid overlap
       if (footerTop < windowHeight + 20) {
         setIsNearFooter(true);
       } else {
         setIsNearFooter(false);
       }
-
-      // Scroll logic: Hide only when user scrolls deep and continues scrolling down
-      // But ensure it stays visible if they are scrolling back up or stopped
-      if (currentScrollY > lastScrollY && currentScrollY > 400) {
-        setShowFloatingButton(false);
-      } else {
-        setShowFloatingButton(true);
-      }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleTagMediaError = () => {
     setTagMediaError(true);
