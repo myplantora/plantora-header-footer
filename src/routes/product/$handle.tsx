@@ -11,7 +11,7 @@ import { SectionContainer } from "@/components/layout/SectionContainer";
 
 import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
-import { ProductBadges } from "@/components/product/ProductBadges";
+
 import { ProductRating } from "@/components/product/ProductRating";
 import { DeliveryEstimator } from "@/components/product/DeliveryEstimator";
 import { ProductRecommendations } from "@/components/product/ProductRecommendations";

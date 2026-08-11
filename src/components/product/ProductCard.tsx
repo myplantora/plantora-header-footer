@@ -6,7 +6,7 @@ import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
 import type { PlantoraProductCard, PlantoraVariant } from "@/services/shopify/types";
 import { ProductRating } from "./ProductRating";
-import { ProductBadges } from "./ProductBadges";
+
 
 type ProductCardProps = {
   product: PlantoraProductCard;
