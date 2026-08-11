@@ -149,9 +149,9 @@ export function ProductCard({
           )}
         </div>
 
-        {/* Feature Tags - Exact spacing and styling from reference */}
+        {/* Feature Tags - Exact spacing and styling from reference, showing max 2 tags */}
         <div className="flex gap-1 mb-2 h-[22px] overflow-hidden items-start">
-          {product.badges.map((badge) => (
+          {product.badges.slice(0, 2).map((badge) => (
             <span 
               key={badge.key}
               style={{ backgroundColor: badge.backgroundColor || '#EDE9D2' }}
