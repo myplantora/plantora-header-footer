@@ -7,6 +7,8 @@ import { analyticsConfig } from "./config";
 import {
   getClientId,
   getSessionToken,
+  getMicroSessionId,
+  getMicroSessionCount,
   sendMonorailEvents,
   type MonorailEvent,
 } from "@/lib/analytics/monorail";
