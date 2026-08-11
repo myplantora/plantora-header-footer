@@ -6,8 +6,11 @@
  * it after an awaited network request silently does nothing. Always call this
  * at the very start of the event handler, never after `await`.
  */
+import { hapticsEnabled } from '@/stores/preferencesStore';
+
 export const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'light') => {
   if (typeof window === 'undefined') return;
+  if (!hapticsEnabled()) return; // user disabled haptics in settings
   const nav = window.navigator as Navigator & { vibrate?: (p: number | number[]) => boolean };
   if (typeof nav.vibrate !== 'function') return;
 
