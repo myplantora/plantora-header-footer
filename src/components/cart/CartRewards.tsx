@@ -40,7 +40,7 @@ function CouponPill({ code }: { code: string }) {
         type="button"
         onClick={copy}
         aria-label={`Copy coupon code ${code}`}
-        className="inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[#A8622A] px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-[#A8622A] transition-colors duration-300 hover:bg-[#A8622A]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none"
+        className="inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[#A8622A] px-1.5 py-0.5 text-[10px]  tracking-wide text-[#A8622A] transition-colors duration-300 hover:bg-[#A8622A]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none"
       >
         <svg fill="none" height="7" width="12" viewBox="0 0 12 7" aria-hidden="true">
           <g fill="#A8622A">
@@ -102,13 +102,13 @@ export function CartRewards() {
         {state.nextTier ? (
           <>
             You are{" "}
-            <span className="font-semibold text-[#A8622A]">{formatMoney(state.remaining)}</span> away
-            from <span className="font-semibold">{state.nextTier?.label}</span> above{" "}
+            <span className=" text-[#A8622A]">{formatMoney(state.remaining)}</span> away
+            from <span className="">{state.nextTier?.label}</span> above{" "}
             {formatMoney(state.nextTier?.threshold ?? 0)}
           </>
         ) : (
           <>
-            You&apos;ve unlocked <span className="font-semibold">{state.currentTier?.label}</span> —
+            You&apos;ve unlocked <span className="">{state.currentTier?.label}</span> —
             the best reward available.
           </>
         )}
@@ -159,7 +159,7 @@ export function CartRewards() {
                 <p
                   className={`mt-1.5 text-center text-[10px] sm:text-[11px] font-medium leading-tight px-1 ${
                     tier.unlocked ? "text-primary" : "text-muted-foreground"
-                  } ${isCurrent || isNext ? "font-bold" : ""}`}
+                  } ${isCurrent || isNext ? "" : ""}`}
                   aria-label={`${tier.label}: ${tier.unlocked ? 'Unlocked' : 'Locked'}${isCurrent ? ' (Current Reward)' : ''}${isNext ? ' (Next Goal)' : ''}`}
                 >
                   {tier.label}

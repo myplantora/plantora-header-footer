@@ -257,7 +257,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             ))}
           </div>
 
-          <h1 className="text-2xl leading-tight text-primary sm:text-3xl font-bold">
+          <h1 className="text-2xl leading-tight text-primary sm:text-3xl ">
             {product.title}
           </h1>
 
@@ -269,14 +269,14 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
           <div className="flex items-center justify-between gap-2 mt-1">
             <div className="flex flex-nowrap items-center gap-2 overflow-hidden">
-              <span className="text-2xl font-bold text-[#1D4D44] whitespace-nowrap">{formatMoney(price.amount, price.currency)}</span>
+              <span className="text-2xl  text-[#1D4D44] whitespace-nowrap">{formatMoney(price.amount, price.currency)}</span>
               {compareAt ? (
                 <span className="text-xl text-[#707070] line-through font-normal whitespace-nowrap">
                   {formatMoney(compareAt.amount, compareAt.currency)}
                 </span>
               ) : null}
               {compareAt && compareAt.amount > price.amount ? (
-                <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2 py-1 text-[11px] font-bold text-[#254838] whitespace-nowrap shrink-0">
+                <span className="inline-flex items-center rounded-[10px] bg-[#F4C439] px-2 py-1 text-[11px]  text-[#254838] whitespace-nowrap shrink-0">
                   SAVE {formatMoney(Math.round(compareAt.amount - price.amount), price.currency)}
                 </span>
               ) : null}
@@ -370,7 +370,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               >
                 <Minus className="size-3.5" />
               </button>
-              <span className="grid h-10 w-10 place-items-center text-sm font-semibold text-primary">
+              <span className="grid h-10 w-10 place-items-center text-sm  text-primary">
                 {quantity}
               </span>
               <button
@@ -404,7 +404,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
             />
             <div className="flex flex-1 flex-col gap-0.5">
-              <span className="text-sm font-bold text-[#1D4D44] sm:text-base">
+              <span className="text-sm  text-[#1D4D44] sm:text-base">
                 10-Day Damage Replacement Guarantee
               </span>
               <span className="text-xs text-[#1D4D44]/80 sm:text-sm">
@@ -477,7 +477,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               <X className="size-4" />
             </button>
             <div className="flex flex-col gap-3 pr-8">
-              <span className="font-button text-lg font-bold text-primary">
+              <span className="font-button text-lg  text-primary">
                 10-Day Damage Replacement Guarantee
               </span>
               <p className="text-sm leading-relaxed text-muted-foreground">

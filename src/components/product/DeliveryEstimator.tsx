@@ -88,7 +88,7 @@ export function DeliveryEstimator() {
         {result.status === "success" ? (
           <p className="text-xs text-[#1D4D44] sm:text-sm">
             Healthy plants will be delivered to{" "}
-            <span className="font-semibold">
+            <span className="">
               {result.place}
               {result.state ? `, ${result.state}` : ""}
             </span>{" "}

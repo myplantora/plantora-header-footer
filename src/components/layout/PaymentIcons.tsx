@@ -23,7 +23,7 @@ export function PaymentIcons() {
               // Fallback if SVG fails to load
               e.currentTarget.style.display = 'none';
               e.currentTarget.parentElement!.innerText = method.name.substring(0, 1);
-              e.currentTarget.parentElement!.classList.add('text-[8px]', 'font-bold', 'text-white');
+              e.currentTarget.parentElement!.classList.add('text-[8px]', '', 'text-white');
             }}
           />
         </li>

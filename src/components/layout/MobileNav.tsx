@@ -122,7 +122,7 @@ export function MobileNav({ open, onClose }: Props) {
 
           <div className="mt-10 space-y-6">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              <p className="text-[11px]  uppercase tracking-[0.2em] text-muted-foreground mb-4">
                 SUPPORT
               </p>
               <ul className="space-y-4">

@@ -50,17 +50,17 @@ export function CollectionSort({ products, onSortChange }: CollectionSortProps) 
   return (
     <div className="hidden justify-end">
       <Select value={sortBy} onValueChange={handleValueChange}>
-        <SelectTrigger className="w-auto border-none bg-transparent p-0 font-bold text-[#254838] shadow-none focus:ring-0">
+        <SelectTrigger className="w-auto border-none bg-transparent p-0  text-[#254838] shadow-none focus:ring-0">
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="manual" className={cn(sortBy === "manual" && "font-bold")}>Featured</SelectItem>
-          <SelectItem value="best-sellers" className={cn(sortBy === "best-sellers" && "font-bold")}>Best Sellers</SelectItem>
-          <SelectItem value="newest" className={cn(sortBy === "newest" && "font-bold")}>Newest</SelectItem>
-          <SelectItem value="alpha-asc" className={cn(sortBy === "alpha-asc" && "font-bold")}>Alphabetically, A-Z</SelectItem>
-          <SelectItem value="alpha-desc" className={cn(sortBy === "alpha-desc" && "font-bold")}>Alphabetically, Z-A</SelectItem>
-          <SelectItem value="price-asc" className={cn(sortBy === "price-asc" && "font-bold")}>Price, low to high</SelectItem>
-          <SelectItem value="price-desc" className={cn(sortBy === "price-desc" && "font-bold")}>Price, high to low</SelectItem>
+          <SelectItem value="manual" className={cn(sortBy === "manual" && "")}>Featured</SelectItem>
+          <SelectItem value="best-sellers" className={cn(sortBy === "best-sellers" && "")}>Best Sellers</SelectItem>
+          <SelectItem value="newest" className={cn(sortBy === "newest" && "")}>Newest</SelectItem>
+          <SelectItem value="alpha-asc" className={cn(sortBy === "alpha-asc" && "")}>Alphabetically, A-Z</SelectItem>
+          <SelectItem value="alpha-desc" className={cn(sortBy === "alpha-desc" && "")}>Alphabetically, Z-A</SelectItem>
+          <SelectItem value="price-asc" className={cn(sortBy === "price-asc" && "")}>Price, low to high</SelectItem>
+          <SelectItem value="price-desc" className={cn(sortBy === "price-desc" && "")}>Price, high to low</SelectItem>
         </SelectContent>
       </Select>
     </div>

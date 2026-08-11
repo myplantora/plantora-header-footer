@@ -49,7 +49,7 @@ export function WhyChooseKyari() {
             </div>
             
             <div className="space-y-0.5 px-1">
-              <h3 className="text-[13px] font-bold leading-tight text-[#254838] md:text-[15px]">
+              <h3 className="text-[13px]  leading-tight text-[#254838] md:text-[15px]">
                 <span className="relative inline-block">
                   {feature.title}
                 </span>

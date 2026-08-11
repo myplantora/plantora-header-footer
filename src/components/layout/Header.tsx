@@ -49,7 +49,7 @@ function CartButton() {
       <ShoppingBag className="pointer-events-none h-5 w-5" aria-hidden="true" />
       <span
         aria-hidden="true"
-        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
+        className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px]  text-primary-foreground"
       >
         {count}
       </span>
@@ -146,7 +146,7 @@ export function Header() {
                       <div className="rounded-3xl border border-border bg-background p-5 shadow-soft">
                         {item.mega.map((col) => (
                           <div key={col.title}>
-                            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                            <p className="mb-3 text-[11px]  uppercase tracking-[0.14em] text-muted-foreground">
                               {col.title}
                             </p>
                             <ul className="space-y-1">
