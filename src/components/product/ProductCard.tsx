@@ -134,7 +134,7 @@ export function ProductCard({
 
       <div className="flex flex-1 flex-col pt-3 pb-2">
         {/* Reviews Row - Exact Judge.me style from reference */}
-        <div className="flex items-center h-4 mb-1.5">
+        <div className="flex items-center h-5 mb-1.5">
           {product.reviews ? (
             <ProductRating reviews={product.reviews} />
           ) : (
@@ -150,15 +150,15 @@ export function ProductCard({
         </div>
 
         {/* Feature Tags - Exact spacing and styling from reference, showing max 2 tags */}
-        <div className="flex gap-1 mb-2 h-[22px] overflow-hidden items-start">
+        <div className="flex flex-wrap gap-1 mb-2 min-h-[22px] items-start">
           {product.badges.slice(0, 2).map((badge) => (
             <span 
               key={badge.key}
               style={{ backgroundColor: badge.backgroundColor || '#EDE9D2' }}
-              className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium text-[#254838] leading-none whitespace-nowrap"
+              className="flex items-center gap-1 rounded-full px-2 py-1 text-[10px] md:text-[11px] font-medium text-[#254838] leading-none whitespace-nowrap"
             >
               {badge.iconUrl && (
-                <img src={badge.iconUrl} alt="" className="size-3 object-contain" />
+                <img src={badge.iconUrl} alt="" className="size-3 object-contain shrink-0" />
               )}
               {badge.label}
             </span>
