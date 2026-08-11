@@ -120,32 +120,34 @@ export function CartDrawer() {
                     <p className="mt-1 text-sm text-primary">
                       {formatMoney(line.amount * line.quantity, line.currency)}
                     </p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <button
-                        type="button"
-                        aria-label="Decrease quantity"
-                        disabled={isLoading}
-                        onClick={() =>
-                          updateLine(line.id, line.quantity - 1)
-                        }
-                        className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      >
-                        <Minus className="size-3.5" />
-                      </button>
-                      <span className="text-sm text-primary">{line.quantity}</span>
-                      <button
-                        type="button"
-                        aria-label="Increase quantity"
-                        disabled={isLoading}
-                        onClick={() => updateLine(line.id, line.quantity + 1)}
-                        className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      >
-                        <Plus className="size-3.5" />
-                      </button>
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          aria-label="Decrease quantity"
+                          disabled={isLoading}
+                          onClick={() =>
+                            updateLine(line.id, line.quantity - 1)
+                          }
+                          className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        >
+                          <Minus className="size-3.5" />
+                        </button>
+                        <span className="text-sm text-primary">{line.quantity}</span>
+                        <button
+                          type="button"
+                          aria-label="Increase quantity"
+                          disabled={isLoading}
+                          onClick={() => updateLine(line.id, line.quantity + 1)}
+                          className="rounded-md border border-border p-1 text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        >
+                          <Plus className="size-3.5" />
+                        </button>
+                      </div>
                       <button
                         type="button"
                         onClick={() => removeLine(line.id)}
-                        className="ml-auto text-xs text-muted-foreground underline hover:text-primary"
+                        className="text-xs text-muted-foreground underline hover:text-primary"
                       >
                         Remove
                       </button>
