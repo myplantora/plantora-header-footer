@@ -19,48 +19,21 @@
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
 
-export const CLIENT_ID_KEY = "plantora_client_id";
-export const SESSION_TOKEN_KEY = "plantora_session_token";
+// Identity lives in one place; UUIDs are always lowercase and read from storage
+// so they stay stable across navigations (Monorail 400s on uppercase UUIDs).
+export {
+  CLIENT_ID_KEY,
+  SESSION_TOKEN_KEY,
+  MICRO_SESSION_ID_KEY,
+  MICRO_SESSION_COUNT_KEY,
+  getClientId,
+  getSessionToken,
+  getMicroSessionId,
+  getMicroSessionCount,
+} from "@/lib/analytics/identity";
 
 const isBrowser = () => typeof window !== "undefined" && typeof document !== "undefined";
 
-function uuid(): string {
-  try {
-    return window.crypto.randomUUID();
-  } catch {
-    return `${Date.now().toString(16)}-${Math.random().toString(16).slice(2)}`;
-  }
-}
-
-/** Stable per-visitor id (localStorage). Empty string during SSR. */
-export function getClientId(): string {
-  if (!isBrowser()) return "";
-  try {
-    let id = window.localStorage.getItem(CLIENT_ID_KEY);
-    if (!id) {
-      id = uuid();
-      window.localStorage.setItem(CLIENT_ID_KEY, id);
-    }
-    return id;
-  } catch {
-    return "";
-  }
-}
-
-/** Per-session token (sessionStorage). Empty string during SSR. */
-export function getSessionToken(): string {
-  if (!isBrowser()) return "";
-  try {
-    let token = window.sessionStorage.getItem(SESSION_TOKEN_KEY);
-    if (!token) {
-      token = uuid();
-      window.sessionStorage.setItem(SESSION_TOKEN_KEY, token);
-    }
-    return token;
-  } catch {
-    return "";
-  }
-}
 
 export type MonorailEvent = {
   schema_id: string;
