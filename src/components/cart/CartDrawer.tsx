@@ -8,6 +8,8 @@ import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
+import { useCartAnalytics } from "@/lib/analytics/useCartAnalytics";
+import { useCartViewed } from "@/lib/analytics/useCartViewed";
 
 const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
 const GPAY_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gpay.webp?v=1786466039";
