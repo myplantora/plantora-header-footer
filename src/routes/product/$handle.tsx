@@ -412,6 +412,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
           <div className="hidden sm:flex flex-wrap items-center gap-2 mt-1">
             <button
+              id="main-add-to-basket"
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
