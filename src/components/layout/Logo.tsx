@@ -23,7 +23,7 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
         aria-hidden="true"
       />
       <span className={cn(
-        "text-[15px] font-medium leading-none transition-colors duration-300",
+        "text-[20px] font-bold leading-none tracking-tight transition-colors duration-300 font-fraunces",
         tone === "light" ? "text-white" : "text-[#254838]"
       )}>
         Plantora
