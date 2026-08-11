@@ -130,6 +130,20 @@ export function ProductCard({
             />
           </div>
         )}
+
+        {/* Combo Offer Banner - Only for products with "Combo" tag */}
+        {product.tags?.includes("Combo") && (
+          <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[32px] md:h-[38px] items-center justify-start gap-2 bg-[#8CD4DC] px-3">
+            <img 
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
+              alt="" 
+              className="size-4 object-contain md:size-5"
+            />
+            <span className="font-quicksand text-[11px] font-bold text-[#1D4D44] md:text-[13px]">
+              Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col pt-3 pb-2">
