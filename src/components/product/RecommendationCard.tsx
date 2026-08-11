@@ -14,8 +14,7 @@ type Props = {
 };
 
 export function RecommendationCard({ product, priority = false }: Props) {
-  const addLine = useCartStore((s) => s.addLine);
-  const openCart = useCartStore((s) => s.openCart);
+  const addLineAndOpen = useCartStore((s) => s.addLineAndOpen);
   const [pending, setPending] = useState(false);
 
   const sizeOption = product.options[0];
@@ -41,16 +40,19 @@ export function RecommendationCard({ product, priority = false }: Props) {
     const variantId = selectedVariant?.id ?? product.defaultVariantId;
     if (!variantId || soldOut || pending) return;
     setPending(true);
-    openCart();
     try {
-      await addLine(variantId, 1);
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        navigator.vibrate(80);
+      const ok = await addLineAndOpen(variantId, 1);
+      if (ok) {
+        if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+          navigator.vibrate(80);
+        }
+        toast.success(`${product.title} added to basket`, {
+          icon: <span className="text-sm">✓</span>,
+          style: { background: "#1D4D44", color: "#fff", border: "none" },
+        });
+      } else {
+        toast.error("Could not add to basket. Please try again.");
       }
-      toast.success(`${product.title} added to basket`, {
-        icon: <span className="text-sm">✓</span>,
-        style: { background: "#1D4D44", color: "#fff", border: "none" },
-      });
     } catch {
       toast.error("Could not add to basket. Please try again.");
     } finally {

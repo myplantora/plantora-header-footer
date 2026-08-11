@@ -31,6 +31,8 @@ type CartState = {
   openCart: () => void;
   closeCart: () => void;
   addLine: (merchandiseId: string, quantity?: number) => Promise<boolean>;
+  /** Adds a line via the Storefront API and opens the cart slider only when the API responds with a cart + checkout URL. */
+  addLineAndOpen: (merchandiseId: string, quantity?: number) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   setDiscountCodes: (codes: string[]) => Promise<boolean>;
