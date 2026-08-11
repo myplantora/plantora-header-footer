@@ -89,38 +89,41 @@ function boughtCountFromSeed(seed: string) {
 
 function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<typeof getProduct>>>["product"] }) {
   const [tagMediaError, setTagMediaError] = useState(false);
-  const [showFloatingButton, setShowFloatingButton] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
   const [isNearFooter, setIsNearFooter] = useState(false);
   
   useEffect(() => {
+    const mainButton = document.getElementById('main-add-to-basket');
+    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const footer = document.querySelector('footer');
       const footerTop = footer?.getBoundingClientRect().top ?? Infinity;
       const windowHeight = window.innerHeight;
 
-      // Hide if near footer
+      // 1. Show only when the main "Add to Basket" button is out of view (scrolled past it)
+      if (mainButton) {
+        const rect = mainButton.getBoundingClientRect();
+        // If bottom of main button is above top of viewport
+        setShowFloatingButton(rect.bottom < 0);
+      } else {
+        // Fallback if button not found
+        setShowFloatingButton(currentScrollY > 400);
+      }
+
+      // 2. Hide if near footer to avoid overlap
       if (footerTop < windowHeight + 20) {
         setIsNearFooter(true);
       } else {
         setIsNearFooter(false);
       }
-
-      // Scroll logic: Hide only when user scrolls deep and continues scrolling down
-      // But ensure it stays visible if they are scrolling back up or stopped
-      if (currentScrollY > lastScrollY && currentScrollY > 400) {
-        setShowFloatingButton(false);
-      } else {
-        setShowFloatingButton(true);
-      }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleTagMediaError = () => {
     setTagMediaError(true);
@@ -409,6 +412,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
           <div className="hidden sm:flex flex-wrap items-center gap-2 mt-1">
             <button
+              id="main-add-to-basket"
               type="button"
               onClick={handleAdd}
               disabled={soldOut || isLoading}
@@ -418,22 +422,38 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
             </button>
           </div>
 
-          {/* Floating Mobile Add to Basket */}
+          {/* Floating Mobile Add to Basket (Matches reference HTML structure) */}
           <div 
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out sm:hidden",
+              "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out sm:hidden",
               (showFloatingButton && !isNearFooter) ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             )}
           >
-            <div className="flex flex-col gap-2 rounded-t-[30px] bg-[#F8F8F8] px-8 pb-4 pt-3 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
-              <button
-                type="button"
-                onClick={handleAdd}
-                disabled={soldOut || isLoading}
-                className="flex h-14 w-full items-center justify-center rounded-full bg-[#1D4D44] text-[15px] font-bold tracking-widest text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
-              >
-                {soldOut ? "SOLD OUT" : "ADD TO BASKET"}
-              </button>
+            <div className="bg-white border-t border-border px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm font-medium text-primary line-clamp-1 flex-1 mr-4">
+                    {product.title}
+                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-sm font-bold text-primary">{formatMoney(price.amount, price.currency)}</span>
+                    {compareAt && (
+                      <span className="text-xs text-muted-foreground line-through">
+                        {formatMoney(compareAt.amount, compareAt.currency)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  disabled={soldOut || isLoading}
+                  className="flex h-12 w-full items-center justify-center rounded-md bg-[#1D4D44] text-sm font-bold tracking-wide text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                >
+                  <span className="uppercase">{soldOut ? "SOLD OUT" : "Add to Basket"}</span>
+                </button>
+              </div>
             </div>
           </div>
 
