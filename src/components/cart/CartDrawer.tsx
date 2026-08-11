@@ -84,7 +84,7 @@ export function CartDrawer() {
 
                   <button
                     onClick={closeCart}
-                    className="w-full rounded-full bg-[#74A84A] py-4 font-button text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
+                    className="w-full rounded-full bg-[#74A84A] py-4 text-sm font-bold text-white transition-all hover:shadow-md uppercase tracking-wider"
                   >
                     Return to Shop
                   </button>
