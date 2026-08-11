@@ -65,7 +65,7 @@ function BigSavingsPage() {
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
       <main className="mx-auto max-w-[1400px] px-2.5 pb-10 lg:pb-16">
-        <header className="mb-6 flex flex-col gap-6 pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <header className="mb-6 flex flex-col gap-6 pt-[3px] sm:flex-row sm:items-center sm:justify-between">
           <div className="text-center sm:text-left">
             <h1 className="font-serif text-[28px] font-bold text-primary sm:text-4xl">{collection.title}</h1>
           </div>
