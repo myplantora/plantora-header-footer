@@ -29,7 +29,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
   return (
     <SectionContainer className="bg-[#FFFFFF] pt-6 pb-10 lg:pt-10 lg:pb-16">
       <div className="flex items-center justify-center relative mb-6 lg:mb-8">
-        <h2 className="text-[20px] sm:text-2xl font-medium text-[#254838] text-center px-12">
+        <h2 className="text-[18px] sm:text-2xl font-medium text-[#254838] text-center px-12">
           {heading ?? collection.title}
         </h2>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
