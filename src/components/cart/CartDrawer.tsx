@@ -8,9 +8,9 @@ import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 
-import paypalAsset from "@/assets/paypal.png.asset.json";
-import gpayAsset from "@/assets/gpay.png.asset.json";
-import mastercardAsset from "@/assets/mastercard.png.asset.json";
+const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
+const GPAY_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gpay.webp?v=1786466039";
+const MASTER_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Master.jpg?v=1786466040";
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -186,21 +186,21 @@ export function CartDrawer() {
                 <div className="flex items-center -space-x-2">
                   <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                     <img
-                      src={paypalAsset.url}
+                      src={PAYPAL_CDN}
                       alt="PayPal"
                       className="size-full scale-125 object-contain"
                     />
                   </div>
                   <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                     <img
-                      src={gpayAsset.url}
+                      src={GPAY_CDN}
                       alt="Google Pay"
                       className="size-full scale-125 object-contain"
                     />
                   </div>
                   <div className="size-[24px] overflow-hidden rounded-full border-2 border-white/20 bg-white">
                     <img
-                      src={mastercardAsset.url}
+                      src={MASTER_CDN}
                       alt="Mastercard"
                       className="size-full scale-125 object-contain"
                     />
