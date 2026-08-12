@@ -379,10 +379,6 @@ export const useCartStore = create<CartState>()(
           const SETTLE_DELAY_MS = 1500;
           let retryCount = 0;
 
-          const isLineActuallyAdded = (r: any) =>
-            (mapCart(r?.cart)?.lines ?? []).some(
-              (line) => line.merchandiseId === variantGid && line.quantity > 0,
-            );
 
           while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
