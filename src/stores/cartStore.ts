@@ -48,8 +48,6 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
-        
-        # quantityAvailable removed due to insufficient permissions
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
         product {
@@ -92,6 +90,7 @@ const CART_CREATE = `
     cartCreate(input: $input) {
       cart { ...CartFragment }
       userErrors { field message }
+      warnings { code message target }
     }
   }
 `;
@@ -201,21 +200,23 @@ function mapCart(cart: any) {
       code: String(d.code),
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
-    lines: (cart.lines?.edges ?? []).map((edge: any) => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandiseId: edge.node.merchandise.id,
-      title: edge.node.merchandise.product.title,
-      handle: edge.node.merchandise.product.handle,
-      variantTitle: edge.node.merchandise.title,
-      imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
-      amount: Number(edge.node.merchandise.price.amount),
-      compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
-        ? Number(edge.node.merchandise.compareAtPrice.amount)
-        : null,
-      currency: edge.node.merchandise.price.currencyCode,
-      productType: edge.node.merchandise.product.productType,
-    })) as CartLine[],
+    lines: (cart.lines?.edges ?? [])
+      .filter((edge: any) => Number(edge?.node?.quantity) > 0)
+      .map((edge: any) => ({
+        id: edge.node.id,
+        quantity: edge.node.quantity,
+        merchandiseId: edge.node.merchandise.id,
+        title: edge.node.merchandise.product.title,
+        handle: edge.node.merchandise.product.handle,
+        variantTitle: edge.node.merchandise.title,
+        imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
+        amount: Number(edge.node.merchandise.price.amount),
+        compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
+          ? Number(edge.node.merchandise.compareAtPrice.amount)
+          : null,
+        currency: edge.node.merchandise.price.currencyCode,
+        productType: edge.node.merchandise.product.productType,
+      })) as CartLine[],
   };
 }
 
@@ -306,8 +307,7 @@ export const useCartStore = create<CartState>()(
           } else {
             const data = await storefrontApiRequest<any>(CART_CREATE, {
               input: {
-                lines: [{ merchandiseId, quantity }],
-                buyerIdentity: { countryCode: "IN" } // Defaulting to IN as per previous contexts
+                lines: [{ merchandiseId, quantity }]
               }
             });
             result = data?.data?.cartCreate;
@@ -317,10 +317,12 @@ export const useCartStore = create<CartState>()(
           notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
           
           const mapped = mapCart(result?.cart);
-          if (mapped) {
+          const addedLine = mapped?.lines.find((line) => line.merchandiseId === merchandiseId);
+          if (mapped && addedLine && addedLine.quantity > 0) {
             set(mapped);
             return true;
           }
+          if (mapped) set(mapped);
           return false;
         } catch (e) {
           toast.error("Something went wrong, please try again");
