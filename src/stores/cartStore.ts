@@ -301,11 +301,12 @@ export const useCartStore = create<CartState>()(
             if (data?.errors) {
                console.error("[Cart] GraphQL errors on cartCreate:", data.errors);
             }
+            console.log("[Cart] cartCreate result:", data?.data?.cartCreate);
             return data?.data?.cartCreate;
           };
 
           const addLinesToCart = async (cartId: string) => {
-            console.log("[Cart] Adding lines to cart:", cartId);
+            console.log("[Cart] Calling cartLinesAdd", { cartId, variantGid, quantity });
             const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
               cartId,
               lines: [{ merchandiseId: variantGid, quantity }],
@@ -313,6 +314,7 @@ export const useCartStore = create<CartState>()(
             if (data?.errors) {
               console.error("[Cart] GraphQL errors on cartLinesAdd:", data.errors);
             }
+            console.log("[Cart] cartLinesAdd result:", data?.data?.cartLinesAdd);
             return data?.data?.cartLinesAdd;
           };
 
