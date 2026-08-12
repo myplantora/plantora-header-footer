@@ -17,7 +17,6 @@ export function CartDrawer() {
     useCartStore();
   const lines = useCartStore(state => state.lines);
   
-  console.log("[CartDrawer] Rendering. isOpen:", isOpen, "lines count:", lines.length);
   const { trackInitiateCheckout } = useMetaTracking();
 
   useEffect(() => {
