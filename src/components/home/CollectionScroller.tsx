@@ -1,4 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { collectionLinkProps } from "@/lib/collectionLink";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/product/ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
@@ -43,8 +44,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
             </Link>
           ) : (
             <Link
-              to="/collections/$handle"
-              params={{ handle: collection.handle || "all" }}
+              {...collectionLinkProps(collection.handle || "all")}
               className="flex items-center gap-0.5 text-[14px] font-medium text-[#254838] hover:opacity-70 transition-opacity"
             >
               View all
@@ -79,8 +79,7 @@ export function CollectionScroller({ collectionId, limit = 12, heading }: Props)
             </Link>
           ) : (
             <Link
-              to="/collections/$handle"
-              params={{ handle: collection.handle || "all" }}
+              {...collectionLinkProps(collection.handle || "all")}
               className="flex items-center gap-2 rounded-full bg-[#C3754C] px-8 py-3 text-[14px] text-primary-foreground transition-all hover:opacity-90"
             >
               View more product

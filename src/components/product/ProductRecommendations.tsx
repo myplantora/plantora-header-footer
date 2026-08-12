@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
+import { collectionLinkProps } from "@/lib/collectionLink";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "./ProductCard";
 import { getCollectionById } from "@/services/shopify/collection.service";
@@ -39,8 +40,7 @@ export function ProductRecommendations({
         </h2>
         {collection?.handle ? (
           <Link
-            to="/collections/$handle"
-            params={{ handle: collection.handle }}
+            {...collectionLinkProps(collection.handle)}
             className="absolute right-0 hidden text-sm font-medium text-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:inline"
           >
             View all
@@ -58,8 +58,7 @@ export function ProductRecommendations({
 
       {collection?.handle ? (
         <Link
-          to="/collections/$handle"
-          params={{ handle: collection.handle }}
+          {...collectionLinkProps(collection.handle)}
           className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-full bg-[#C3754C] px-5 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:hidden"
         >
           View all products
