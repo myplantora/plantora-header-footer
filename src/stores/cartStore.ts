@@ -389,10 +389,11 @@ export const useCartStore = create<CartState>()(
               console.warn("[Cart] Stale reference during retry, force resetting...");
             }
 
-            // Clear session FIRST
+            // Clear session and localStorage FIRST
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             if (typeof window !== "undefined") {
               localStorage.removeItem("plantora-cart");
+              localStorage.removeItem("cartId"); // Just in case another key was used
             }
             
             const freshCart = await createEmptyCart();
