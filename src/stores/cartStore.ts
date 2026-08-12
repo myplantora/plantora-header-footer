@@ -117,8 +117,8 @@ export const useCartStore = create<CartState>((set, get) => ({
       const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
       if (data.cart) {
         set({ cart: data.cart });
-        console.log("[CartStore] initCart: data.cart.lines.edges.length:", data.cart?.lines?.edges?.length);
-        console.log("[CartStore] initCart: raw cart data:", JSON.stringify(data.cart));
+        console.log("[CartStore] initCart success. Raw edges count:", data.cart?.lines?.edges?.length);
+        set({ cart: data.cart });
       } else {
         get().clearCart();
       }
