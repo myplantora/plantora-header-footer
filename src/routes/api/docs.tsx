@@ -43,8 +43,76 @@ function DocsPage() {
 
         <section className="rounded-xl bg-[#F8F8F8] p-6 border border-border">
           <h2 className="mb-4 text-xl font-bold">🧪 Testing in GraphiQL</h2>
-          <p>Test your queries live against your store using the <a href="https://shopify.dev/docs/storefronts/tools/graphiql-storefront-api" target="_blank" className="text-accent underline font-bold">GraphiQL explorer</a>.</p>
-          <p className="mt-2 text-sm italic">Set your store URL and token directly in the explorer to test mutations against myplantora.myshopify.com.</p>
+          <div className="space-y-4">
+            <div>
+              <p className="font-semibold mb-2">1. Initialize a Cart</p>
+              <p className="text-sm mb-2">Required to establish a session context before adding items.</p>
+              <div className="relative group">
+                <pre className="overflow-x-auto rounded-lg bg-[#254838] p-4 text-xs text-white">
+{`mutation CartCreate {
+  cartCreate(input: {}) {
+    cart {
+      id
+      checkoutUrl
+    }
+    userErrors {
+      message
+    }
+  }
+}`}
+                </pre>
+                <button 
+                  onClick={() => navigator.clipboard.writeText(`mutation CartCreate {\n  cartCreate(input: {}) {\n    cart {\n      id\n      checkoutUrl\n    }\n    userErrors {\n      message\n    }\n  }\n}`)}
+                  className="absolute right-2 top-2 rounded bg-white/10 px-2 py-1 text-[10px] text-white hover:bg-white/20 transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <p className="font-semibold mb-2">2. Add Line Items</p>
+              <p className="text-sm mb-2">Add a product variant using the ID returned from step 1.</p>
+              <div className="relative group">
+                <pre className="overflow-x-auto rounded-lg bg-[#254838] p-4 text-xs text-white">
+{`mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+  cartLinesAdd(cartId: $cartId, lines: $lines) {
+    cart {
+      id
+      totalQuantity
+      lines(first: 5) {
+        edges {
+          node {
+            merchandise {
+              ... on ProductVariant {
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      message
+    }
+  }
+}`}
+                </pre>
+                <button 
+                  onClick={() => navigator.clipboard.writeText(`mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {\n  cartLinesAdd(cartId: $cartId, lines: $lines) {\n    cart {\n      id\n      totalQuantity\n      lines(first: 5) {\n        edges {\n          node {\n            merchandise {\n              ... on ProductVariant {\n                title\n              }\n            }\n          }\n        }\n      }\n    }\n    userErrors {\n      message\n    }\n  }\n}`)}
+                  className="absolute right-2 top-2 rounded bg-white/10 px-2 py-1 text-[10px] text-white hover:bg-white/20 transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground italic">Variables: {"{ \"cartId\": \"...\", \"lines\": [ { \"merchandiseId\": \"...\", \"quantity\": 1 } ] }"}</p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-border/50">
+              <p className="text-sm">Test these live using the <a href="https://shopify.dev/docs/storefronts/tools/graphiql-storefront-api" target="_blank" className="text-accent underline font-bold">GraphiQL explorer</a>.</p>
+              <p className="mt-1 text-xs italic">Endpoint: myplantora.myshopify.com/api/2025-07/graphql.json</p>
+            </div>
+          </div>
         </section>
       </div>
       
