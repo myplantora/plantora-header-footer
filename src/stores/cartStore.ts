@@ -149,6 +149,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   addToCart: async (merchandiseId: string, quantity: number) => {
     pendingOperations++;
+    // Do not set global loading if cart is already open to allow background updates
     if (!get().isOpen) set({ isLoading: true });
 
     try {
