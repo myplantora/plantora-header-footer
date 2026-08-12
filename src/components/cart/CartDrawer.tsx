@@ -243,8 +243,15 @@ export function CartDrawer() {
                   checkoutUrl,
                   resolveRewardState(subtotal?.amount ?? 0).bestCode
                 );
-                if (url && url !== "#") {
-                  // Fires checkout_started (once, keepalive) then navigates.
+                
+                if (!url || url === "#") {
+                  toast.error("Checkout unavailable", {
+                    description: "Please ensure all items are in stock or contact support."
+                  });
+                  return;
+                }
+
+                // Fire checkout_started (once, keepalive) then navigates.
                   handleCheckout(url, (target) =>
                     window.open(target, "_blank", "noopener,noreferrer")
                   );
