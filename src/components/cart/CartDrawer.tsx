@@ -147,6 +147,12 @@ export function CartDrawer() {
                       </p>
                     ) : null}
 
+                    {line.quantity === 1 && line.productType === "Combo" ? (
+                      <p className="text-[10px] leading-tight text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
+                        Note: Stock status for this item is currently updating, but it remains available for checkout.
+                      </p>
+                    ) : null}
+
 
 
 
