@@ -59,7 +59,12 @@ const CART_FRAGMENT = `
               image { url altText }
               price { amount currencyCode }
               compareAtPrice { amount currencyCode }
-              product { title handle }
+              product { 
+                title 
+                handle 
+                productType
+                tags
+              }
             }
           }
         }
@@ -119,13 +124,39 @@ const CART_QUERY = `${CART_FRAGMENT}
     cart(id: $id) { ...CartFields }
   }`;
 
-function notifyWarnings(warnings: any[] | undefined) {
+function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   if (!warnings?.length) return;
-  const outOfStock = warnings.filter(
-    (w) =>
-      w?.code === "MERCHANDISE_OUT_OF_STOCK" &&
-      !w?.message?.toLowerCase().includes("combo"),
-  );
+
+  const outOfStock = warnings.filter((w) => {
+    if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return false;
+
+    // Check if the warning targets a specific line/merchandise in the cart
+    const targetId = w.target;
+    let isCombo = false;
+
+    if (targetId && cart?.lines?.edges) {
+      const line = cart.lines.edges.find((e: any) => e.node.merchandise?.id === targetId || e.node.id === targetId);
+      const product = line?.node.merchandise?.product;
+      if (product) {
+        isCombo = 
+          product.productType?.toLowerCase() === "combo" || 
+          product.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+      }
+    }
+
+    // Fallback: Check message if target lookup failed or to be safe
+    if (!isCombo && w.message?.toLowerCase().includes("combo")) {
+      isCombo = true;
+    }
+
+    if (isCombo) {
+      console.warn("[Cart] Suppressing MERCHANDISE_OUT_OF_STOCK warning for Combo product:", w.message);
+      return false;
+    }
+
+    return true;
+  });
+
   if (outOfStock.length) {
     toast.error("Some items are sold out", {
       description: outOfStock.map((w) => w.message).join(" "),
@@ -175,10 +206,12 @@ async function addLineToCart(
   const data = cartId
     ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
     : await storefrontApiRequest<any>(CART_CREATE, { lines });
-  notifyWarnings(
-    data?.data?.cartLinesAdd?.warnings ?? data?.data?.cartCreate?.warnings,
-  );
-  const cart = data?.data?.cartLinesAdd?.cart ?? data?.data?.cartCreate?.cart;
+  
+  const result = data?.data?.cartLinesAdd ?? data?.data?.cartCreate;
+  const cart = result?.cart;
+  
+  notifyWarnings(result?.warnings, cart);
+  
   if (!cart) return null;
   return mapCart(cart);
 }
@@ -273,8 +306,9 @@ export const useCartStore = create<CartState>()(
             cartId,
             lines: [{ id: lineId, quantity }],
           });
-          notifyWarnings(data?.data?.cartLinesUpdate?.warnings);
-          const cart = data?.data?.cartLinesUpdate?.cart;
+          const result = data?.data?.cartLinesUpdate;
+          const cart = result?.cart;
+          notifyWarnings(result?.warnings, cart);
           if (cart) set(mapCart(cart));
         } finally {
           set({ isLoading: false });
