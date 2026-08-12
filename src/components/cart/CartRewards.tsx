@@ -8,14 +8,21 @@ const LOCKED_GIF =
 const UNLOCKED_GIF =
   "https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Unlocked.gif?v=1721738691";
 
-/** Appends the best earned coupon to the Shopify checkout URL. */
+/** Appends the best earned coupon to the Shopify checkout URL.
+ * Format: https://checkout.myplantora.com/cart/c/{cartToken}?discount=CODE&key=...
+ * Existing key, _s, _y params are preserved by URL.searchParams.set()
+ */
 export function buildCheckoutUrl(checkoutUrl: string | null, code: string | null) {
   if (!checkoutUrl) return "#";
   try {
     const url = new URL(checkoutUrl);
     url.searchParams.set("channel", "online_store");
-    if (code) url.searchParams.set("discount", code);
-    return url.toString();
+    if (code) {
+      url.searchParams.set("discount", code.toUpperCase());
+    }
+    const finalUrl = url.toString();
+    console.log(code ? `[Checkout URL with Discount] ${finalUrl}` : `[Checkout URL] ${finalUrl}`);
+    return finalUrl;
   } catch {
     return checkoutUrl;
   }
