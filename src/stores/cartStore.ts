@@ -187,8 +187,17 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
+          // Sync state and fire analytics
           set({ cart });
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+          
+          // Force a final re-fetch of the cart to ensure state is absolutely current with Shopify's edge
+          // This fixes the "0 items" issue in the drawer immediately after addition
+          const finalSync = await storefrontFetch<any>(queries.GET_CART, { cartId: currentCartId });
+          if (finalSync.cart) {
+            set({ cart: finalSync.cart });
+          }
+
           return true;
         }
 
