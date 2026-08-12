@@ -61,7 +61,7 @@ export function CartDrawer() {
         "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-2xl transition-transform duration-500 ease-out sm:rounded-l-3xl",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <header className="flex items-center justify-between border-b border-border px-6 py-4">
+        <header className="flex items-center justify-between border-b border-border px-3 py-4">
           <div className="w-8" />
           <h2 className="text-xl font-bold text-primary">Your basket</h2>
           <button
@@ -74,7 +74,7 @@ export function CartDrawer() {
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="flex-1 overflow-y-auto px-3 py-4">
           <CartRewards />
           
           {isLoading && lines.length === 0 ? (
@@ -187,7 +187,7 @@ export function CartDrawer() {
         </div>
 
         {lines.length > 0 && (
-          <footer className="border-t border-border bg-white px-6 py-6 space-y-4">
+          <footer className="border-t border-border bg-white px-3 py-6 space-y-4">
             <div className="flex items-center justify-between text-lg font-bold">
               <span>Subtotal</span>
               <span className="text-[#1D4D44]">
