@@ -55,21 +55,30 @@ const STALE_ERRORS = [
 ];
 
 function mapCartLines(cart: any): CartLine[] {
-  return (cart?.lines?.edges ?? []).map((edge: any) => ({
-    id: edge.node.id,
-    quantity: edge.node.quantity,
-    merchandiseId: edge.node.merchandise.id,
-    title: edge.node.merchandise.product.title,
-    handle: edge.node.merchandise.product.handle,
-    variantTitle: edge.node.merchandise.title,
-    imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
-    amount: Number(edge.node.merchandise.price.amount),
-    compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
-      ? Number(edge.node.merchandise.compareAtPrice.amount)
-      : null,
-    currency: edge.node.merchandise.price.currencyCode,
-    productType: edge.node.merchandise.product.productType,
-  }));
+  const rawLines = cart?.lines?.edges ?? [];
+  console.log("[CartStore] mapCartLines: rawLines.length:", rawLines.length);
+  return rawLines.map((edge: any) => {
+    const node = edge.node;
+    if (!node.merchandise) {
+       console.warn("[CartStore] Missing merchandise in line node:", node);
+       return null;
+    }
+    return {
+      id: node.id,
+      quantity: node.quantity,
+      merchandiseId: node.merchandise.id,
+      title: node.merchandise.product?.title || node.merchandise.title || "Product",
+      handle: node.merchandise.product?.handle || "",
+      variantTitle: node.merchandise.title,
+      imageUrl: node.merchandise.product?.featuredImage?.url || node.merchandise.image?.url || null,
+      amount: Number(node.merchandise.price?.amount || 0),
+      compareAtAmount: node.merchandise.compareAtPrice?.amount
+        ? Number(node.merchandise.compareAtPrice.amount)
+        : null,
+      currency: node.merchandise.price?.currencyCode || "USD",
+      productType: node.merchandise.product?.productType || "",
+    };
+  }).filter(Boolean) as CartLine[];
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
