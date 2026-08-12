@@ -109,7 +109,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       if (data.cart) {
         set({ cart: data.cart });
         console.log("[CartStore] initCart: data.cart.lines.edges.length:", data.cart?.lines?.edges?.length);
-        console.log("[CartStore] initCart: first line sample:", data.cart?.lines?.edges?.[0]?.node);
+        console.log("[CartStore] initCart: raw cart data:", JSON.stringify(data.cart));
       } else {
         get().clearCart();
       }
@@ -188,7 +188,7 @@ export const useCartStore = create<CartState>((set, get) => ({
           // Force local state update IMMEDIATELY
           set({ cart });
           console.log("[CartStore] addToCart: cart.lines.edges.length:", cart?.lines?.edges?.length);
-          console.log("[CartStore] addToCart: first line sample:", cart?.lines?.edges?.[0]?.node);
+          console.log("[CartStore] addToCart: raw cart data:", JSON.stringify(cart));
           
           // Open drawer immediately
           set({ isOpen: true });
