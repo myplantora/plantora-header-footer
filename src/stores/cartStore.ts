@@ -159,17 +159,21 @@ const CART_QUERY = `
 
 // Errors that mean our persisted cart/line reference is stale (common in
 // Safari/Brave/mobile where storage survives longer than the Shopify cart).
+const STALE_CART_ERRORS = [
+  "cart not found",
+  "invalid cart id",
+  "invalid cartid",
+  "variable $cartid of type id!", // GraphQL type error on malformed ID
+  "throttled",                     // edge rejection
+  "merchandise line",              // specifically for stale line items
+  "does not exist",
+];
+
 function isStaleReferenceError(errors: any[] | undefined) {
   if (!errors || !errors.length) return false;
   return errors.some((e) => {
     const msg = String(e?.message || "").toLowerCase();
-    const isCartNotFound = 
-      msg.includes("does not exist") || 
-      msg.includes("not found") || 
-      msg.includes("invalid id") || 
-      msg.includes("invalid cartid"); // Added specific check for Brave/Safari variants
-    const isLineNotFound = msg.includes("merchandise line");
-    return isCartNotFound || isLineNotFound;
+    return STALE_CART_ERRORS.some((pattern) => msg.includes(pattern));
   });
 }
 
@@ -332,7 +336,13 @@ export const useCartStore = create<CartState>()(
             // DETAILED CHECK: If result is null/undefined or has stale errors
             if (!result || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
+              
+              // Clear session FIRST to prevent race conditions
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("plantora-cart");
+              }
+
               const recreated = await createEmptyCart();
               const recreatedCartId = recreated?.cart?.id;
               if (!recreatedCartId) {
@@ -363,28 +373,46 @@ export const useCartStore = create<CartState>()(
           // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
           // it usually means a session-level inventory lock or a corrupted cart state.
           // We will clear the cart and try ONE more time with a brand new cart ID.
-          if (!lineAdded(result)) {
+          const MAX_OOS_RETRIES = 2;
+          const SETTLE_DELAY_MS = 1500;
+          let retryCount = 0;
+
+          while (!lineAdded(result) && retryCount < MAX_OOS_RETRIES) {
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
-            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.", { hasOOSWarning });
+            if (!hasOOSWarning && result?.cart) {
+               // If there's no OOS warning and we have a cart, but line wasn't added, 
+               // it might be a different issue, but we'll try recovery once.
+            }
+            
+            console.warn(`[Cart] Line quantity is 0. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning });
+            
+            // Clear session FIRST
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("plantora-cart");
+            }
             
             const freshCart = await createEmptyCart();
             const freshCartId = freshCart?.cart?.id;
             
             if (freshCartId) {
-              // Wait for Shopify's cache to settle if needed
-              await new Promise(r => setTimeout(r, 1500));
+              // Wait for Shopify's cache to settle
+              await new Promise(r => setTimeout(r, SETTLE_DELAY_MS));
               
               result = await addLinesToCart(freshCartId);
-              if (!lineAdded(result)) {
-                // If it STILL fails on a brand new cart, it's a real inventory issue from Shopify
-                console.error("[Cart] Permanent failure: Product is out of stock in Shopify backend.");
-                handleUserErrors(result?.userErrors);
-                notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
-                console.groupEnd();
-                return false;
-              }
+              retryCount++;
+            } else {
+              break;
             }
+          }
+
+          if (!lineAdded(result)) {
+            // If it STILL fails after retries, it's a real inventory issue or permanent failure
+            console.error("[Cart] Permanent failure: Product could not be added after recovery attempts.");
+            handleUserErrors(result?.userErrors);
+            notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
+            console.groupEnd();
+            return false;
           }
 
           if (handleUserErrors(result?.userErrors)) {
