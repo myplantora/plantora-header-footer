@@ -20,8 +20,18 @@ export function CartDrawer() {
   useEffect(() => {
     if (isOpen) {
       trackCartViewed(useCartStore.getState().cart);
-      // Hydrate if open and empty to ensure we didn't miss a sync
-      if (lines.length === 0) void hydrate();
+    }
+  }, [isOpen]);
+
+  // Separate hydration logic to avoid infinite loops or stale renders
+  useEffect(() => {
+    if (isOpen && lines.length === 0) {
+      const timer = setTimeout(() => {
+        if (useCartStore.getState().lines.length === 0) {
+          void hydrate();
+        }
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [isOpen, lines.length, hydrate]);
 
