@@ -117,6 +117,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
       if (data.cart) {
         set({ cart: data.cart });
+        console.log("[CartStore] data.cart updated:", JSON.stringify(data.cart).substring(0, 500));
       } else {
         get().clearCart();
       }
