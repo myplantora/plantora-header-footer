@@ -340,12 +340,15 @@ export const useCartStore = create<CartState>()(
         const cartId = get().cartId;
         if (!cartId) return;
 
-        // We allow quantity 0 for combos in the store state so they stay visible
-        // even if Shopify warns they are out of stock.
         const line = get().lines.find(l => l.id === lineId);
         if (quantity <= 0 && !line?.isCombo) {
           return get().removeLine(lineId);
         }
+        
+        // If it is a combo and quantity is about to become 0, we can either:
+        // 1. Keep it at 1 (prevent decrease)
+        // 2. Allow 0 but ensure it's not removed
+        const finalQuantity = (line?.isCombo && quantity <= 0) ? 1 : quantity;
 
         set({ isLoading: true });
         try {
