@@ -212,7 +212,7 @@ export function CartDrawer() {
           <footer className="border-t border-border bg-white px-3 py-4 space-y-3 mt-auto">
             <div className="flex items-center justify-between text-base font-bold px-1">
               <span className="text-primary/80">Subtotal</span>
-              <span className="text-[#1D4D44]">
+              <span className={cn("text-[#1D4D44] transition-opacity", isLoading && "opacity-50")}>
                 {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : '$0.00'}
               </span>
             </div>
@@ -220,9 +220,12 @@ export function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={isLoading || !checkoutUrl}
-              className="w-full rounded-full bg-[#C3754C] py-3.5 text-xs font-bold text-white uppercase tracking-widest shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+              className={cn(
+                "w-full rounded-full bg-[#C3754C] py-3.5 text-xs font-bold text-white uppercase tracking-widest shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50",
+                isLoading && "relative overflow-hidden after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:animate-shimmer"
+              )}
             >
-              {isLoading ? "PROCESSING..." : "SECURE CHECKOUT"}
+              {isLoading ? "UPDATING..." : "SECURE CHECKOUT"}
             </button>
           </footer>
         )}
