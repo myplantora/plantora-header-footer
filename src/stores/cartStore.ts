@@ -159,17 +159,21 @@ const CART_QUERY = `
 
 // Errors that mean our persisted cart/line reference is stale (common in
 // Safari/Brave/mobile where storage survives longer than the Shopify cart).
+const STALE_CART_ERRORS = [
+  "cart not found",
+  "invalid cart id",
+  "invalid cartid",
+  "variable $cartid of type id!", // GraphQL type error on malformed ID
+  "throttled",                     // edge rejection
+  "merchandise line",              // specifically for stale line items
+  "does not exist",
+];
+
 function isStaleReferenceError(errors: any[] | undefined) {
   if (!errors || !errors.length) return false;
   return errors.some((e) => {
     const msg = String(e?.message || "").toLowerCase();
-    const isCartNotFound = 
-      msg.includes("does not exist") || 
-      msg.includes("not found") || 
-      msg.includes("invalid id") || 
-      msg.includes("invalid cartid"); // Added specific check for Brave/Safari variants
-    const isLineNotFound = msg.includes("merchandise line");
-    return isCartNotFound || isLineNotFound;
+    return STALE_CART_ERRORS.some((pattern) => msg.includes(pattern));
   });
 }
 
