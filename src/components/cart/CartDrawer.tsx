@@ -35,9 +35,28 @@ export function CartDrawer() {
 
   const handleCheckout = () => {
     if (checkoutUrl) {
-      trackInitiateCheckout(useCartStore.getState().cart);
-      // Perform a direct top-level navigation to ensure Shopify's checkout processes correctly
-      window.location.href = checkoutUrl;
+      try {
+        const url = new URL(checkoutUrl);
+        
+        // Ensure only https is used
+        if (url.protocol !== 'https:') {
+          console.warn("[Checkout] Unsafe protocol detected, forcing https");
+          url.protocol = 'https:';
+        }
+
+        trackInitiateCheckout(useCartStore.getState().cart);
+        
+        console.log(`[Checkout] Redirecting to sanitized URL: ${url.toString()}`);
+        
+        // Perform a direct top-level navigation
+        window.location.href = url.toString();
+      } catch (e) {
+        console.error("[Checkout] Invalid checkout URL:", checkoutUrl, e);
+        // Fallback to original URL if parsing fails, but only if it looks like a valid URL
+        if (checkoutUrl.startsWith('http')) {
+          window.location.href = checkoutUrl;
+        }
+      }
     }
   };
 
