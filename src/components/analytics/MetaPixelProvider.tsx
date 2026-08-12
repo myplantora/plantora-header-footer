@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouterState } from '@tanstack/react-router';
 import { initMetaPixel, trackMetaPageView } from '@/lib/analytics/meta.events';
 import { isMetaEnabled } from '@/lib/analytics/meta.helpers';
+import { trackShopifyPageView } from '@/lib/analytics';
 
 /**
  * Global provider for Meta Pixel tracking
@@ -32,6 +33,17 @@ export function MetaPixelProvider() {
     if (window.fbq && window.fbq.loaded) {
       trackMetaPageView();
     }
+  }, [pathname]);
+
+  useEffect(() => {
+    const pageType = pathname.startsWith('/product/')
+      ? 'product'
+      : pathname.startsWith('/collections/')
+        ? 'collection'
+        : pathname === '/collections'
+          ? 'list-collections'
+          : 'index';
+    trackShopifyPageView(pageType);
   }, [pathname]);
 
   return null;

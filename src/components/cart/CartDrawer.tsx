@@ -6,7 +6,7 @@ import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
-import { trackCartViewed } from "@/lib/analytics";
+import { trackCartViewed, trackCheckoutStarted } from "@/lib/analytics";
 import { trackMetaEvent } from "@/lib/analytics/meta.events";
 import { resolveRewardState } from "@/lib/rewards";
 
@@ -41,6 +41,7 @@ export function CartDrawer() {
     const finalUrl = buildCheckoutUrl(checkoutUrl, rewardState.bestCode);
 
     try {
+      trackCheckoutStarted(currentCart);
       trackMetaEvent("InitiateCheckout", {
         content_ids: lines.map((line) => line.merchandiseId).filter(Boolean),
         content_type: "product",
