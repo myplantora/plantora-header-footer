@@ -165,17 +165,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <ShopifyAnalytics />
-        <MetaPixelProvider />
-        <AnnouncementBar />
-        <Header />
-        <CartDrawer />
-        <Outlet />
-        <Analytics />
-        <Toaster position="bottom-right" />
-        
-      </CartProvider>
+      <ShopifyAnalytics />
+      <MetaPixelProvider />
+      <AnnouncementBar />
+      <Header />
+      <CartDrawer />
+      <Outlet />
+      <Analytics />
+      <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
 }
