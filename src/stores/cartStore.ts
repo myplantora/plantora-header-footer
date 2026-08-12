@@ -362,7 +362,8 @@ export const useCartStore = create<CartState>()(
           // it usually means a session-level inventory lock or a corrupted cart state.
           // We will clear the cart and try ONE more time with a brand new cart ID.
           if (!lineAdded(result)) {
-            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.");
+            const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
+            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.", { hasOOSWarning });
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             
             const freshCart = await createEmptyCart();
