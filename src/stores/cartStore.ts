@@ -152,13 +152,27 @@ export const useCartStore = create<CartState>((set, get) => ({
     if (!get().isOpen) set({ isLoading: true });
 
     try {
+      console.log(`[Add to Cart] Starting flow for variant: ${merchandiseId}`);
       // Step 1: Pre-fetch availability check
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
       
+      console.log(
+        `[Variant Check] ID: ${merchandiseId} | Available: ${variant?.availableForSale} | Qty: ${variant?.quantityAvailable ?? 'untracked'}`
+      );
+
       if (!variant || !variant.availableForSale) {
+        console.log(`[Add to Cart] Blocked — variant not available for sale: ${merchandiseId}`);
         toast.error("Out of Stock", {
           description: "This item is currently unavailable."
+        });
+        return false;
+      }
+
+      if (variant?.quantityAvailable !== null && variant?.quantityAvailable < quantity) {
+        console.log(`[Add to Cart] Blocked — insufficient stock. Requested: ${quantity} | Available: ${variant.quantityAvailable}`);
+        toast.error("Insufficient Stock", {
+          description: `Only ${variant.quantityAvailable} items available.`
         });
         return false;
       }
