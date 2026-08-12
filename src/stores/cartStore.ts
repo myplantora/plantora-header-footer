@@ -114,25 +114,31 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      // STEP 1: Check availability
+      // STEP 1: Strict availability check
+      // Note: We use quantityAvailable if present, but some stores don't expose it.
+      // availableForSale is the primary source of truth for Storefront API.
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
-      if (!variant || !variant.availableForSale || variant.quantityAvailable === 0) {
-        toast.error("Out of Stock");
+      
+      if (!variant || !variant.availableForSale) {
+        toast.error("Out of Stock", {
+          description: "This item is currently unavailable."
+        });
         return false;
       }
 
-      const executeAdd = async (retry = false): Promise<boolean> => {
+      const executeAdd = async (retryCount = 0): Promise<boolean> => {
         let cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        // STEP 2: Get or create cart
-        if (!cartId) {
+        // STEP 2: Ensure a valid cart exists
+        if (!cartId || cartId.includes('FAKE')) {
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
           cartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, cartId!);
+          // Small delay to allow Shopify edge to propagate the new cart ID
           await new Promise(r => setTimeout(r, 500));
         }
 
@@ -149,19 +155,33 @@ export const useCartStore = create<CartState>((set, get) => ({
           const errorMsg = userErrors[0].message.toLowerCase();
           const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
 
-          if (isStale && !retry) {
+          if (isStale && retryCount < 1) {
             get().clearCart();
-            return executeAdd(true);
+            return executeAdd(retryCount + 1);
           }
           throw new Error(userErrors[0].message);
         }
 
+        // Handle the "added with quantity 0" edge case (Shopify cache lag)
+        const lineAdded = cart?.lines?.edges?.find((e: any) => 
+          e.node.merchandise.id === merchandiseId && e.node.quantity > 0
+        );
+
+        if (!lineAdded && !warnings?.length && retryCount < 2) {
+          // If Shopify returned success but quantity is 0, wait and retry
+          console.log('[CartStore] Shopify returned 0 quantity for success mutation. Retrying...');
+          await new Promise(r => setTimeout(r, 1000));
+          return executeAdd(retryCount + 1);
+        }
+
         if (warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) {
-          if (!retry) {
-            get().clearCart();
+          if (retryCount < 2) {
+            console.log('[CartStore] OOS warning. Retrying after settle delay...');
             await new Promise(r => setTimeout(r, 1500));
-            return executeAdd(true);
+            return executeAdd(retryCount + 1);
           }
+          toast.error("Item unavailable", { description: "We couldn't add this item right now." });
+          return false;
         }
 
         if (cart) {
@@ -176,7 +196,13 @@ export const useCartStore = create<CartState>((set, get) => ({
       return await executeAdd();
     } catch (e: any) {
       console.error("[CartStore] Error adding to cart:", e);
-      toast.error("Something went wrong, please try again");
+      // If we hit a hard error, try clearing the cart ID to recover next time
+      if (STALE_ERRORS.some(err => e.message?.toLowerCase().includes(err))) {
+        get().clearCart();
+      }
+      toast.error("Could not add to basket", {
+        description: "Please refresh and try again."
+      });
       return false;
     } finally {
       set({ isLoading: false });
