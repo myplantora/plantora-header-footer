@@ -145,7 +145,7 @@ export function CartDrawer() {
                     to="/product/$handle"
                     params={{ handle: line.handle }}
                     onClick={closeCart}
-                    className="size-24 sm:size-28 shrink-0 overflow-hidden rounded-xl bg-secondary"
+                    className="size-24 sm:size-28 shrink-0 overflow-hidden rounded-xl bg-secondary aspect-square"
                   >
                     {line.imageUrl && (
                       <img src={line.imageUrl} alt={line.title} className="size-full object-cover transition-transform group-hover:scale-105" />
