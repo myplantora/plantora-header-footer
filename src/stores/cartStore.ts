@@ -163,7 +163,11 @@ function isStaleReferenceError(errors: any[] | undefined) {
   if (!errors || !errors.length) return false;
   return errors.some((e) => {
     const msg = String(e?.message || "").toLowerCase();
-    const isCartNotFound = msg.includes("does not exist") || msg.includes("not found") || msg.includes("invalid id");
+    const isCartNotFound = 
+      msg.includes("does not exist") || 
+      msg.includes("not found") || 
+      msg.includes("invalid id") || 
+      msg.includes("invalid cartid"); // Added specific check for Brave/Safari variants
     const isLineNotFound = msg.includes("merchandise line");
     return isCartNotFound || isLineNotFound;
   });
