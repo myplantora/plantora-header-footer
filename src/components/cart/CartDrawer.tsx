@@ -222,7 +222,7 @@ export function CartDrawer() {
         {lines.length > 0 && (
           <footer className="border-t border-border bg-white px-3 py-4 space-y-3 mt-auto">
             <div className="flex items-center justify-between text-base font-bold px-1">
-              <span className="text-primary/80">Subtotal</span>
+              <span className="text-primary/80">Net Total (Exclusive of shipping)</span>
               <span className={cn("text-[#1D4D44] transition-opacity", isLoading && "opacity-50")}>
                 {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : '$0.00'}
               </span>
