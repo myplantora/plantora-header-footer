@@ -25,7 +25,7 @@ interface CartState {
   isOpen: boolean;
   isLoading: boolean;
   
-  // Getters for components
+  // Flattened state to avoid unstable getters
   cartId: string | null;
   lines: CartLine[];
   totalQuantity: number;
@@ -80,31 +80,41 @@ function mapCartLines(cart: any): CartLine[] {
   }).filter(Boolean) as CartLine[];
 }
 
+function deriveCartState(cart: any) {
+  const subtotalAmount = cart?.cost?.subtotalAmount;
+  return {
+    cart,
+    cartId: cart?.id || null,
+    lines: mapCartLines(cart),
+    totalQuantity: cart?.totalQuantity || 0,
+    subtotal: subtotalAmount ? { amount: Number(subtotalAmount.amount), currency: subtotalAmount.currencyCode } : null,
+    checkoutUrl: cart?.checkoutUrl || null
+  };
+}
 
 export const useCartStore = create<CartState>((set, get) => ({
   cart: null,
   isOpen: false,
   isLoading: false,
-
-  // Computed values
-  get cartId() { return get().cart?.id || null; },
-  get lines() { 
-    return mapCartLines(get().cart);
-  },
-
-  get totalQuantity() { return get().cart?.totalQuantity || 0; },
-  get subtotal() { 
-    const amount = get().cart?.cost?.subtotalAmount;
-    return amount ? { amount: Number(amount.amount), currency: amount.currencyCode } : null;
-  },
-  get checkoutUrl() { return get().cart?.checkoutUrl || null; },
+  cartId: null,
+  lines: [],
+  totalQuantity: 0,
+  subtotal: null,
+  checkoutUrl: null,
 
   openCart: () => set({ isOpen: true }),
   closeCart: () => set({ isOpen: false }),
 
   clearCart: () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    set({ cart: null });
+    set({ 
+      cart: null,
+      cartId: null,
+      lines: [],
+      totalQuantity: 0,
+      subtotal: null,
+      checkoutUrl: null
+    });
   },
 
   hydrate: async () => get().initCart(),
@@ -119,7 +129,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
       const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
       if (data.cart) {
-        set({ cart: data.cart });
+        set(deriveCartState(data.cart));
       } else {
         get().clearCart();
       }
@@ -136,14 +146,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   addToCart: async (merchandiseId: string, quantity: number) => {
-    // Optimization: If we are already loading a change for this specific item, 
-    // we should still allow it to queue or process to ensure rapid clicks work.
-    // However, to prevent UI flickering, we only set global loading if not already open.
     if (!get().isOpen) set({ isLoading: true });
 
-
     try {
-      // STEP 1: Strict availability check
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
       
@@ -157,25 +162,22 @@ export const useCartStore = create<CartState>((set, get) => ({
       const executeAdd = async (retryCount = 0): Promise<boolean> => {
         let currentCartId = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        // STEP 2: Ensure a valid cart exists
         if (!currentCartId || currentCartId.includes('FAKE')) {
-          console.log("[CartStore] Creating fresh empty cart...");
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
           currentCartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
-          await new Promise(r => setTimeout(r, 300)); // Reduced settle time for faster responsiveness
+          await new Promise(r => setTimeout(r, 300));
         }
 
-        // STEP 3: Add lines separately
         const addData = await storefrontFetch<any>(queries.CART_LINES_ADD, {
           cartId: currentCartId,
           lines: [{ merchandiseId, quantity }]
         });
 
-        const { cart, userErrors, warnings } = addData.cartLinesAdd || {};
+        const { cart, userErrors } = addData.cartLinesAdd || {};
 
         if (userErrors?.length) {
           const errorMsg = userErrors[0].message.toLowerCase();
@@ -187,31 +189,22 @@ export const useCartStore = create<CartState>((set, get) => ({
           throw new Error(userErrors[0].message);
         }
 
-        // Step 4: Verify the item was actually added to the cart object
-        // We look for the merchandiseId in the lines edges
         const lineInCart = cart?.lines?.edges?.some((e: any) => 
           e.node.merchandise.id === merchandiseId
         );
 
         if (!lineInCart && retryCount < 2) {
-          console.log(`[CartStore] Item missing in response, retrying ${retryCount + 1}...`);
-          await new Promise(r => setTimeout(r, 400)); // Reduced retry delay
+          await new Promise(r => setTimeout(r, 400));
           return executeAdd(retryCount + 1);
         }
 
-
         if (cart) {
-          // Fire analytics
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
-
-          // Force local state update IMMEDIATELY
           set({ 
-            cart: { ...cart }, 
+            ...deriveCartState(cart),
             isLoading: false,
             isOpen: true 
           });
-
-
           return true;
         }
 
@@ -240,7 +233,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       const { cart, userErrors } = data.cartLinesUpdate || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
       if (cart) {
-        set({ cart });
+        set(deriveCartState(cart));
         analytics.trackCartUpdated(cart, 'update_cart');
       }
     } catch (e: any) {
@@ -262,7 +255,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       const { cart, userErrors } = data.cartLinesRemove || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
       if (cart) {
-        set({ cart });
+        set(deriveCartState(cart));
         analytics.trackCartUpdated(cart, 'remove_from_cart');
       }
     } catch (e: any) {
