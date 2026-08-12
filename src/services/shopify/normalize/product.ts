@@ -1,4 +1,5 @@
-import { featureFlags, metafieldConfig } from "../config";
+import globalConfig from "../../../../config/globalconf.json";
+const { featureFlags, metafieldConfig } = globalConfig.shopify;
 import type {
   PlantoraAvailability,
   PlantoraBadge,
@@ -120,9 +121,9 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
 
   const badgeIcon = readImage(map, media["badgeIcon"]!.namespace, media["badgeIcon"]!.key);
   const badges: PlantoraBadge[] = featureFlags.badges
-    ? metafieldConfig.badges
-        .filter((badge) => readBoolean(map, badge.namespace, badge.key))
-        .map((badge, idx): PlantoraBadge => {
+    ? (metafieldConfig.badges as any[])
+        .filter((badge: any) => readBoolean(map, badge.namespace, badge.key))
+        .map((badge: any, idx: number): PlantoraBadge => {
           const iconUrl = (badge as { gifUrl?: string }).gifUrl ?? (badge.key === 'tagMedia' ? badgeIcon?.url : null);
           const bgColors = ['#EDE9D2', '#C3E8E8', '#F2E8C2'];
           const backgroundColor = bgColors[idx % bgColors.length] || '#EDE9D2';

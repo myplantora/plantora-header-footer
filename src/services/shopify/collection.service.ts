@@ -1,5 +1,7 @@
-import { storefrontApiRequest } from "./client";
-import { paginationConfig } from "./config";
+import { storefrontFetch } from "../../lib/shopify";
+import globalConfig from "../../../config/globalconf.json";
+
+const { paginationConfig } = globalConfig.shopify;
 import { normalizeCollection } from "./normalize/collection";
 import { normalizeProductCard } from "./normalize/product";
 import {
@@ -14,12 +16,12 @@ export async function getCollection(params: {
   after?: string | null;
   limit?: number;
 }): Promise<PlantoraCollection | null> {
-  const data = await storefrontApiRequest<{ data?: { collection?: unknown } }>(COLLECTION_PAGE_QUERY, {
+  const data = await storefrontFetch<{ collection?: unknown }>(COLLECTION_PAGE_QUERY, {
     handle: params.handle,
     productLimit: params.limit ?? paginationConfig.collectionPageSize,
     after: params.after ?? null,
   });
-  const node = data?.data?.collection;
+  const node = data?.collection;
   if (!node) return null;
   return normalizeCollection(node);
 }
@@ -33,12 +35,12 @@ export async function getProductCards(params: {
   products: PlantoraProductCard[];
   pageInfo: { hasNextPage: boolean; endCursor: string | null };
 }> {
-  const data = await storefrontApiRequest<any>(PRODUCTS_QUERY, {
+  const data = await storefrontFetch<any>(PRODUCTS_QUERY, {
     first: params.first ?? paginationConfig.collectionPageSize,
     query: params.query ?? null,
     after: params.after ?? null,
   });
-  const conn = data?.data?.products;
+  const conn = data?.products;
   return {
     products: (conn?.edges ?? []).map((e: any) => normalizeProductCard(e.node)),
     pageInfo: {
@@ -57,7 +59,7 @@ export async function getCollectionById(params: {
   const gid = params.id.startsWith("gid://")
     ? params.id
     : `gid://shopify/Collection/${params.id.split("/").pop()}`;
-  const data = await storefrontApiRequest<{ data?: { collection?: unknown } }>(
+  const data = await storefrontFetch<{ collection?: unknown }>(
     COLLECTION_BY_ID_QUERY,
     {
       id: gid,
@@ -65,7 +67,7 @@ export async function getCollectionById(params: {
       after: params.after ?? null,
     },
   );
-  const node = data?.data?.collection;
+  const node = data?.collection;
   if (!node) return null;
   return normalizeCollection(node);
 }
