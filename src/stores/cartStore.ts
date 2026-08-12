@@ -128,18 +128,7 @@ const CART_QUERY = `${CART_FRAGMENT}
 function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   if (!warnings?.length) return;
 
-  const outOfStock = warnings.filter((w) => {
-    if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return false;
-    
-    // Check if it's the specific combo product causing trouble
-    const isTroubleCombo = w.message?.includes("Air Purifying Combo");
-    if (isTroubleCombo) {
-      console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Air Purifying Combo:", w.message);
-      return false;
-    }
-
-    return true;
-  });
+  const outOfStock = warnings.filter((w) => w?.code === "MERCHANDISE_OUT_OF_STOCK");
 
   if (outOfStock.length) {
     toast.error("Some items are sold out", {
@@ -171,16 +160,9 @@ function mapCart(cart: any, warnings: any[] = []) {
       const quantity = edge.node.quantity;
       const title = edge.node.merchandise?.product?.title ?? "";
       
-      const isTroubleCombo = title.includes("Air Purifying Combo");
-      const hasSuppressedWarning = warnings.some(w => 
-        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
-        w.message?.includes("Air Purifying Combo") &&
-        (w.target === lineId || w.target === edge.node.merchandise?.id)
-      );
-
       return {
         id: edge.node.id,
-        quantity: (quantity === 0 && isTroubleCombo && hasSuppressedWarning) ? 1 : quantity,
+        quantity: edge.node.quantity,
         merchandiseId: edge.node.merchandise?.id,
         title: title,
         handle: edge.node.merchandise?.product?.handle ?? "",
