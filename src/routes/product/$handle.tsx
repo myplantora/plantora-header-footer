@@ -73,7 +73,6 @@ function ProductPage() {
       <ProductRecommendations currentProductHandle={handle} />
       <MarqueeBanner />
       <Footer />
-
     </div>
   );
 }
