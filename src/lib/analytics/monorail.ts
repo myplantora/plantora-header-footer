@@ -60,23 +60,19 @@ export function sendMonorailEvent({ schema_id, payload }: MonorailEvent): void {
   try {
     void fetch(MONORAIL_ENDPOINT, {
       method: "POST",
-      // Simple content type => no CORS preflight, request leaves with the
-      // visitor's IP as the request origin.
       headers: {
         "content-type": "text/plain",
         "X-Monorail-Edge-Event-Created-At-Ms": String(createdAtMs),
       },
       body,
-      // Survives SPA route changes, tab close and bfcache unload.
       keepalive: true,
-      // No cookies needed; identity travels in the payload.
       credentials: "omit",
       mode: "cors",
     }).catch(() => {
-      /* analytics is best-effort */
+      // Best-effort; likely blocked by ad-blocker
     });
-  } catch {
-    /* analytics is best-effort */
+  } catch (e) {
+    // Silently fail if fetch throws (e.g. extension block)
   }
 }
 
