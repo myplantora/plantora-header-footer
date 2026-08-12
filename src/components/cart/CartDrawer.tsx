@@ -13,9 +13,8 @@ const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isOpen, closeCart, cart, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
+  const { isOpen, closeCart, cart, subtotal, lines, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
-  const lines = useCartStore(state => state.lines);
   
   const { trackInitiateCheckout } = useMetaTracking();
 
