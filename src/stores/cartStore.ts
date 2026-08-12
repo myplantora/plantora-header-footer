@@ -6,6 +6,7 @@ import { toast } from "sonner";
 export type CartLine = {
   id: string;
   quantity: number;
+  isCombo?: boolean;
   merchandiseId: string;
   title: string;
   handle: string;
@@ -170,6 +171,8 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
 
     if (isCombo) {
       console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Combo product. Target:", targetId, "Msg:", w.message);
+      // If Shopify returns quantity 0 for a suppressed combo, we must treat it as available locally
+      // by not filtering it out of the warnings that trigger the "Sold out" text in UI.
       return false;
     }
 
@@ -177,6 +180,8 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   });
 
   if (outOfStock.length) {
+    // Only show the toast if we actually have out-of-stock items that weren't suppressed.
+    // The warnings might also affect the quantity of existing items in the cart.
     toast.error("Some items are sold out", {
       description: outOfStock.map((w) => w.message).join(" "),
       position: "top-center",
@@ -199,20 +204,28 @@ function mapCart(cart: any) {
       code: String(d.code),
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
-    lines: (cart?.lines?.edges ?? []).map((edge: any) => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandiseId: edge.node.merchandise?.id,
-      title: edge.node.merchandise?.product?.title ?? "",
-      handle: edge.node.merchandise?.product?.handle ?? "",
-      variantTitle: edge.node.merchandise?.title ?? "",
-      imageUrl: edge.node.merchandise?.image?.url ?? null,
-      amount: Number(edge.node.merchandise?.price?.amount ?? 0),
-      compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
-        ? Number(edge.node.merchandise.compareAtPrice.amount)
-        : null,
-      currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
-    })) as CartLine[],
+    lines: (cart?.lines?.edges ?? []).map((edge: any) => {
+      const product = edge.node.merchandise?.product;
+      const isCombo = 
+        product?.productType?.toLowerCase() === "combo" || 
+        product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+
+      return {
+        id: edge.node.id,
+        quantity: edge.node.quantity,
+        isCombo,
+        merchandiseId: edge.node.merchandise?.id,
+        title: edge.node.merchandise?.product?.title ?? "",
+        handle: edge.node.merchandise?.product?.handle ?? "",
+        variantTitle: edge.node.merchandise?.title ?? "",
+        imageUrl: edge.node.merchandise?.image?.url ?? null,
+        amount: Number(edge.node.merchandise?.price?.amount ?? 0),
+        compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
+          ? Number(edge.node.merchandise.compareAtPrice.amount)
+          : null,
+        currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
+      };
+    }) as CartLine[],
   };
 }
 
