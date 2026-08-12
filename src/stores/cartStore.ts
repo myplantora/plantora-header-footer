@@ -365,10 +365,12 @@ export const useCartStore = create<CartState>()(
             result = await addLinesToCart(createdCartId);
           }
 
-          const lineAdded = (r: any) =>
-            (mapCart(r?.cart)?.lines ?? []).some(
+          const isLineActuallyAdded = (r: any) => {
+            const lines = mapCart(r?.cart)?.lines ?? [];
+            return lines.some(
               (line) => line.merchandiseId === variantGid && line.quantity > 0,
             );
+          };
 
           // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
           // it usually means a session-level inventory lock or a corrupted cart state.
@@ -377,19 +379,19 @@ export const useCartStore = create<CartState>()(
           const SETTLE_DELAY_MS = 1500;
           let retryCount = 0;
 
-          while (!lineAdded(result) && retryCount < MAX_OOS_RETRIES) {
+
+          while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
-            if (!hasOOSWarning && result?.cart) {
-               // If there's no OOS warning and we have a cart, but line wasn't added, 
-               // it might be a different issue, but we'll try recovery once.
+            console.warn(`[Cart] Line quantity is 0 or missing. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning, cartId: result?.cart?.id });
+            if (handleUserErrors(result?.userErrors)) {
+              console.warn("[Cart] Stale reference during retry, force resetting...");
             }
-            
-            console.warn(`[Cart] Line quantity is 0. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning });
-            
-            // Clear session FIRST
+
+            // Clear session and localStorage FIRST
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             if (typeof window !== "undefined") {
               localStorage.removeItem("plantora-cart");
+              localStorage.removeItem("cartId"); // Just in case another key was used
             }
             
             const freshCart = await createEmptyCart();
@@ -406,28 +408,30 @@ export const useCartStore = create<CartState>()(
             }
           }
 
-          if (!lineAdded(result)) {
+          if (!isLineActuallyAdded(result)) {
             // If it STILL fails after retries, it's a real inventory issue or permanent failure
             console.error("[Cart] Permanent failure: Product could not be added after recovery attempts.");
-            handleUserErrors(result?.userErrors);
             notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
             console.groupEnd();
             return false;
           }
 
           if (handleUserErrors(result?.userErrors)) {
-            console.error("[Cart] Aborting due to userErrors", result?.userErrors);
+            console.error("[Cart] Aborting due to unresolved userErrors", result?.userErrors);
             console.groupEnd();
             return false;
           }
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
+          
+          if (result?.warnings) {
+             notifyWarnings(result.warnings, result.cart?.lines?.edges ?? [], isLineActuallyAdded(result));
+          }
 
           const mapped = mapCart(result?.cart);
           console.log("[Cart] Final mapped state:", mapped);
           
           if (mapped) {
             set(mapped);
-            if (lineAdded(result)) {
+            if (isLineActuallyAdded(result)) {
               console.log("[Cart] Success: Line added with quantity > 0");
               console.groupEnd();
               return true;
