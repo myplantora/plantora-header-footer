@@ -19,22 +19,19 @@ export function CartDrawer() {
 
   useEffect(() => {
     if (isOpen) {
+      console.log("[CartDrawer] Opened. Lines length:", lines.length);
       trackCartViewed(useCartStore.getState().cart);
     }
-  }, [isOpen]);
+  }, [isOpen, lines.length]);
 
-  // Separate hydration logic to avoid infinite loops or stale renders
+  // Force a sync when opening to ensure we have the latest state
   useEffect(() => {
-    if (isOpen && lines.length === 0) {
-      const timer = setTimeout(() => {
-        if (useCartStore.getState().lines.length === 0) {
-          void hydrate();
-        }
-      }, 500);
-      return () => clearTimeout(timer);
+    if (isOpen) {
+      console.log("[CartDrawer] Triggering hydration on open...");
+      void hydrate();
     }
-    return undefined;
-  }, [isOpen, lines.length, hydrate]);
+  }, [isOpen, hydrate]);
+
 
   const handleCheckout = () => {
     if (checkoutUrl) {
