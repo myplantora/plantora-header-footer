@@ -60,10 +60,8 @@ export function ProductCard({
     setPending(true);
 
     try {
-      const ok = await addLineAndOpen(currentVariant.id, 1, {
-        availableForSale: currentVariant.available ?? false,
-        quantityAvailable: currentVariant.quantityAvailable ?? null,
-      });
+      const ok = await addLineAndOpen(currentVariant.id, 1);
+
       if (!ok) return;
     } catch {
       console.error("[Cart] Unexpected add-to-cart failure");
