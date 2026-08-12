@@ -152,13 +152,27 @@ export const useCartStore = create<CartState>((set, get) => ({
     if (!get().isOpen) set({ isLoading: true });
 
     try {
+      console.log(`[Add to Cart] Starting flow for variant: ${merchandiseId}`);
       // Step 1: Pre-fetch availability check
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
       
+      console.log(
+        `[Variant Check] ID: ${merchandiseId} | Available: ${variant?.availableForSale} | Qty: ${variant?.quantityAvailable ?? 'untracked'}`
+      );
+
       if (!variant || !variant.availableForSale) {
+        console.log(`[Add to Cart] Blocked — variant not available for sale: ${merchandiseId}`);
         toast.error("Out of Stock", {
           description: "This item is currently unavailable."
+        });
+        return false;
+      }
+
+      if (variant?.quantityAvailable !== null && variant?.quantityAvailable < quantity) {
+        console.log(`[Add to Cart] Blocked — insufficient stock. Requested: ${quantity} | Available: ${variant.quantityAvailable}`);
+        toast.error("Insufficient Stock", {
+          description: `Only ${variant.quantityAvailable} items available.`
         });
         return false;
       }
@@ -169,12 +183,31 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         // Ensure cart exists
         if (!currentCartId || currentCartId.includes('FAKE')) {
-          const createData = await storefrontFetch<any>(queries.CART_CREATE);
+          const createData = await storefrontFetch<any>(queries.CART_CREATE, {
+            input: {
+              lines: [{ merchandiseId, quantity }],
+              buyerIdentity: { countryCode: "US" }
+            }
+          });
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
-          currentCartId = createData.cartCreate.cart.id;
+          const cart = createData.cartCreate.cart;
+          currentCartId = cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
+          
+          console.log(
+            `[Cart Created] Cart ID: ${cart.id} | Checkout URL: ${cart.checkoutUrl} | Total: ${cart.cost.totalAmount.amount} ${cart.cost.totalAmount.currencyCode}`
+          );
+          console.log(`[Checkout URL] ${cart.checkoutUrl}`);
+
+          analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+          set({ 
+            ...deriveCartState(cart),
+            isLoading: pendingOperations > 1, 
+            isOpen: true 
+          });
+          return true;
         }
 
         // Add to cart
@@ -187,6 +220,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         if (userErrors?.length) {
           const errorMsg = userErrors[0].message.toLowerCase();
+          console.log(`[Cart Error] ${userErrors.map((e: any) => e.field + ': ' + e.message).join(' | ')}`);
           const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
           if (isStale && retryCount < 1) {
             get().clearCart();
@@ -196,6 +230,7 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
+          console.log(`[Cart Updated] Cart ID: ${cart.id} | Total lines: ${cart.lines?.edges?.length}`);
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
           // Force shallow clone for immediate reactivity
           set({ 
