@@ -22,7 +22,9 @@ const PRODUCT_CARD_FRAGMENT = `
           price { amount currencyCode }
           compareAtPrice { amount currencyCode }
           selectedOptions { name value }
+          quantityAvailable
           image { url altText width height }
+
         }
       }
     }

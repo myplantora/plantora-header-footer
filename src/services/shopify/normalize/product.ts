@@ -156,7 +156,8 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
       title: v.title,
       sku: v.sku ?? null,
       available: Boolean(v.availableForSale),
-      quantityAvailable: typeof v.quantityAvailable === "number" ? v.quantityAvailable : null,
+      quantityAvailable: typeof v.quantityAvailable === "number" ? v.quantityAvailable : (v.availableForSale ? 99 : 0),
+
       price: money(v.price) ?? price,
       compareAtPrice: money(v.compareAtPrice),
       selectedOptions: v.selectedOptions ?? [],
@@ -176,8 +177,9 @@ export function normalizeProductCard(node: any): PlantoraProductCard {
     discountPercent: discountPercent(price, compareAtPrice),
     availability: availabilityOf(
       Boolean(node?.availableForSale),
-      typeof firstVariant?.quantityAvailable === "number" ? firstVariant.quantityAvailable : null,
+      typeof firstVariant?.quantityAvailable === "number" ? firstVariant.quantityAvailable : (node?.availableForSale ? 99 : 0),
     ),
+
     badges: generateFeatureChips(node?.id ?? "", node?.productType, node?.tags ?? []),
     tagMedia: featureFlags.tagMedia
       ? readImage(map, media["tagMedia"]!.namespace, media["tagMedia"]!.key)
@@ -201,7 +203,8 @@ export function normalizeProduct(node: any): PlantoraProduct {
       title: v.title,
       sku: v.sku ?? null,
       available: Boolean(v.availableForSale),
-      quantityAvailable: typeof v.quantityAvailable === "number" ? v.quantityAvailable : null,
+      quantityAvailable: typeof v.quantityAvailable === "number" ? v.quantityAvailable : (v.availableForSale ? 99 : 0),
+
       price: money(v.price) ?? card.price,
       compareAtPrice: money(v.compareAtPrice),
       selectedOptions: v.selectedOptions ?? [],
