@@ -203,10 +203,17 @@ function mapCart(cart: any) {
       code: String(d.code),
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
-    lines: (cart?.lines?.edges ?? []).map((edge: any) => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandiseId: edge.node.merchandise?.id,
+    lines: (cart?.lines?.edges ?? []).map((edge: any) => {
+      const product = edge.node.merchandise?.product;
+      const isCombo = 
+        product?.productType?.toLowerCase() === "combo" || 
+        product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+
+      return {
+        id: edge.node.id,
+        quantity: edge.node.quantity,
+        isCombo,
+        merchandiseId: edge.node.merchandise?.id,
       title: edge.node.merchandise?.product?.title ?? "",
       handle: edge.node.merchandise?.product?.handle ?? "",
       variantTitle: edge.node.merchandise?.title ?? "",
