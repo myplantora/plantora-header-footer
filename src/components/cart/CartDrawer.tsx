@@ -33,6 +33,7 @@ export function CartDrawer() {
       }, 500);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [isOpen, lines.length, hydrate]);
 
   const handleCheckout = () => {
