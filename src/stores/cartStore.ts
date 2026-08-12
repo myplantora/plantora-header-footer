@@ -48,8 +48,6 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
-        
-        # quantityAvailable removed due to insufficient permissions
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
         product {
@@ -306,8 +304,7 @@ export const useCartStore = create<CartState>()(
           } else {
             const data = await storefrontApiRequest<any>(CART_CREATE, {
               input: {
-                lines: [{ merchandiseId, quantity }],
-                buyerIdentity: { countryCode: "IN" } // Defaulting to IN as per previous contexts
+                lines: [{ merchandiseId, quantity }]
               }
             });
             result = data?.data?.cartCreate;
@@ -317,10 +314,12 @@ export const useCartStore = create<CartState>()(
           notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
           
           const mapped = mapCart(result?.cart);
-          if (mapped) {
+          const addedLine = mapped?.lines.find((line) => line.merchandiseId === merchandiseId);
+          if (mapped && addedLine && addedLine.quantity > 0) {
             set(mapped);
             return true;
           }
+          if (mapped) set(mapped);
           return false;
         } catch (e) {
           toast.error("Something went wrong, please try again");
