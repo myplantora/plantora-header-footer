@@ -207,8 +207,8 @@ export function CartDrawer() {
         </div>
 
         {lines.length > 0 && (
-          <footer className="border-t border-border bg-white px-3 py-6 space-y-4">
-            <div className="flex items-center justify-between text-lg font-bold">
+          <footer className="border-t border-border bg-white px-3 py-4 space-y-3">
+            <div className="flex items-center justify-between text-base font-bold">
               <span>Subtotal</span>
               <span className="text-[#1D4D44]">
                 {subtotal ? formatMoney(subtotal.amount, subtotal.currency) : '$0.00'}
@@ -219,7 +219,7 @@ export function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={isLoading || !checkoutUrl}
-              className="w-full rounded-full bg-[#C3754C] py-4 text-sm font-bold text-white uppercase tracking-widest shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+              className="w-full rounded-full bg-[#C3754C] py-3 text-xs font-bold text-white uppercase tracking-widest shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? "PROCESSING..." : "SECURE CHECKOUT"}
             </button>
