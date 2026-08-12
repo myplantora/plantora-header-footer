@@ -345,17 +345,30 @@ export const useCartStore = create<CartState>()(
             result = await createCart();
           }
 
+          const lineAdded = (r: any) =>
+            (mapCart(r?.cart)?.lines ?? []).some(
+              (line) => line.merchandiseId === merchandiseId && line.quantity > 0
+            );
+
+          // Some carts get stuck in a bad state on Shopify's side: the mutation
+          // succeeds but the line comes back with quantity 0 (reported as
+          // MERCHANDISE_OUT_OF_STOCK). Retry once from a brand new cart before
+          // treating it as a genuine stock failure.
+          if (get().cartId && !lineAdded(result)) {
+            console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
+            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+            const retry = await createCart();
+            if (retry?.cart) result = retry;
+          }
+
           handleUserErrors(result?.userErrors);
           notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
-          
+
           const mapped = mapCart(result?.cart);
-          const addedLine = mapped?.lines.find((line) => line.merchandiseId === merchandiseId);
-          if (mapped && addedLine && addedLine.quantity > 0) {
-            set(mapped);
-            return true;
-          }
           if (mapped) set(mapped);
+          if (mapped && lineAdded(result)) return true;
           return false;
+
         } catch (e) {
           toast.error("Something went wrong, please try again");
           return false;
