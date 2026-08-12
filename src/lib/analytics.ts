@@ -4,6 +4,10 @@ import {
   getClientBrowserParameters,
   sendShopifyAnalytics,
 } from "@shopify/hydrogen-react";
+import type {
+  ShopifyAddToCartPayload,
+  ShopifyPageViewPayload,
+} from "@shopify/hydrogen-react";
 import { trackMetaEvent } from "@/lib/analytics/meta.events";
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
@@ -149,15 +153,16 @@ function getShopifyPayload(cart?: any) {
 
 export function trackShopifyPageView(pageType = "index", resourceId?: string) {
   if (typeof window === "undefined") return;
+  const payload = {
+    ...getShopifyPayload(),
+    pageType,
+    canonicalUrl: window.location.href,
+    ...(resourceId ? { resourceId } : {}),
+  } as ShopifyPageViewPayload;
   void sendShopifyAnalytics(
     {
       eventName: AnalyticsEventName.PAGE_VIEW,
-      payload: {
-        ...getShopifyPayload(),
-        pageType,
-        resourceId,
-        canonicalUrl: window.location.href,
-      },
+      payload,
     },
     globalConfig.analytics.shopDomain,
   ).catch((error) => console.warn("[Shopify Analytics] Page view failed", error));
@@ -165,10 +170,14 @@ export function trackShopifyPageView(pageType = "index", resourceId?: string) {
 
 function trackShopifyAddToCart(cart: any) {
   if (typeof window === "undefined" || !cart?.id) return;
+  const payload = {
+    ...getShopifyPayload(cart),
+    cartId: cart.id,
+  } as ShopifyAddToCartPayload;
   void sendShopifyAnalytics(
     {
       eventName: AnalyticsEventName.ADD_TO_CART,
-      payload: { ...getShopifyPayload(cart), cartId: cart.id },
+      payload,
     },
     globalConfig.analytics.shopDomain,
   ).catch((error) => console.warn("[Shopify Analytics] Add to cart failed", error));
