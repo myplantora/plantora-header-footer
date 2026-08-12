@@ -48,7 +48,7 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
-        inventoryPolicy
+        quantityAvailable
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
         product {
@@ -179,20 +179,16 @@ function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
   const realWarnings = warnings.filter((w) => {
     if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return true;
 
-    // Find the associated line to check handle and inventoryPolicy
+    // Find the associated line to check handle
     const targetId = w.target;
     const line = lines.find(l => 
       l.node.id === targetId || l.node.merchandise.id === targetId
     );
     
-    const merchandise = line?.node?.merchandise;
-    const handle = merchandise?.product?.handle || "";
-    const inventoryPolicy = merchandise?.inventoryPolicy;
+    const handle = line?.node?.merchandise?.product?.handle || "";
 
-    // Suppress if it's a combo OR if inventory policy explicitly allows overselling
-    const shouldSuppress = 
-      handle.toLowerCase().includes("combo") || 
-      inventoryPolicy === "CONTINUE";
+    // Suppress if handle contains "combo" — these are CONTINUE policy products
+    const shouldSuppress = handle.toLowerCase().includes("combo");
 
     if (shouldSuppress) {
       console.warn("[Cart] Suppressed warning", w);
