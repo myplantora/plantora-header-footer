@@ -48,7 +48,6 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
-        quantityAvailable
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
         product {
