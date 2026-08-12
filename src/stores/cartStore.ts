@@ -233,7 +233,7 @@ function mapCart(cart: any, warnings: any[] = []) {
 
       return {
         id: edge.node.id,
-        quantity: edge.node.quantity,
+        quantity: (quantity === 0 && isCombo && hasSuppressedWarning) ? 1 : quantity,
         isCombo,
         merchandiseId: edge.node.merchandise?.id,
         title: edge.node.merchandise?.product?.title ?? "",
