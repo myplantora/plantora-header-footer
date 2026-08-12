@@ -41,7 +41,10 @@ export function RecommendationCard({ product, priority = false }: Props) {
     if (!variantId || soldOut || pending) return;
     setPending(true);
     try {
-      const ok = await addLineAndOpen(variantId, 1);
+      const ok = await addLineAndOpen(variantId, 1, {
+        availableForSale: selectedVariant?.available,
+        quantityAvailable: selectedVariant?.quantityAvailable ?? null,
+      });
       if (ok) {
         if (typeof navigator !== "undefined" && "vibrate" in navigator) {
           navigator.vibrate(80);
@@ -202,7 +205,10 @@ export function RecommendationCard({ product, priority = false }: Props) {
                         })
                       );
                       if (matchingVariant) {
-                        useCartStore.getState().addLineAndOpen(matchingVariant.id, 1);
+                        useCartStore.getState().addLineAndOpen(matchingVariant.id, 1, {
+                          availableForSale: matchingVariant.available,
+                          quantityAvailable: matchingVariant.quantityAvailable,
+                        });
                       }
                     }}
                     style={{ touchAction: "manipulation" }}

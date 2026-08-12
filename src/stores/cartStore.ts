@@ -31,8 +31,20 @@ type CartState = {
   isDiscountLoading: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addLine: (merchandiseId: string, quantity?: number) => Promise<boolean>;
-  addLineAndOpen: (merchandiseId: string, quantity?: number) => Promise<boolean>;
+  handleAddToCart: (
+    variantGid: string,
+    options?: { quantity?: number; availableForSale?: boolean; quantityAvailable?: number | null },
+  ) => Promise<boolean>;
+  addLine: (
+    merchandiseId: string,
+    quantity?: number,
+    variant?: { availableForSale?: boolean; quantityAvailable?: number | null },
+  ) => Promise<boolean>;
+  addLineAndOpen: (
+    merchandiseId: string,
+    quantity?: number,
+    variant?: { availableForSale?: boolean; quantityAvailable?: number | null },
+  ) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   setDiscountCodes: (codes: string[]) => Promise<boolean>;
@@ -172,6 +184,25 @@ function handleUserErrors(errors: any[] | undefined) {
   return false;
 }
 
+function hasOutOfStockWarning(warnings: any[] | undefined): boolean {
+  return Boolean(warnings?.some((warning) => warning?.code === "MERCHANDISE_OUT_OF_STOCK"));
+}
+
+function readPersistedCartId(): string | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem("plantora-cart");
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as { state?: { cartId?: string | null } };
+    const cartId = parsed?.state?.cartId;
+    return typeof cartId === "string" && cartId.length > 0 ? cartId : null;
+  } catch {
+    return null;
+  }
+}
+
 
 function notifyWarnings(warnings: any[] | undefined, lines: any[], _added = true) {
   if (!warnings?.length) return;
@@ -255,6 +286,81 @@ export const useCartStore = create<CartState>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
 
+      handleAddToCart: async (variantGid, options) => {
+        const quantity = options?.quantity ?? 1;
+
+        if (!variantGid || quantity <= 0) return false;
+        if (options?.availableForSale === false || options?.quantityAvailable === 0) {
+          toast.error("Out of stock");
+          return false;
+        }
+
+        set({ isLoading: true });
+        try {
+          const createCart = async () => {
+            const data = await storefrontApiRequest<any>(CART_CREATE, {
+              input: { lines: [{ merchandiseId: variantGid, quantity }] },
+            });
+            return data?.data?.cartCreate;
+          };
+
+          const activeCartId = get().cartId ?? readPersistedCartId();
+          let result;
+
+          if (activeCartId) {
+            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
+              cartId: activeCartId,
+              lines: [{ merchandiseId: variantGid, quantity }],
+            });
+            result = data?.data?.cartLinesAdd;
+
+            if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
+              console.warn("[Cart] Stale cart detected, recreating", result?.userErrors);
+              set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+              result = await createCart();
+            }
+          } else {
+            result = await createCart();
+          }
+
+          const lineAdded = (r: any) =>
+            (mapCart(r?.cart)?.lines ?? []).some(
+              (line) => line.merchandiseId === variantGid && line.quantity > 0,
+            );
+
+          if (activeCartId && !lineAdded(result)) {
+            console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
+            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+            const retry = await createCart();
+            if (retry?.cart) result = retry;
+          }
+
+          if (hasOutOfStockWarning(result?.warnings)) {
+            toast.error("Out of stock", {
+              description: result?.warnings
+                ?.filter((w: any) => w?.code === "MERCHANDISE_OUT_OF_STOCK")
+                .map((w: any) => w?.message)
+                .filter(Boolean)
+                .join(" "),
+            });
+            return false;
+          }
+
+          if (handleUserErrors(result?.userErrors)) return false;
+          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
+
+          const mapped = mapCart(result?.cart);
+          if (mapped) set(mapped);
+          if (mapped && lineAdded(result)) return true;
+          return false;
+        } catch (e) {
+          toast.error("Something went wrong, please try again");
+          return false;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
       hydrate: async () => {
         const cartId = get().cartId;
         if (!cartId) return;
@@ -312,71 +418,16 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      addLine: async (merchandiseId, quantity = 1) => {
-        set({ isLoading: true });
-        try {
-          const createCart = async () => {
-            const data = await storefrontApiRequest<any>(CART_CREATE, {
-              input: { lines: [{ merchandiseId, quantity }] },
-            });
-            return data?.data?.cartCreate;
-          };
-
-          const cartId = get().cartId;
-          let result;
-
-          if (cartId) {
-            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
-              cartId,
-              lines: [{ merchandiseId, quantity }]
-            });
-            result = data?.data?.cartLinesAdd;
-
-            // Stale/expired cart (typical on Safari, Brave and mobile where the
-            // stored cart id outlives the Shopify cart): start a fresh cart.
-            if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
-              console.warn("[Cart] Stale cart detected, recreating", result?.userErrors);
-              set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-              result = await createCart();
-            }
-          } else {
-            result = await createCart();
-          }
-
-          const lineAdded = (r: any) =>
-            (mapCart(r?.cart)?.lines ?? []).some(
-              (line) => line.merchandiseId === merchandiseId && line.quantity > 0
-            );
-
-          // Some carts get stuck in a bad state on Shopify's side: the mutation
-          // succeeds but the line comes back with quantity 0 (reported as
-          // MERCHANDISE_OUT_OF_STOCK). Retry once from a brand new cart before
-          // treating it as a genuine stock failure.
-          if (get().cartId && !lineAdded(result)) {
-            console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
-            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-            const retry = await createCart();
-            if (retry?.cart) result = retry;
-          }
-
-          handleUserErrors(result?.userErrors);
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
-
-          const mapped = mapCart(result?.cart);
-          if (mapped) set(mapped);
-          if (mapped && lineAdded(result)) return true;
-          return false;
-
-        } catch (e) {
-          toast.error("Something went wrong, please try again");
-          return false;
-        } finally {
-          set({ isLoading: false });
-        }
+      addLine: async (merchandiseId, quantity = 1, variant) => {
+        return get().handleAddToCart(merchandiseId, {
+          quantity,
+          availableForSale: variant?.availableForSale,
+          quantityAvailable: variant?.quantityAvailable,
+        });
       },
 
-      addLineAndOpen: async (merchandiseId, quantity = 1) => {
-        const success = await get().addLine(merchandiseId, quantity);
+      addLineAndOpen: async (merchandiseId, quantity = 1, variant) => {
+        const success = await get().addLine(merchandiseId, quantity, variant);
         if (success) {
           set({ isOpen: true });
         }

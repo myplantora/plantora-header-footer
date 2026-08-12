@@ -180,7 +180,10 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     setAddError(null);
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
-      const ok = await addLineAndOpen(variantId, quantity);
+      const ok = await addLineAndOpen(variantId, quantity, {
+        availableForSale: variant.available,
+        quantityAvailable: variant.quantityAvailable,
+      });
       if (!ok) {
         setAddError("Could not add to basket. Please try again.");
         return;

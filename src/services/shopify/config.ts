@@ -7,7 +7,21 @@ export const featureFlags = globalconf.features;
 export const metafieldConfig = globalconf.metafields;
 export const metaobjectConfig = globalconf.metaobjects;
 
-export const SHOPIFY_STOREFRONT_URL = `https://${shopifyConfig.storeDomain}/api/${shopifyConfig.apiVersion}/graphql.json`;
+function readConfigValue(source: Record<string, unknown>, keys: string[]): string {
+  for (const key of keys) {
+    const value = source[key];
+    if (typeof value === "string" && value.length > 0) return value;
+  }
+  return "";
+}
+
+export const storefrontConfig = {
+  shopDomain: readConfigValue(shopifyConfig as Record<string, unknown>, ["shopDomain", "storeDomain"]),
+  storefrontAccessToken: readConfigValue(shopifyConfig as Record<string, unknown>, ["storefrontAccessToken", "storefrontToken"]),
+  apiVersion: readConfigValue(shopifyConfig as Record<string, unknown>, ["apiVersion"]),
+};
+
+export const SHOPIFY_STOREFRONT_URL = `https://${storefrontConfig.shopDomain}/api/${storefrontConfig.apiVersion}/graphql.json`;
 
 /** Every metafield identifier we ask Shopify for, derived from globalconf. */
 export function allMetafieldIdentifiers(): { namespace: string; key: string }[] {

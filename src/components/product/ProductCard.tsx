@@ -61,7 +61,10 @@ export function ProductCard({
     setPending(true);
 
     try {
-      const ok = await addLineAndOpen(currentVariant.id, 1);
+      const ok = await addLineAndOpen(currentVariant.id, 1, {
+        availableForSale: currentVariant.available,
+        quantityAvailable: currentVariant.quantityAvailable,
+      });
       if (!ok) toast.error("Could not add to basket");
     } catch {
       toast.error("Could not add to basket");

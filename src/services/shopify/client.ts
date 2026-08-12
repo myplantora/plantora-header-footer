@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { SHOPIFY_STOREFRONT_URL, shopifyConfig } from "./config";
+import { SHOPIFY_STOREFRONT_URL, storefrontConfig } from "./config";
 
 const ADMIN_ONLY_STOREFRONT_FIELDS = /\binventoryPolicy\b/;
 
@@ -16,12 +16,24 @@ export async function storefrontApiRequest<T = any>(
   query: string,
   variables: Record<string, unknown> = {},
 ): Promise<T | undefined> {
+  return storefrontFetch<T>(query, variables);
+}
+
+export async function storefrontFetch<T = any>(
+  query: string,
+  variables: Record<string, unknown> = {},
+): Promise<T | undefined> {
   const storefrontQuery = sanitizeStorefrontQuery(query);
+
+  if (!storefrontConfig.shopDomain || !storefrontConfig.storefrontAccessToken || !storefrontConfig.apiVersion) {
+    throw new Error("Missing Shopify storefront config (shopDomain, storefrontAccessToken, or apiVersion)");
+  }
+
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": shopifyConfig.storefrontToken,
+      "X-Shopify-Storefront-Access-Token": storefrontConfig.storefrontAccessToken,
     },
     body: JSON.stringify({ query: storefrontQuery, variables }),
   });

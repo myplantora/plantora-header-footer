@@ -49,11 +49,16 @@ function baseCartPayload(input: CartEventInput, eventName: string): Record<strin
   const clientId = getClientId();
   const sessionToken = getSessionToken();
   const eventCreatedAtMs = Date.now();
+  const optionalHydrogenSubchannelId =
+    (analyticsConfig as Record<string, unknown>)["hydrogenSubchannelId"];
 
   return {
     event_name: eventName,
     source: analyticsConfig.salesChannel ?? "headless",
-    hydrogenSubchannelId: analyticsConfig.storefrontId ?? "0",
+    hydrogenSubchannelId:
+      (typeof optionalHydrogenSubchannelId === "string" && optionalHydrogenSubchannelId) ||
+      analyticsConfig.storefrontId ||
+      "0",
     shop_id: numericShopId(),
     currency: analyticsConfig.currency,
     // Identity — browser storage only, never server-generated.
@@ -78,16 +83,28 @@ function baseCartPayload(input: CartEventInput, eventName: string): Record<strin
 }
 
 /** Fires after a successful Storefront API cart mutation. */
-export function sendCartUpdated(input: CartEventInput): void {
+export function fireCartUpdated(input: CartEventInput): void {
   if (typeof window === "undefined") return;
+  if (input.lineItemsCount <= 0) return;
+
+  const cartToken = extractCartToken(input.cartId ?? "");
+  if (!cartToken) return;
+
+  const eventCreatedAtMs = Date.now();
+
   sendMonorailEvent({
     schema_id: CART_SCHEMA_ID,
     payload: {
       ...baseCartPayload(input, "cart_updated"),
+      cart_token: cartToken,
+      event_created_at_ms: eventCreatedAtMs,
+      event_time: eventCreatedAtMs,
       total_price: input.totalPrice ?? "0.00",
     },
   });
 }
+
+export const sendCartUpdated = fireCartUpdated;
 
 /** Fires when the cart drawer opens (or the /cart page mounts) with items. */
 export function sendCartViewed(input: CartEventInput): void {
