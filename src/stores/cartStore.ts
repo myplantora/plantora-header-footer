@@ -1,5 +1,4 @@
 import { create } from "zustand";
-if (typeof window !== 'undefined') { (window as any).useCartStore = () => (useCartStore as any).getState(); }
 import { storefrontFetch } from "@/lib/shopify";
 import * as queries from "@/lib/cartQueries";
 import * as analytics from "@/lib/analytics";
@@ -188,11 +187,6 @@ export const useCartStore = create<CartState>((set, get) => ({
           
           // Open drawer immediately
           set({ isOpen: true });
-
-          // Perform a background sync just in case
-          storefrontFetch<any>(queries.GET_CART, { cartId: currentCartId }).then(data => {
-            if (data.cart) set({ cart: data.cart });
-          });
 
           return true;
         }
