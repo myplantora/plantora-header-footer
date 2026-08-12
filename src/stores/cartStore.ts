@@ -361,12 +361,16 @@ export const useCartStore = create<CartState>()(
             const freshCartId = freshCart?.cart?.id;
             
             if (freshCartId) {
+              // Wait for Shopify's cache to settle if needed
+              await new Promise(r => setTimeout(r, 1500));
+              
               result = await addLinesToCart(freshCartId);
               if (!lineAdded(result)) {
                 // If it STILL fails on a brand new cart, it's a real inventory issue from Shopify
                 console.error("[Cart] Permanent failure: Product is out of stock in Shopify backend.");
                 handleUserErrors(result?.userErrors);
                 notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
+                console.groupEnd();
                 return false;
               }
             }

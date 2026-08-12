@@ -25,11 +25,18 @@ export function useHeartbeat() {
     if (typeof window === "undefined" || typeof document === "undefined") return;
 
     let timer: ReturnType<typeof setInterval> | undefined;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 3;
 
     const tick = () => {
+      if (attempts >= MAX_ATTEMPTS) {
+        stop();
+        console.warn("[Analytics] Heartbeat max attempts reached (likely blocked), stopping.");
+        return;
+      }
+      
       try {
-        // Fresh URL + event_created_at_ms on every tick; identity (client_id /
-        // session_token) is read from storage inside the transport layer.
+        attempts++;
         void sendShopifyPageView({
           ...getLastPageViewExtras(),
           url: window.location.href,
@@ -48,12 +55,13 @@ export function useHeartbeat() {
 
     const start = () => {
       stop();
+      attempts = 0; // Reset attempts when starting/resuming
       timer = setInterval(tick, HEARTBEAT_INTERVAL_MS);
     };
 
     const onVisibilityChange = () => {
       if (document.visibilityState === "hidden") stop();
-      else start(); // resume with a fresh 15s clock
+      else start();
     };
 
     if (document.visibilityState === "visible") start();
