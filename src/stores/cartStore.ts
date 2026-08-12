@@ -176,6 +176,18 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
       return false;
     }
 
+    // EXTRA FIX: If we have ANY quantity in the local line and Shopify is trying to zero it out via a warning,
+    // and it's a combo, we force success.
+    if (!isCombo && cart?.lines?.edges) {
+      const line = cart.lines.edges.find((e: any) => e.node.id === targetId);
+      if (line?.node.quantity === 0) {
+        const product = line?.node.merchandise?.product;
+        const isActuallyCombo = product?.productType?.toLowerCase() === "combo" || 
+                               product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+        if (isActuallyCombo) return false;
+      }
+    }
+
     return true;
   });
 
