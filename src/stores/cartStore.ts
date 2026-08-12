@@ -259,52 +259,91 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   updateLine: async (lineId: string, quantity: number) => {
+    const { cart } = get();
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!cartId) return;
-    pendingOperations++;
-    // background update
-    if (!get().isOpen) set({ isLoading: true });
+    if (!cartId || !cart) return;
+
+    if (quantity < 1) {
+      return get().removeLine(lineId);
+    }
+
+    // Save previous state for rollback
+    const previousState = deriveCartState(cart);
+
+    // Optimistic Update
+    const optimisticLines = cart.lines.edges.map((edge: any) => {
+      if (edge.node.id === lineId) {
+        return {
+          ...edge,
+          node: { ...edge.node, quantity }
+        };
+      }
+      return edge;
+    });
+
+    // Simple optimistic calculation for subtotal and total quantity
+    const newTotalQuantity = optimisticLines.reduce((acc: number, edge: any) => acc + edge.node.quantity, 0);
+    const optimisticCart = {
+      ...cart,
+      lines: { ...cart.lines, edges: optimisticLines },
+      totalQuantity: newTotalQuantity
+    };
+
+    set(deriveCartState(optimisticCart));
+
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_UPDATE, {
         cartId,
         lines: [{ id: lineId, quantity }]
       });
-      const { cart, userErrors } = data.cartLinesUpdate || {};
+      const { cart: updatedCart, userErrors } = data.cartLinesUpdate || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
-      if (cart) {
-        set({ ...deriveCartState(cart) });
-        analytics.trackCartUpdated(cart, 'update_cart');
+      if (updatedCart) {
+        set(deriveCartState(updatedCart));
+        analytics.trackCartUpdated(updatedCart, 'update_cart');
       }
     } catch (e: any) {
+      console.error("[CartStore] Update rollback:", e);
+      set(previousState);
       toast.error(e.message || "Failed to update quantity");
-    } finally {
-      pendingOperations--;
-      if (pendingOperations <= 0) set({ isLoading: false });
     }
   },
 
   removeLine: async (lineId: string) => {
+    const { cart } = get();
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!cartId) return;
-    pendingOperations++;
-    // background update
-    if (!get().isOpen) set({ isLoading: true });
+    if (!cartId || !cart) return;
+
+    // Save previous state for rollback
+    const previousState = deriveCartState(cart);
+
+    // Optimistic Update
+    const optimisticLines = cart.lines.edges.filter((edge: any) => edge.node.id !== lineId);
+    const newTotalQuantity = optimisticLines.reduce((acc: number, edge: any) => acc + edge.node.quantity, 0);
+    
+    const optimisticCart = {
+      ...cart,
+      lines: { ...cart.lines, edges: optimisticLines },
+      totalQuantity: newTotalQuantity
+    };
+
+    set(deriveCartState(optimisticCart));
+
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_REMOVE, {
         cartId,
         lineIds: [lineId]
       });
-      const { cart, userErrors } = data.cartLinesRemove || {};
+      const { cart: updatedCart, userErrors } = data.cartLinesRemove || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
-      if (cart) {
-        set({ ...deriveCartState(cart) });
-        analytics.trackCartUpdated(cart, 'remove_from_cart');
+      if (updatedCart) {
+        set(deriveCartState(updatedCart));
+        analytics.trackCartUpdated(updatedCart, 'remove_from_cart');
       }
     } catch (e: any) {
+      console.error("[CartStore] Remove rollback:", e);
+      set(previousState);
       toast.error(e.message || "Failed to remove item");
-    } finally {
-      pendingOperations--;
-      if (pendingOperations <= 0) set({ isLoading: false });
     }
   }
 }));
