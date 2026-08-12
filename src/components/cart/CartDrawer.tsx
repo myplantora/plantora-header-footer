@@ -161,8 +161,18 @@ export function CartDrawer() {
                             type="button"
                             aria-label="Decrease quantity"
                             disabled={isLoading}
-                            onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity - 1); }}
-                            className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                            onClick={() => { 
+                              if (line.quantity <= 1 && line.isCombo) {
+                                // For combos at 1, don't let it go to 0 via minus
+                                return;
+                              }
+                              triggerHaptic('light'); 
+                              updateLine(line.id, line.quantity - 1); 
+                            }}
+                            className={cn(
+                              "grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                              line.quantity <= 1 && line.isCombo && "opacity-20 cursor-not-allowed"
+                            )}
                           >
                             <Minus className="size-3" />
                           </button>
