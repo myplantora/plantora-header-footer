@@ -170,6 +170,8 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
 
     if (isCombo) {
       console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Combo product. Target:", targetId, "Msg:", w.message);
+      // If Shopify returns quantity 0 for a suppressed combo, we must treat it as available locally
+      // by not filtering it out of the warnings that trigger the "Sold out" text in UI.
       return false;
     }
 
