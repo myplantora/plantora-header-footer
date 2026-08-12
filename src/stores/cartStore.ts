@@ -87,7 +87,11 @@ export const useCartStore = create<CartState>((set, get) => ({
   // Computed values
   get cartId() { return get().cart?.id || null; },
   get lines() { 
-    return mapCartLines(get().cart); 
+    const cart = get().cart;
+    console.log("[CartStore] Getter 'lines' called. Raw cart lines:", cart?.lines?.edges?.length);
+    const mapped = mapCartLines(cart);
+    console.log("[CartStore] Mapped lines length:", mapped.length);
+    return mapped;
   },
 
 
@@ -204,11 +208,12 @@ export const useCartStore = create<CartState>((set, get) => ({
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
 
           // Force local state update IMMEDIATELY
-          set((state) => ({ 
+          console.log("[CartStore] Setting cart state after add:", cart.id, "Lines count:", cart.lines?.edges?.length);
+          set({ 
             cart, 
             isLoading: false,
             isOpen: true 
-          }));
+          });
 
 
           return true;

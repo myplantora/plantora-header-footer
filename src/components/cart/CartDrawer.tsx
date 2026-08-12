@@ -13,8 +13,11 @@ const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
+  const { isOpen, closeCart, cart, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
+  const lines = useCartStore(state => state.lines);
+  
+  console.log("[CartDrawer] Rendering. isOpen:", isOpen, "lines count:", lines.length);
   const { trackInitiateCheckout } = useMetaTracking();
 
   useEffect(() => {
