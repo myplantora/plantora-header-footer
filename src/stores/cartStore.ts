@@ -6,15 +6,38 @@ import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = 'plantora_cart_id';
 
+export type CartLine = {
+  id: string;
+  quantity: number;
+  merchandiseId: string;
+  title: string;
+  handle: string;
+  variantTitle: string;
+  imageUrl: string | null;
+  amount: number;
+  compareAtAmount: number | null;
+  currency: string;
+  productType: string;
+};
+
 interface CartState {
   cart: any | null;
   isOpen: boolean;
   isLoading: boolean;
+  
+  // Getters for components
+  cartId: string | null;
+  lines: CartLine[];
+  totalQuantity: number;
+  subtotal: { amount: number; currency: string } | null;
+  checkoutUrl: string | null;
+
   initCart: () => Promise<void>;
+  hydrate: () => Promise<void>;
   addToCart: (merchandiseId: string, quantity: number) => Promise<boolean>;
-  updateCartLine: (lineId: string, quantity: number) => Promise<void>;
-  removeCartLine: (lineId: string) => Promise<void>;
-  getCart: () => any | null;
+  addLineAndOpen: (merchandiseId: string, quantity: number) => Promise<boolean>;
+  updateLine: (lineId: string, quantity: number) => Promise<void>;
+  removeLine: (lineId: string) => Promise<void>;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -22,20 +45,48 @@ interface CartState {
 
 const STALE_ERRORS = ['cart not found', 'invalid cart', 'variable $cartid', 'does not exist', 'expired'];
 
+function mapCartLines(cart: any): CartLine[] {
+  return (cart?.lines?.edges ?? []).map((edge: any) => ({
+    id: edge.node.id,
+    quantity: edge.node.quantity,
+    merchandiseId: edge.node.merchandise.id,
+    title: edge.node.merchandise.product.title,
+    handle: edge.node.merchandise.product.handle,
+    variantTitle: edge.node.merchandise.title,
+    imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
+    amount: Number(edge.node.merchandise.price.amount),
+    compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
+      ? Number(edge.node.merchandise.compareAtPrice.amount)
+      : null,
+    currency: edge.node.merchandise.price.currencyCode,
+    productType: edge.node.merchandise.product.productType,
+  }));
+}
+
 export const useCartStore = create<CartState>((set, get) => ({
   cart: null,
   isOpen: false,
   isLoading: false,
 
+  // Computed values
+  get cartId() { return get().cart?.id || null; },
+  get lines() { return mapCartLines(get().cart); },
+  get totalQuantity() { return get().cart?.totalQuantity || 0; },
+  get subtotal() { 
+    const amount = get().cart?.cost?.subtotalAmount;
+    return amount ? { amount: Number(amount.amount), currency: amount.currencyCode } : null;
+  },
+  get checkoutUrl() { return get().cart?.checkoutUrl || null; },
+
   openCart: () => set({ isOpen: true }),
   closeCart: () => set({ isOpen: false }),
-
-  getCart: () => get().cart,
 
   clearCart: () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     set({ cart: null });
   },
+
+  hydrate: async () => get().initCart(),
 
   initCart: async () => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -51,6 +102,12 @@ export const useCartStore = create<CartState>((set, get) => ({
     } catch (e) {
       get().clearCart();
     }
+  },
+
+  addLineAndOpen: async (merchandiseId: string, quantity: number) => {
+    const ok = await get().addToCart(merchandiseId, quantity);
+    if (ok) set({ isOpen: true });
+    return ok;
   },
 
   addToCart: async (merchandiseId: string, quantity: number) => {
@@ -108,7 +165,7 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
-          set({ cart, isOpen: true });
+          set({ cart });
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
           return true;
         }
@@ -126,7 +183,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  updateCartLine: async (lineId: string, quantity: number) => {
+  updateLine: async (lineId: string, quantity: number) => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
 
@@ -149,7 +206,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  removeCartLine: async (lineId: string) => {
+  removeLine: async (lineId: string) => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
 
