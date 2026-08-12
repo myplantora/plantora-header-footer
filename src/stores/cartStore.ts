@@ -194,8 +194,6 @@ export const useCartStore = create<CartState>((set, get) => ({
 
           // Force local state update IMMEDIATELY
           set({ cart });
-          console.log("[CartStore] addToCart: cart.lines.edges.length:", cart?.lines?.edges?.length);
-          console.log("[CartStore] addToCart: raw cart data:", JSON.stringify(cart));
           
           // Open drawer immediately
           set({ isOpen: true });
