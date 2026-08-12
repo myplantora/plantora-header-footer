@@ -313,22 +313,32 @@ export const useCartStore = create<CartState>()(
       addLine: async (merchandiseId, quantity = 1) => {
         set({ isLoading: true });
         try {
+          const createCart = async () => {
+            const data = await storefrontApiRequest<any>(CART_CREATE, {
+              input: { lines: [{ merchandiseId, quantity }] },
+            });
+            return data?.data?.cartCreate;
+          };
+
           const cartId = get().cartId;
           let result;
-          
+
           if (cartId) {
             const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
               cartId,
               lines: [{ merchandiseId, quantity }]
             });
             result = data?.data?.cartLinesAdd;
+
+            // Stale/expired cart (typical on Safari, Brave and mobile where the
+            // stored cart id outlives the Shopify cart): start a fresh cart.
+            if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
+              console.warn("[Cart] Stale cart detected, recreating", result?.userErrors);
+              set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+              result = await createCart();
+            }
           } else {
-            const data = await storefrontApiRequest<any>(CART_CREATE, {
-              input: {
-                lines: [{ merchandiseId, quantity }]
-              }
-            });
-            result = data?.data?.cartCreate;
+            result = await createCart();
           }
 
           handleUserErrors(result?.userErrors);
@@ -370,6 +380,12 @@ export const useCartStore = create<CartState>()(
             lines: [{ id: lineId, quantity }]
           });
           const result = data?.data?.cartLinesUpdate;
+          if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
+            console.warn("[Cart] Stale line on update, resyncing", result?.userErrors);
+            set({ isLoading: false });
+            await get().hydrate();
+            return;
+          }
           handleUserErrors(result?.userErrors);
           notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
           
@@ -392,6 +408,12 @@ export const useCartStore = create<CartState>()(
             lineIds: [lineId]
           });
           const result = data?.data?.cartLinesRemove;
+          if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
+            console.warn("[Cart] Stale line on remove, resyncing", result?.userErrors);
+            set({ isLoading: false });
+            await get().hydrate();
+            return;
+          }
           handleUserErrors(result?.userErrors);
           
           const mapped = mapCart(result?.cart);
@@ -402,6 +424,7 @@ export const useCartStore = create<CartState>()(
           set({ isLoading: false });
         }
       },
+
     }),
     {
       name: "plantora-cart",
