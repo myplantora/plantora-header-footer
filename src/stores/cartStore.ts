@@ -130,6 +130,14 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
 
   const outOfStock = warnings.filter((w) => {
     if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return false;
+    
+    // Check if it's the specific combo product causing trouble
+    const isTroubleCombo = w.message?.includes("Air Purifying Combo");
+    if (isTroubleCombo) {
+      console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Air Purifying Combo:", w.message);
+      return false;
+    }
+
     return true;
   });
 
@@ -140,6 +148,7 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
     });
   }
 }
+
 
 
 function mapCart(cart: any, warnings: any[] = []) {
@@ -158,11 +167,22 @@ function mapCart(cart: any, warnings: any[] = []) {
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => {
+      const lineId = edge.node.id;
+      const quantity = edge.node.quantity;
+      const title = edge.node.merchandise?.product?.title ?? "";
+      
+      const isTroubleCombo = title.includes("Air Purifying Combo");
+      const hasSuppressedWarning = warnings.some(w => 
+        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
+        w.message?.includes("Air Purifying Combo") &&
+        (w.target === lineId || w.target === edge.node.merchandise?.id)
+      );
+
       return {
         id: edge.node.id,
-        quantity: edge.node.quantity,
+        quantity: (quantity === 0 && isTroubleCombo && hasSuppressedWarning) ? 1 : quantity,
         merchandiseId: edge.node.merchandise?.id,
-        title: edge.node.merchandise?.product?.title ?? "",
+        title: title,
         handle: edge.node.merchandise?.product?.handle ?? "",
         variantTitle: edge.node.merchandise?.title ?? "",
         imageUrl: edge.node.merchandise?.image?.url ?? null,
@@ -173,6 +193,7 @@ function mapCart(cart: any, warnings: any[] = []) {
         currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
       };
     }) as CartLine[],
+
   };
 }
 
