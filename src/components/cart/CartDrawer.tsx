@@ -76,7 +76,7 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <CartRewards />
           
-          {lines.length === 0 ? (
+          {(!lines || lines.length === 0) ? (
             <div className="flex flex-col items-center py-12 text-center">
               <div className="mb-6 grid size-20 place-items-center rounded-full bg-[#F1F8EE]">
                 <ShoppingBag className="size-10 text-[#74A84A]" />
