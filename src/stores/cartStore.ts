@@ -33,17 +33,17 @@ type CartState = {
   closeCart: () => void;
   handleAddToCart: (
     variantGid: string,
-    options?: { quantity?: number; availableForSale?: boolean; quantityAvailable?: number | null | undefined },
+    options?: { quantity?: number; availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   addLine: (
     merchandiseId: string,
     quantity?: number,
-    variant?: { availableForSale?: boolean; quantityAvailable?: number | null | undefined },
+    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   addLineAndOpen: (
     merchandiseId: string,
     quantity?: number,
-    variant?: { availableForSale?: boolean; quantityAvailable?: number | null | undefined },
+    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
