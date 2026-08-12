@@ -141,19 +141,12 @@ export function CartDrawer() {
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
 
-                    {line.quantity === 0 && !line.isCombo ? (
+                    {line.quantity === 0 ? (
                       <p className="text-xs font-medium text-[#C3754C]">
                         Sold out &mdash; unavailable for checkout
                       </p>
                     ) : null}
 
-                    {line.quantity === 0 && line.isCombo ? (
-                      <div className="flex flex-col gap-1">
-                        <p className="text-[10px] leading-tight text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
-                          Note: This combo is available, but individual stock varies. You can still checkout.
-                        </p>
-                      </div>
-                    ) : null}
 
                     <div className="flex items-end justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -163,20 +156,14 @@ export function CartDrawer() {
                             aria-label="Decrease quantity"
                             disabled={isLoading}
                             onClick={() => { 
-                              if (line.quantity <= 1 && line.isCombo) {
-                                // For combos at 1, don't let it go to 0 via minus
-                                return;
-                              }
                               triggerHaptic('light'); 
                               updateLine(line.id, line.quantity - 1); 
                             }}
-                            className={cn(
-                              "grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                              line.quantity <= 1 && line.isCombo && "opacity-20 cursor-not-allowed"
-                            )}
+                            className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                           >
                             <Minus className="size-3" />
                           </button>
+
                           <span className="min-w-[1.5rem] text-center text-sm text-primary">
                             {line.quantity}
                           </span>

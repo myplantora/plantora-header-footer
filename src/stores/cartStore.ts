@@ -6,7 +6,6 @@ import { toast } from "sonner";
 export type CartLine = {
   id: string;
   quantity: number;
-  isCombo?: boolean;
   merchandiseId: string;
   title: string;
   handle: string;
@@ -16,6 +15,7 @@ export type CartLine = {
   compareAtAmount: number | null;
   currency: string;
 };
+
 
 export type CartDiscountCode = { code: string; applicable: boolean };
 
@@ -130,76 +130,17 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
 
   const outOfStock = warnings.filter((w) => {
     if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return false;
-
-    // Check if the warning targets a specific line/merchandise in the cart
-    const targetId = w.target;
-    let isCombo = false;
-
-    // First check: Find product by comparing targetId to line node ID or merchandise ID
-    if (targetId && cart?.lines?.edges) {
-      const line = cart.lines.edges.find((e: any) => 
-        e.node.id === targetId || 
-        e.node.merchandise?.id === targetId
-      );
-      const product = line?.node.merchandise?.product;
-      if (product) {
-        isCombo = 
-          product.productType?.toLowerCase() === "combo" || 
-          product.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-      }
-    }
-
-    // Second check: If not found, check ALL lines in the cart for any combo product
-    // This handles cases where Shopify doesn't provide a precise targetId or targetId is ambiguous
-    if (!isCombo && cart?.lines?.edges) {
-      const hasAnyCombo = cart.lines.edges.some((e: any) => {
-        const product = e.node.merchandise?.product;
-        return product && (
-          product.productType?.toLowerCase() === "combo" || 
-          product.tags?.some((t: string) => t.toLowerCase() === "combo-product")
-        );
-      });
-      if (hasAnyCombo) {
-        isCombo = true;
-      }
-    }
-
-    // Fallback: Check message if target lookup failed or to be safe
-    if (!isCombo && w.message?.toLowerCase().includes("combo")) {
-      isCombo = true;
-    }
-
-    if (isCombo) {
-      console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Combo product. Target:", targetId, "Msg:", w.message);
-      // If Shopify returns quantity 0 for a suppressed combo, we must treat it as available locally
-      // by not filtering it out of the warnings that trigger the "Sold out" text in UI.
-      return false;
-    }
-
-    // EXTRA FIX: If we have ANY quantity in the local line and Shopify is trying to zero it out via a warning,
-    // and it's a combo, we force success.
-    if (!isCombo && cart?.lines?.edges) {
-      const line = cart.lines.edges.find((e: any) => e.node.id === targetId);
-      if (line?.node.quantity === 0) {
-        const product = line?.node.merchandise?.product;
-        const isActuallyCombo = product?.productType?.toLowerCase() === "combo" || 
-                               product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-        if (isActuallyCombo) return false;
-      }
-    }
-
     return true;
   });
 
   if (outOfStock.length) {
-    // Only show the toast if we actually have out-of-stock items that weren't suppressed.
-    // The warnings might also affect the quantity of existing items in the cart.
     toast.error("Some items are sold out", {
       description: outOfStock.map((w) => w.message).join(" "),
       position: "top-center",
     });
   }
 }
+
 
 function mapCart(cart: any, warnings: any[] = []) {
   return {
@@ -217,24 +158,9 @@ function mapCart(cart: any, warnings: any[] = []) {
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => {
-      const lineId = edge.node.id;
-      const quantity = edge.node.quantity;
-      
-      // If quantity is 0, check if there's a suppressed warning for this line
-      const hasSuppressedWarning = warnings.some(w => 
-        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
-        (w.target === lineId || w.target === edge.node.merchandise?.id)
-      );
-
-      const product = edge.node.merchandise?.product;
-      const isCombo = 
-        product?.productType?.toLowerCase() === "combo" || 
-        product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-
       return {
         id: edge.node.id,
-        quantity: (quantity === 0 && isCombo && hasSuppressedWarning) ? 1 : quantity,
-        isCombo,
+        quantity: edge.node.quantity,
         merchandiseId: edge.node.merchandise?.id,
         title: edge.node.merchandise?.product?.title ?? "",
         handle: edge.node.merchandise?.product?.handle ?? "",
@@ -350,14 +276,12 @@ export const useCartStore = create<CartState>()(
         if (!cartId) return;
 
         const line = get().lines.find(l => l.id === lineId);
-        if (quantity <= 0 && !line?.isCombo) {
+        if (quantity <= 0) {
           return get().removeLine(lineId);
         }
         
-        // If it is a combo and quantity is about to become 0, we can either:
-        // 1. Keep it at 1 (prevent decrease)
-        // 2. Allow 0 but ensure it's not removed
-        const finalQuantity = (line?.isCombo && quantity <= 0) ? 1 : quantity;
+        const finalQuantity = quantity;
+
 
         set({ isLoading: true });
         try {
