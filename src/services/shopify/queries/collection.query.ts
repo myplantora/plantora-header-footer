@@ -1,5 +1,5 @@
 import globalConfig from "../../../../config/globalconf.json";
-const { metafieldConfig } = globalConfig.shopify;
+const metafieldConfig = globalConfig.metafields;
 
 const metafieldIdentifiersLiteral = () => {
   const media = metafieldConfig.media as Record<string, { namespace: string; key: string }>;

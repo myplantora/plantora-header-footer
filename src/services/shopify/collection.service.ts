@@ -1,7 +1,7 @@
 import { storefrontFetch } from "../../lib/shopify";
 import globalConfig from "../../../config/globalconf.json";
 
-const { paginationConfig } = globalConfig.shopify;
+const paginationConfig = globalConfig.pagination;
 import { normalizeCollection } from "./normalize/collection";
 import { normalizeProductCard } from "./normalize/product";
 import {

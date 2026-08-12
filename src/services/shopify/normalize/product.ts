@@ -1,5 +1,6 @@
 import globalConfig from "../../../../config/globalconf.json";
-const { featureFlags, metafieldConfig } = globalConfig.shopify;
+const featureFlags = globalConfig.features;
+const metafieldConfig = globalConfig.metafields;
 import type {
   PlantoraAvailability,
   PlantoraBadge,

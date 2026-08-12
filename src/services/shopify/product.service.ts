@@ -1,7 +1,7 @@
 import { storefrontFetch } from "../../lib/shopify";
 import globalConfig from "../../../config/globalconf.json";
 
-const { metaobjectConfig } = globalConfig.shopify;
+const metaobjectConfig = globalConfig.metaobjects;
 import { normalizeMetaobjects, type NormalizedMetaobjects } from "./normalize/metaobjects";
 import { normalizeProduct } from "./normalize/product";
 import { PRODUCT_PAGE_QUERY } from "./queries/product.query";
