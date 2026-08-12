@@ -108,6 +108,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
       if (data.cart) {
         set({ cart: data.cart });
+        console.log("[CartStore] initCart: data.cart.lines.edges.length:", data.cart?.lines?.edges?.length);
       } else {
         get().clearCart();
       }
