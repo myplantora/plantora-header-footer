@@ -22,7 +22,7 @@ const PRODUCT_CARD_FRAGMENT = `
           price { amount currencyCode }
           compareAtPrice { amount currencyCode }
           selectedOptions { name value }
-          quantityAvailable
+          // quantityAvailable removed due to insufficient permissions (unauthenticated_read_product_inventory)
           image { url altText width height }
 
         }
