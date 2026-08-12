@@ -215,16 +215,17 @@ function mapCart(cart: any) {
         quantity: edge.node.quantity,
         isCombo,
         merchandiseId: edge.node.merchandise?.id,
-      title: edge.node.merchandise?.product?.title ?? "",
-      handle: edge.node.merchandise?.product?.handle ?? "",
-      variantTitle: edge.node.merchandise?.title ?? "",
-      imageUrl: edge.node.merchandise?.image?.url ?? null,
-      amount: Number(edge.node.merchandise?.price?.amount ?? 0),
-      compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
-        ? Number(edge.node.merchandise.compareAtPrice.amount)
-        : null,
-      currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
-    })) as CartLine[],
+        title: edge.node.merchandise?.product?.title ?? "",
+        handle: edge.node.merchandise?.product?.handle ?? "",
+        variantTitle: edge.node.merchandise?.title ?? "",
+        imageUrl: edge.node.merchandise?.image?.url ?? null,
+        amount: Number(edge.node.merchandise?.price?.amount ?? 0),
+        compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
+          ? Number(edge.node.merchandise.compareAtPrice.amount)
+          : null,
+        currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
+      };
+    }) as CartLine[],
   };
 }
 
