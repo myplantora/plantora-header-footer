@@ -1,4 +1,14 @@
 import globalConfig from "../../config/globalconf.json";
+import {
+  AnalyticsEventName,
+  getClientBrowserParameters,
+  sendShopifyAnalytics,
+} from "@shopify/hydrogen-react";
+import type {
+  ShopifyAddToCartPayload,
+  ShopifyPageViewPayload,
+} from "@shopify/hydrogen-react";
+import { trackMetaEvent } from "@/lib/analytics/meta.events";
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
 
@@ -90,12 +100,117 @@ async function sendMonorailEvent(eventName: string, cart: any, retryCount = 0) {
   }
 }
 
+function getCartLines(cart: any): any[] {
+  if (Array.isArray(cart?.lines)) return cart.lines;
+  if (Array.isArray(cart?.lines?.nodes)) return cart.lines.nodes;
+  if (Array.isArray(cart?.lines?.edges)) {
+    return cart.lines.edges.map((edge: any) => edge?.node).filter(Boolean);
+  }
+  return [];
+}
+
+function getAnalyticsProducts(cart: any) {
+  return getCartLines(cart).map((line: any) => {
+    const merchandise = line?.merchandise ?? {};
+    const product = merchandise?.product ?? {};
+    return {
+      productGid: product.id ?? merchandise.productId ?? merchandise.id,
+      variantGid: merchandise.id ?? line?.merchandiseId,
+      name: product.title ?? line?.title ?? "Product",
+      variantName: merchandise.title ?? line?.variantTitle,
+      brand: product.vendor ?? "Plantora",
+      category: product.productType,
+      price: String(
+        line?.cost?.amountPerQuantity?.amount ??
+          merchandise?.price?.amount ??
+          line?.amount ??
+          0,
+      ),
+      sku: merchandise.sku ?? undefined,
+      quantity: Number(line?.quantity ?? 1),
+    };
+  }).filter((product: any) => product.productGid && product.variantGid);
+}
+
+function getShopifyPayload(cart?: any) {
+  const products = getAnalyticsProducts(cart);
+  return {
+    ...getClientBrowserParameters(),
+    hasUserConsent: true,
+    shopId: globalConfig.analytics.shopId,
+    storefrontId: globalConfig.analytics.storefrontId,
+    hydrogenSubchannelId: globalConfig.analytics.storefrontId,
+    shopifySalesChannel: globalConfig.analytics.salesChannel,
+    currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    acceptedLanguage: globalConfig.analytics.acceptedLanguage,
+    analyticsAllowed: true,
+    marketingAllowed: true,
+    saleOfDataAllowed: true,
+    products,
+    totalValue: Number(cart?.cost?.subtotalAmount?.amount ?? 0),
+  };
+}
+
+export function trackShopifyPageView(pageType = "index", resourceId?: string) {
+  if (typeof window === "undefined") return;
+  const payload = {
+    ...getShopifyPayload(),
+    pageType,
+    canonicalUrl: window.location.href,
+    ...(resourceId ? { resourceId } : {}),
+  } as ShopifyPageViewPayload;
+  void sendShopifyAnalytics(
+    {
+      eventName: AnalyticsEventName.PAGE_VIEW,
+      payload,
+    },
+    globalConfig.analytics.shopDomain,
+  ).catch((error) => console.warn("[Shopify Analytics] Page view failed", error));
+}
+
+function trackShopifyAddToCart(cart: any) {
+  if (typeof window === "undefined" || !cart?.id) return;
+  const payload = {
+    ...getShopifyPayload(cart),
+    cartId: cart.id,
+  } as ShopifyAddToCartPayload;
+  void sendShopifyAnalytics(
+    {
+      eventName: AnalyticsEventName.ADD_TO_CART,
+      payload,
+    },
+    globalConfig.analytics.shopDomain,
+  ).catch((error) => console.warn("[Shopify Analytics] Add to cart failed", error));
+}
+
 export const trackCartViewed = (cart: any) => {
   sendMonorailEvent("cart_viewed", cart);
 };
 
 export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_from_cart' | 'update_cart', item?: { merchandiseId: string; quantity: number }) => {
   sendMonorailEvent("cart_updated", cart);
+
+  if (eventType === "add_to_cart") {
+    trackShopifyAddToCart(cart);
+    const products = getAnalyticsProducts(cart);
+    const addedProduct = products.find((product: any) => product.variantGid === item?.merchandiseId);
+    if (addedProduct) {
+      trackMetaEvent("AddToCart", {
+        content_ids: [addedProduct.productGid],
+        content_name: addedProduct.name,
+        content_type: "product",
+        contents: [{
+          id: addedProduct.variantGid,
+          quantity: item?.quantity ?? addedProduct.quantity ?? 1,
+          price: Number(addedProduct.price),
+          title: addedProduct.name,
+        }],
+        value: Number(addedProduct.price) * (item?.quantity ?? addedProduct.quantity ?? 1),
+        currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+        num_items: item?.quantity ?? addedProduct.quantity ?? 1,
+      });
+    }
+  }
   
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('plantora:cart:updated', {
@@ -106,4 +221,8 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
       }
     }));
   }
+};
+
+export const trackCheckoutStarted = (cart: any) => {
+  sendMonorailEvent("checkout_started", cart);
 };

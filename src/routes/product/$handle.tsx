@@ -196,7 +196,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     }
     return () => document.body.classList.remove("overflow-hidden");
   }, [chartOpen]);
-  const { trackViewContent, trackAddToCart } = useMetaTracking();
+  const { trackViewContent } = useMetaTracking();
   const boughtCount = boughtCountFromSeed(product.id || product.handle);
 
   useEffect(() => {
@@ -217,7 +217,6 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
       const ok = await addLineAndOpen(variantId, quantity);
 
       if (!ok) return;
-      trackAddToCart(product, quantity);
     } catch {
       setAddError("Could not add to basket. Please try again.");
     }
