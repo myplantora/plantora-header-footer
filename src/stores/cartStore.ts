@@ -354,7 +354,7 @@ export const useCartStore = create<CartState>()(
         try {
           const data = await storefrontApiRequest<any>(CART_LINES_UPDATE, {
             cartId,
-            lines: [{ id: lineId, quantity }],
+            lines: [{ id: lineId, quantity: finalQuantity }],
           });
           const result = data?.data?.cartLinesUpdate;
           const cart = result?.cart;
