@@ -100,8 +100,8 @@ export function CartDrawer() {
           {isLoading && lines.length === 0 ? (
             <div className="mt-4 space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50 animate-pulse">
-                  <div className="size-24 shrink-0 rounded-xl bg-secondary" />
+                <div key={i} className="flex gap-4 rounded-2xl bg-white p-3 shadow-sm border border-border/50 animate-pulse">
+                  <div className="size-28 shrink-0 rounded-xl bg-secondary" />
                   <div className="flex flex-1 flex-col justify-between py-1">
                     <div className="space-y-2">
                       <div className="h-4 w-3/4 rounded bg-secondary" />
