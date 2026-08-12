@@ -124,32 +124,42 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       const executeAdd = async (retry = false): Promise<boolean> => {
         let cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+        console.log('[CartStore] Current cartId from storage:', cartId);
 
         // STEP 2: Get or create cart
         if (!cartId) {
+          console.log('[CartStore] No cartId found, creating fresh cart...');
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
+          console.log('[CartStore] cartCreate response:', createData);
+          
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
           cartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, cartId!);
-          await new Promise(r => setTimeout(r, 500));
+          console.log('[CartStore] New cartId saved:', cartId);
+          // Wait briefly for Shopify edge to recognize the new ID
+          await new Promise(r => setTimeout(r, 800));
         }
 
         // STEP 3: Add lines
+        console.log('[CartStore] Adding line to cart:', { cartId, merchandiseId, quantity });
         const addData = await storefrontFetch<any>(queries.CART_LINES_ADD, {
           cartId,
           lines: [{ merchandiseId, quantity }]
         });
+        console.log('[CartStore] cartLinesAdd response:', addData);
 
         const { cart, userErrors, warnings } = addData.cartLinesAdd || {};
 
         // STEP 4: Handle response
         if (userErrors?.length) {
           const errorMsg = userErrors[0].message.toLowerCase();
+          console.warn('[CartStore] userErrors detected:', errorMsg);
           const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
 
           if (isStale && !retry) {
+            console.log('[CartStore] Stale ID detected, retrying with fresh cart...');
             get().clearCart();
             return executeAdd(true);
           }
@@ -157,7 +167,9 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) {
+          console.warn('[CartStore] OOS warning detected');
           if (!retry) {
+            console.log('[CartStore] Retrying OOS after settle delay...');
             get().clearCart();
             await new Promise(r => setTimeout(r, 1500));
             return executeAdd(true);
@@ -165,11 +177,13 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
+          console.log('[CartStore] Successfully added to cart. totalQuantity:', cart.totalQuantity);
           set({ cart });
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
           return true;
         }
 
+        console.error('[CartStore] Operation finished without a cart object in response');
         return false;
       };
 
