@@ -196,9 +196,33 @@ function readPersistedCartId(): string | null {
 }
 
 
-function notifyWarnings(_warnings: any[] | undefined, _lines: any[], _added = true) {
-  // Intentionally no-op: warning surfacing is handled in Shopify/admin flows.
-  return;
+function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true) {
+  if (!warnings?.length) return;
+
+  warnings.forEach((warning) => {
+    // Suppress MERCHANDISE_OUT_OF_STOCK ONLY if:
+    // 1. The API correctly identifies the target line
+    // 2. We can see that the line actually has stock (availableForSale: true OR quantityAvailable > 0)
+    // In the user's "Not working" Brave trace, availableForSale is FALSE and quantityAvailable is 0,
+    // so this suppression should NOT trigger, and the user should see the "sold out" toast.
+    if (warning.code === "MERCHANDISE_OUT_OF_STOCK") {
+      const targetId = warning.target;
+      const affectedLine = lines.find((edge) => edge?.node?.id === targetId)?.node;
+      const merchandise = affectedLine?.merchandise;
+
+      const hasStock = merchandise?.availableForSale === true || (Number(merchandise?.quantityAvailable ?? 0) > 0);
+
+      if (hasStock) {
+        console.warn("[Cart] Suppressing MERCHANDISE_OUT_OF_STOCK for product with available stock:", warning.message);
+        return;
+      }
+    }
+
+    // Only show toast if we just tried to add this item and it failed
+    if (added) {
+      toast.warning(warning.message || "There was an issue with an item in your cart.");
+    }
+  });
 }
 
 
