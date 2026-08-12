@@ -130,66 +130,16 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
 
   const outOfStock = warnings.filter((w) => {
     if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return false;
-
-    // Check if the warning targets a specific line/merchandise in the cart
-    const targetId = w.target;
-    let isCombo = false;
-
-    // First check: Find product by comparing targetId to line node ID or merchandise ID
-    if (targetId && cart?.lines?.edges) {
-      const line = cart.lines.edges.find((e: any) => 
-        e.node.id === targetId || 
-        e.node.merchandise?.id === targetId
-      );
-      const product = line?.node.merchandise?.product;
-      if (product) {
-        isCombo = 
-          product.productType?.toLowerCase() === "combo" || 
-          product.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-      }
-    }
-
-    // Second check: If not found, check ALL lines in the cart for any combo product
-    // This handles cases where Shopify doesn't provide a precise targetId or targetId is ambiguous
-    if (!isCombo && cart?.lines?.edges) {
-      const hasAnyCombo = cart.lines.edges.some((e: any) => {
-        const product = e.node.merchandise?.product;
-        return product && (
-          product.productType?.toLowerCase() === "combo" || 
-          product.tags?.some((t: string) => t.toLowerCase() === "combo-product")
-        );
-      });
-      if (hasAnyCombo) {
-        isCombo = true;
-      }
-    }
-
-    // Fallback: Check message if target lookup failed or to be safe
-    if (!isCombo && w.message?.toLowerCase().includes("combo")) {
-      isCombo = true;
-    }
-
-    if (isCombo) {
-      console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Combo product. Target:", targetId, "Msg:", w.message);
-      // If Shopify returns quantity 0 for a suppressed combo, we must treat it as available locally
-      // by not filtering it out of the warnings that trigger the "Sold out" text in UI.
-      return false;
-    }
-
-    // EXTRA FIX: If we have ANY quantity in the local line and Shopify is trying to zero it out via a warning,
-    // and it's a combo, we force success.
-    if (!isCombo && cart?.lines?.edges) {
-      const line = cart.lines.edges.find((e: any) => e.node.id === targetId);
-      if (line?.node.quantity === 0) {
-        const product = line?.node.merchandise?.product;
-        const isActuallyCombo = product?.productType?.toLowerCase() === "combo" || 
-                               product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-        if (isActuallyCombo) return false;
-      }
-    }
-
     return true;
   });
+
+  if (outOfStock.length) {
+    toast.error("Some items are sold out", {
+      description: outOfStock.map((w) => w.message).join(" "),
+      position: "top-center",
+    });
+  }
+}
 
   if (outOfStock.length) {
     // Only show the toast if we actually have out-of-stock items that weren't suppressed.
