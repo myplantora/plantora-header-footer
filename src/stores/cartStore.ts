@@ -144,8 +144,25 @@ const CART_QUERY = `
   }
 `;
 
+// Errors that mean our persisted cart/line reference is stale (common in
+// Safari/Brave/mobile where storage survives longer than the Shopify cart).
+function isStaleReferenceError(errors: any[] | undefined) {
+  return Boolean(
+    errors?.some((e) => {
+      const msg = String(e?.message || "").toLowerCase();
+      return (
+        msg.includes("does not exist") ||
+        msg.includes("not found") ||
+        msg.includes("invalid id") ||
+        msg.includes("merchandise line")
+      );
+    }),
+  );
+}
+
 function handleUserErrors(errors: any[] | undefined) {
   if (errors?.length) {
+    if (isStaleReferenceError(errors)) return true; // handled by recovery, don't toast
     errors.forEach(err => {
       toast.error(err.message || "Something went wrong with the cart");
     });
@@ -153,6 +170,7 @@ function handleUserErrors(errors: any[] | undefined) {
   }
   return false;
 }
+
 
 function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
   if (!warnings?.length) return;
