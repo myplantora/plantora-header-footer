@@ -48,6 +48,7 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
+        quantityAvailable
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
         product {
@@ -172,25 +173,21 @@ function handleUserErrors(errors: any[] | undefined) {
 }
 
 
-function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true) {
+function notifyWarnings(warnings: any[] | undefined, lines: any[], _added = true) {
   if (!warnings?.length) return;
 
   const realWarnings = warnings.filter((w) => {
     if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return true;
 
-    // Find the associated line to check handle
     const targetId = w.target;
-    const line = lines.find(l => 
-      l.node.id === targetId || l.node.merchandise.id === targetId
+    const line = lines.find(
+      (l) => l.node.id === targetId || l.node.merchandise.id === targetId,
     );
-    
-    const handle = line?.node?.merchandise?.product?.handle || "";
+    const merchandise = line?.node?.merchandise;
 
-    // Suppress if handle contains "combo" — these are CONTINUE policy products
-    const shouldSuppress = added && handle.toLowerCase().includes("combo");
-
-    if (shouldSuppress) {
-      console.warn("[Cart] Suppressed warning", w);
+    // Suppress only when Shopify inventory confirms the item is truly sold out.
+    if (merchandise?.availableForSale === false && merchandise?.quantityAvailable === 0) {
+      console.warn("[Cart] Suppressed out-of-stock warning", w);
       return false;
     }
 
@@ -204,6 +201,7 @@ function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true)
     });
   }
 }
+
 
 function mapCart(cart: any) {
   if (!cart) return null;
