@@ -15,8 +15,10 @@ const metafieldIdentifiersLiteral = () => {
   return `[${identifiers.join(", ")}]`;
 };
 
+import { STOREFRONT_CONTEXT } from "../../../lib/shopify";
+
 export const PRODUCT_PAGE_QUERY = `
-  query ProductPage($handle: String!, $metaobjectIds: [ID!]!) {
+  query ProductPage($handle: String!, $metaobjectIds: [ID!]!) ${STOREFRONT_CONTEXT} {
     product(handle: $handle) {
       id
       title

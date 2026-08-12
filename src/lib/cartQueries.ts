@@ -1,3 +1,5 @@
+import { STOREFRONT_CONTEXT } from "./shopify";
+
 export const CART_LINE_FRAGMENT = `
   fragment CartLineFragment on CartLine {
     id
@@ -46,8 +48,10 @@ export const CART_FRAGMENT = `
 
 export const CART_CREATE = `
   ${CART_FRAGMENT}
-  mutation CartCreate {
-    cartCreate(input: {}) {
+  mutation CartCreate ${STOREFRONT_CONTEXT} {
+    cartCreate(input: {
+      buyerIdentity: { countryCode: US }
+    }) {
       cart { ...CartFragment }
       userErrors { field message }
     }
@@ -56,7 +60,7 @@ export const CART_CREATE = `
 
 export const CART_LINES_ADD = `
   ${CART_FRAGMENT}
-  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) ${STOREFRONT_CONTEXT} {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart { ...CartFragment }
       userErrors { field message }
@@ -67,7 +71,7 @@ export const CART_LINES_ADD = `
 
 export const CART_LINES_UPDATE = `
   ${CART_FRAGMENT}
-  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) ${STOREFRONT_CONTEXT} {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart { ...CartFragment }
       userErrors { field message }
@@ -78,7 +82,7 @@ export const CART_LINES_UPDATE = `
 
 export const CART_LINES_REMOVE = `
   ${CART_FRAGMENT}
-  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) ${STOREFRONT_CONTEXT} {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart { ...CartFragment }
       userErrors { field message }
@@ -88,7 +92,7 @@ export const CART_LINES_REMOVE = `
 
 export const GET_CART = `
   ${CART_FRAGMENT}
-  query GetCart($cartId: ID!) {
+  query GetCart($cartId: ID!) ${STOREFRONT_CONTEXT} {
     cart(id: $cartId) {
       ...CartFragment
     }
@@ -96,7 +100,7 @@ export const GET_CART = `
 `;
 
 export const CHECK_VARIANT_AVAILABILITY = `
-  query CheckVariant($id: ID!) {
+  query CheckVariant($id: ID!) ${STOREFRONT_CONTEXT} {
     node(id: $id) {
       ... on ProductVariant {
         id

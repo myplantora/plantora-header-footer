@@ -2,7 +2,9 @@
   "shopify": {
     "storeDomain": "myplantora.myshopify.com",
     "apiVersion": "2025-07",
-    "storefrontToken": "9e366b4208cebbaad6a5996c768455e3"
+    "storefrontToken": "9e366b4208cebbaad6a5996c768455e3",
+    "defaultCountry": "US",
+    "defaultLanguage": "EN"
   },
   "analytics": {
     "shopId": "gid://shopify/Shop/101462671653",

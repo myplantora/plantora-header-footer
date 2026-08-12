@@ -54,9 +54,11 @@ const PRODUCT_CARD_FRAGMENT = `
   }
 `;
 
+import { STOREFRONT_CONTEXT } from "../../../lib/shopify";
+
 export const COLLECTION_PAGE_QUERY = `
   ${PRODUCT_CARD_FRAGMENT}
-  query CollectionPage($handle: String!, $productLimit: Int!, $after: String) {
+  query CollectionPage($handle: String!, $productLimit: Int!, $after: String) ${STOREFRONT_CONTEXT} {
     collection(handle: $handle) {
       id
       title
@@ -75,7 +77,7 @@ export const COLLECTION_PAGE_QUERY = `
 
 export const COLLECTION_BY_ID_QUERY = `
   ${PRODUCT_CARD_FRAGMENT}
-  query CollectionById($id: ID!, $productLimit: Int!, $after: String) {
+  query CollectionById($id: ID!, $productLimit: Int!, $after: String) ${STOREFRONT_CONTEXT} {
     collection(id: $id) {
       id
       title
@@ -93,7 +95,7 @@ export const COLLECTION_BY_ID_QUERY = `
 
 export const PRODUCTS_QUERY = `
   ${PRODUCT_CARD_FRAGMENT}
-  query Products($first: Int!, $query: String, $after: String) {
+  query Products($first: Int!, $query: String, $after: String) ${STOREFRONT_CONTEXT} {
     products(first: $first, query: $query, after: $after) {
       pageInfo { hasNextPage endCursor }
       edges { node { ...ProductCardFields } }
