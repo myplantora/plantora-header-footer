@@ -40,7 +40,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
     setPending(true);
     try {
       const ok = await addLineAndOpen(variantId, 1, {
-        availableForSale: selectedVariant?.available,
+        availableForSale: selectedVariant?.available ?? false,
         quantityAvailable: selectedVariant?.quantityAvailable ?? null,
       });
       if (ok) {
@@ -204,8 +204,8 @@ export function RecommendationCard({ product, priority = false }: Props) {
                       );
                       if (matchingVariant) {
                         useCartStore.getState().addLineAndOpen(matchingVariant.id, 1, {
-                          availableForSale: matchingVariant.available,
-                          quantityAvailable: matchingVariant.quantityAvailable,
+                          availableForSale: matchingVariant.available ?? false,
+                          quantityAvailable: matchingVariant.quantityAvailable ?? null,
                         });
                       }
                     }}

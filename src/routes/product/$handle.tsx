@@ -181,8 +181,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
       const ok = await addLineAndOpen(variantId, quantity, {
-        availableForSale: variant.available,
-        quantityAvailable: variant.quantityAvailable,
+        availableForSale: variant.available ?? false,
+        quantityAvailable: variant.quantityAvailable ?? null,
       });
       if (!ok) return;
       trackAddToCart(product, quantity);

@@ -33,17 +33,17 @@ type CartState = {
   closeCart: () => void;
   handleAddToCart: (
     variantGid: string,
-    options?: { quantity?: number; availableForSale?: boolean; quantityAvailable?: number | null },
+    options?: { quantity?: number; availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   addLine: (
     merchandiseId: string,
     quantity?: number,
-    variant?: { availableForSale?: boolean; quantityAvailable?: number | null },
+    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   addLineAndOpen: (
     merchandiseId: string,
     quantity?: number,
-    variant?: { availableForSale?: boolean; quantityAvailable?: number | null },
+    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
   ) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
@@ -160,17 +160,13 @@ const CART_QUERY = `
 // Errors that mean our persisted cart/line reference is stale (common in
 // Safari/Brave/mobile where storage survives longer than the Shopify cart).
 function isStaleReferenceError(errors: any[] | undefined) {
-  return Boolean(
-    errors?.some((e) => {
-      const msg = String(e?.message || "").toLowerCase();
-      return (
-        msg.includes("does not exist") ||
-        msg.includes("not found") ||
-        msg.includes("invalid id") ||
-        msg.includes("merchandise line")
-      );
-    }),
-  );
+  if (!errors || !errors.length) return false;
+  return errors.some((e) => {
+    const msg = String(e?.message || "").toLowerCase();
+    const isCartNotFound = msg.includes("does not exist") || msg.includes("not found") || msg.includes("invalid id");
+    const isLineNotFound = msg.includes("merchandise line");
+    return isCartNotFound || isLineNotFound;
+  });
 }
 
 function handleUserErrors(errors: any[] | undefined) {
@@ -266,17 +262,25 @@ export const useCartStore = create<CartState>()(
         set({ isLoading: true });
         try {
           const createEmptyCart = async () => {
+            console.log("[Cart] Creating fresh cart");
             const data = await storefrontApiRequest<any>(CART_CREATE, {
               input: {},
             });
+            if (data?.errors) {
+               console.error("[Cart] GraphQL errors on cartCreate:", data.errors);
+            }
             return data?.data?.cartCreate;
           };
 
           const addLinesToCart = async (cartId: string) => {
+            console.log("[Cart] Adding lines to cart:", cartId);
             const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
               cartId,
               lines: [{ merchandiseId: variantGid, quantity }],
             });
+            if (data?.errors) {
+              console.error("[Cart] GraphQL errors on cartLinesAdd:", data.errors);
+            }
             return data?.data?.cartLinesAdd;
           };
 
@@ -286,18 +290,26 @@ export const useCartStore = create<CartState>()(
           if (activeCartId) {
             result = await addLinesToCart(activeCartId);
 
-            if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
-              console.warn("[Cart] Stale cart detected, recreating", result?.userErrors);
+            // If the cart doesn't exist OR the response is completely null/undefined
+            // it means the fetch failed or returned invalid data.
+            if (!result || isStaleReferenceError(result?.userErrors)) {
+              console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
               const recreated = await createEmptyCart();
               const recreatedCartId = recreated?.cart?.id;
-              if (!recreatedCartId) return false;
+              if (!recreatedCartId) {
+                console.error("[Cart] Failed to recreate cart");
+                return false;
+              }
               result = await addLinesToCart(recreatedCartId);
             }
           } else {
             const created = await createEmptyCart();
             const createdCartId = created?.cart?.id;
-            if (!createdCartId) return false;
+            if (!createdCartId) {
+              console.error("[Cart] Failed to create first cart");
+              return false;
+            }
             result = await addLinesToCart(createdCartId);
           }
 
@@ -324,8 +336,9 @@ export const useCartStore = create<CartState>()(
           if (mapped) set(mapped);
           if (mapped && lineAdded(result)) return true;
           return false;
-        } catch (e) {
-          toast.error("Something went wrong, please try again");
+        } catch (e: any) {
+          console.error("[Cart] handleAddToCart error:", e);
+          toast.error(e?.message || "Something went wrong, please try again");
           return false;
         } finally {
           set({ isLoading: false });
@@ -338,6 +351,7 @@ export const useCartStore = create<CartState>()(
         set({ isLoading: true });
         try {
           const data = await storefrontApiRequest<any>(CART_QUERY, { cartId });
+          if (data?.errors) console.error("[Cart] Hydration GraphQL errors:", data.errors);
           const cart = data?.data?.cart;
           if (cart) {
             set(mapCart(cart)!);
