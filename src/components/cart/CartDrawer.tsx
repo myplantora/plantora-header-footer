@@ -134,7 +134,7 @@ export function CartDrawer() {
               {lines.map((line) => (
                 <li
                   key={line.id}
-                  className="group flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50 relative"
+                  className="group flex gap-4 rounded-2xl bg-white p-3 shadow-sm border border-border/50 relative"
                 >
                   {isLoading && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/5 pointer-events-none">
@@ -145,7 +145,7 @@ export function CartDrawer() {
                     to="/product/$handle"
                     params={{ handle: line.handle }}
                     onClick={closeCart}
-                    className="size-24 shrink-0 overflow-hidden rounded-xl bg-secondary"
+                    className="size-28 shrink-0 overflow-hidden rounded-xl bg-secondary"
                   >
                     {line.imageUrl && (
                       <img src={line.imageUrl} alt={line.title} className="size-full object-cover transition-transform group-hover:scale-105" />
