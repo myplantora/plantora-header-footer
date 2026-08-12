@@ -41,34 +41,52 @@ export function useMetaTracking() {
     });
   }, [track]);
 
+  const buildCartPayload = useCallback((cart: any) => {
+    const rawLines: any[] = Array.isArray(cart?.lines)
+      ? cart.lines
+      : Array.isArray(cart?.lines?.edges)
+        ? cart.lines.edges.map((e: any) => e?.node).filter(Boolean)
+        : Array.isArray(cart?.lines?.nodes)
+          ? cart.lines.nodes
+          : [];
+
+    const contents = rawLines.map((l: any) => ({
+      id: l?.merchandise?.id || l?.variantId || l?.id,
+      quantity: l?.quantity ?? 1,
+      price: Number(
+        l?.cost?.amountPerQuantity?.amount ??
+          l?.merchandise?.price?.amount ??
+          l?.amount ??
+          0
+      )
+    }));
+
+    const value = Number(
+      cart?.cost?.subtotalAmount?.amount ?? cart?.subtotal?.amount ?? 0
+    );
+    const currency =
+      cart?.cost?.subtotalAmount?.currencyCode ||
+      cart?.subtotal?.currency ||
+      'USD';
+
+    return {
+      content_ids: contents.map((c) => c.id).filter(Boolean),
+      contents,
+      value,
+      currency,
+      num_items:
+        cart?.totalQuantity ??
+        contents.reduce((sum, c) => sum + (c.quantity || 0), 0)
+    };
+  }, []);
+
   const trackInitiateCheckout = useCallback((cart: any) => {
-    track('InitiateCheckout', {
-      content_ids: cart.lines.map((l: any) => l.id),
-      contents: cart.lines.map((l: any) => ({
-        id: l.id,
-        quantity: l.quantity,
-        price: l.amount
-      })),
-      value: cart.subtotal?.amount || 0,
-      currency: cart.subtotal?.currency || 'USD',
-      num_items: cart.totalQuantity
-    });
-  }, [track]);
+    track('InitiateCheckout', buildCartPayload(cart));
+  }, [track, buildCartPayload]);
 
   const trackPurchase = useCallback((cart: any) => {
-    track('Purchase', {
-      content_ids: cart.lines.map((l: any) => l.id),
-      contents: cart.lines.map((l: any) => ({
-        id: l.id,
-        quantity: l.quantity,
-        price: l.amount
-      })),
-      value: cart.subtotal?.amount || 0,
-      currency: cart.subtotal?.currency || 'USD',
-      num_items: cart.totalQuantity,
-      content_type: 'product'
-    });
-  }, [track]);
+    track('Purchase', { ...buildCartPayload(cart), content_type: 'product' });
+  }, [track, buildCartPayload]);
 
   return {
     track,
