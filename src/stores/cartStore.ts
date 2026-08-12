@@ -312,7 +312,7 @@ export const useCartStore = create<CartState>()(
           });
           const cart = data?.data?.cartDiscountCodesUpdate?.cart;
           if (!cart) return false;
-          set(mapCart(cart));
+          set(mapCart(cart, data?.data?.cartDiscountCodesUpdate?.warnings));
           if (codes.length === 0) return true;
           return (cart.discountCodes ?? []).some(
             (d: any) => d.applicable && codes.includes(String(d.code)),
