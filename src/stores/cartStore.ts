@@ -14,8 +14,8 @@ export type CartLine = {
   amount: number;
   compareAtAmount: number | null;
   currency: string;
+  productType: string;
 };
-
 
 export type CartDiscountCode = { code: string; applicable: boolean };
 
@@ -32,170 +32,191 @@ type CartState = {
   openCart: () => void;
   closeCart: () => void;
   addLine: (merchandiseId: string, quantity?: number) => Promise<boolean>;
-  /** Adds a line via the Storefront API and opens the cart slider only when the API responds with a cart + checkout URL. */
   addLineAndOpen: (merchandiseId: string, quantity?: number) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   setDiscountCodes: (codes: string[]) => Promise<boolean>;
   hydrate: () => Promise<void>;
-
 };
 
-const CART_FRAGMENT = `
-  fragment CartFields on Cart {
+const CART_LINE_FRAGMENT = `
+  fragment CartLineFragment on CartLine {
     id
-    checkoutUrl
-    totalQuantity
-    cost { subtotalAmount { amount currencyCode } }
-    discountCodes { code applicable }
-    lines(first: 50) {
-      edges {
-        node {
+    quantity
+    merchandise {
+      ... on ProductVariant {
+        id
+        title
+        availableForSale
+        inventoryPolicy
+        # quantityAvailable removed due to insufficient permissions
+        price { amount currencyCode }
+        compareAtPrice { amount currencyCode }
+        product {
           id
-          quantity
-          merchandise {
-            ... on ProductVariant {
-              id
-              title
-              image { url altText }
-              price { amount currencyCode }
-              compareAtPrice { amount currencyCode }
-              product { 
-                title 
-                handle 
-                productType
-                tags
-              }
-            }
-          }
+          title
+          productType
+          handle
+          featuredImage { url altText }
         }
       }
+    }
+    cost {
+      totalAmount { amount currencyCode }
+      subtotalAmount { amount currencyCode }
     }
   }
 `;
 
-
-const CART_CREATE = `${CART_FRAGMENT}
-  mutation CartCreate($lines: [CartLineInput!]) {
-    cartCreate(input: { lines: $lines }) {
-      cart { ...CartFields }
-      userErrors { message }
-      warnings { code message target }
+const CART_FRAGMENT = `
+  ${CART_LINE_FRAGMENT}
+  fragment CartFragment on Cart {
+    id
+    checkoutUrl
+    totalQuantity
+    lines(first: 50) {
+      edges { node { ...CartLineFragment } }
     }
-  }`;
+    cost {
+      subtotalAmount { amount currencyCode }
+      totalAmount { amount currencyCode }
+      totalTaxAmount { amount currencyCode }
+    }
+    discountCodes { code applicable }
+  }
+`;
 
-const CART_LINES_ADD = `${CART_FRAGMENT}
+const CART_CREATE = `
+  ${CART_FRAGMENT}
+  mutation CartCreate($input: CartInput!) {
+    cartCreate(input: $input) {
+      cart { ...CartFragment }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_LINES_ADD = `
+  ${CART_FRAGMENT}
   mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
-      cart { ...CartFields }
-      userErrors { message }
+      cart { ...CartFragment }
+      userErrors { field message }
       warnings { code message target }
     }
-  }`;
+  }
+`;
 
-const CART_LINES_UPDATE = `${CART_FRAGMENT}
+const CART_LINES_UPDATE = `
+  ${CART_FRAGMENT}
   mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
-      cart { ...CartFields }
-      userErrors { message }
+      cart { ...CartFragment }
+      userErrors { field message }
       warnings { code message target }
     }
-  }`;
+  }
+`;
 
-const CART_LINES_REMOVE = `${CART_FRAGMENT}
+const CART_LINES_REMOVE = `
+  ${CART_FRAGMENT}
   mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
-      cart { ...CartFields }
-      userErrors { message }
-      warnings { code message target }
+      cart { ...CartFragment }
+      userErrors { field message }
     }
-  }`;
+  }
+`;
 
-const CART_DISCOUNT_CODES_UPDATE = `${CART_FRAGMENT}
-  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+const CART_DISCOUNT_CODES_UPDATE = `
+  ${CART_FRAGMENT}
+  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
     cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
-      cart { ...CartFields }
-      userErrors { message }
-      warnings { code message target }
+      cart { ...CartFragment }
+      userErrors { field message }
     }
-  }`;
+  }
+`;
 
-const CART_QUERY = `${CART_FRAGMENT}
-  query Cart($id: ID!) {
-    cart(id: $id) { ...CartFields }
-  }`;
+const CART_QUERY = `
+  ${CART_FRAGMENT}
+  query GetCart($cartId: ID!) {
+    cart(id: $cartId) { ...CartFragment }
+  }
+`;
 
-function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
+function handleUserErrors(errors: any[] | undefined) {
+  if (errors?.length) {
+    errors.forEach(err => {
+      toast.error(err.message || "Something went wrong with the cart");
+    });
+    return true;
+  }
+  return false;
+}
+
+function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
   if (!warnings?.length) return;
 
-  const outOfStock = warnings.filter((w) => w?.code === "MERCHANDISE_OUT_OF_STOCK");
+  const realWarnings = warnings.filter((w) => {
+    if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return true;
 
-  if (outOfStock.length) {
-    toast.error("Some items are sold out", {
-      description: outOfStock.map((w) => w.message).join(" "),
+    // Find the associated line to check productType
+    const targetId = w.target;
+    const line = lines.find(l => 
+      l.node.id === targetId || l.node.merchandise.id === targetId
+    );
+    
+    const isCombo = line?.node?.merchandise?.product?.productType === "Combo";
+    if (isCombo) {
+      console.warn("[Cart] Suppressed warning", w);
+      return false;
+    }
+
+    return true;
+  });
+
+  if (realWarnings.length) {
+    toast.error("Item is low or out of stock", {
+      description: realWarnings.map((w) => w.message).join(" "),
       position: "top-center",
     });
   }
 }
 
-
-
-function mapCart(cart: any, warnings: any[] = []) {
+function mapCart(cart: any) {
+  if (!cart) return null;
+  
   return {
-    cartId: cart?.id ?? null,
-    checkoutUrl: cart?.checkoutUrl ?? null,
-    totalQuantity: cart?.totalQuantity ?? 0,
-    subtotal: cart?.cost?.subtotalAmount
+    cartId: cart.id,
+    checkoutUrl: cart.checkoutUrl,
+    totalQuantity: cart.totalQuantity,
+    subtotal: cart.cost?.subtotalAmount
       ? {
           amount: Number(cart.cost.subtotalAmount.amount),
           currency: cart.cost.subtotalAmount.currencyCode,
         }
       : null,
-    discountCodes: (cart?.discountCodes ?? []).map((d: any) => ({
+    discountCodes: (cart.discountCodes ?? []).map((d: any) => ({
       code: String(d.code),
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
-    lines: (cart?.lines?.edges ?? []).map((edge: any) => {
-      const lineId = edge.node.id;
-      const quantity = edge.node.quantity;
-      const title = edge.node.merchandise?.product?.title ?? "";
-      
-      return {
-        id: edge.node.id,
-        quantity: edge.node.quantity,
-        merchandiseId: edge.node.merchandise?.id,
-        title: title,
-        handle: edge.node.merchandise?.product?.handle ?? "",
-        variantTitle: edge.node.merchandise?.title ?? "",
-        imageUrl: edge.node.merchandise?.image?.url ?? null,
-        amount: Number(edge.node.merchandise?.price?.amount ?? 0),
-        compareAtAmount: edge.node.merchandise?.compareAtPrice?.amount
-          ? Number(edge.node.merchandise.compareAtPrice.amount)
-          : null,
-        currency: edge.node.merchandise?.price?.currencyCode ?? "USD",
-      };
-    }) as CartLine[],
-
+    lines: (cart.lines?.edges ?? []).map((edge: any) => ({
+      id: edge.node.id,
+      quantity: edge.node.quantity,
+      merchandiseId: edge.node.merchandise.id,
+      title: edge.node.merchandise.product.title,
+      handle: edge.node.merchandise.product.handle,
+      variantTitle: edge.node.merchandise.title,
+      imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
+      amount: Number(edge.node.merchandise.price.amount),
+      compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
+        ? Number(edge.node.merchandise.compareAtPrice.amount)
+        : null,
+      currency: edge.node.merchandise.price.currencyCode,
+      productType: edge.node.merchandise.product.productType,
+    })) as CartLine[],
   };
-}
-
-async function addLineToCart(
-  cartId: string | null,
-  merchandiseId: string,
-  quantity = 1,
-) {
-  const lines = [{ merchandiseId, quantity }];
-  const data = cartId
-    ? await storefrontApiRequest<any>(CART_LINES_ADD, { cartId, lines })
-    : await storefrontApiRequest<any>(CART_CREATE, { lines });
-  
-  const result = data?.data?.cartLinesAdd ?? data?.data?.cartCreate;
-  const cart = result?.cart;
-  
-  notifyWarnings(result?.warnings, cart);
-  
-  if (!cart) return null;
-  return mapCart(cart, result?.warnings);
 }
 
 export const useCartStore = create<CartState>()(
@@ -215,13 +236,19 @@ export const useCartStore = create<CartState>()(
 
       hydrate: async () => {
         const cartId = get().cartId;
-        if (!cartId || get().isLoading) return;
+        if (!cartId) return;
         set({ isLoading: true });
         try {
-          const data = await storefrontApiRequest<any>(CART_QUERY, { id: cartId });
+          const data = await storefrontApiRequest<any>(CART_QUERY, { cartId });
           const cart = data?.data?.cart;
-          if (cart) set(mapCart(cart));
-          else set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null });
+          if (cart) {
+            set(mapCart(cart)!);
+          } else {
+            // Cart expired
+            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+          }
+        } catch (e) {
+          console.error("Hydration error", e);
         } finally {
           set({ isLoading: false });
         }
@@ -236,66 +263,100 @@ export const useCartStore = create<CartState>()(
             cartId,
             discountCodes: codes,
           });
-          const cart = data?.data?.cartDiscountCodesUpdate?.cart;
+          const result = data?.data?.cartDiscountCodesUpdate;
+          handleUserErrors(result?.userErrors);
+          
+          const cart = result?.cart;
           if (!cart) return false;
-          set(mapCart(cart, data?.data?.cartDiscountCodesUpdate?.warnings));
+          
+          const mapped = mapCart(cart)!;
+          set(mapped);
+          
           if (codes.length === 0) return true;
-          return (cart.discountCodes ?? []).some(
-            (d: any) => d.applicable && codes.includes(String(d.code)),
+          
+          const isValid = mapped.discountCodes.some(
+            d => d.applicable && codes.includes(d.code)
           );
+          
+          if (!isValid && codes.length > 0) {
+            toast.error("Invalid or expired discount code.");
+          }
+          
+          return isValid;
+        } catch (e) {
+          toast.error("Something went wrong, please try again");
+          return false;
         } finally {
           set({ isDiscountLoading: false });
         }
       },
 
-
       addLine: async (merchandiseId, quantity = 1) => {
         set({ isLoading: true });
         try {
-          const mapped = await addLineToCart(get().cartId, merchandiseId, quantity);
-          if (!mapped) return false;
-          set(mapped);
-          // Only signal success once Shopify returned a cart with a checkout URL
-          return Boolean(mapped.checkoutUrl);
+          const cartId = get().cartId;
+          let result;
+          
+          if (cartId) {
+            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
+              cartId,
+              lines: [{ merchandiseId, quantity }]
+            });
+            result = data?.data?.cartLinesAdd;
+          } else {
+            const data = await storefrontApiRequest<any>(CART_CREATE, {
+              input: {
+                lines: [{ merchandiseId, quantity }],
+                buyerIdentity: { countryCode: "IN" } // Defaulting to IN as per previous contexts
+              }
+            });
+            result = data?.data?.cartCreate;
+          }
+
+          handleUserErrors(result?.userErrors);
+          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
+          
+          const mapped = mapCart(result?.cart);
+          if (mapped) {
+            set(mapped);
+            return true;
+          }
+          return false;
+        } catch (e) {
+          toast.error("Something went wrong, please try again");
+          return false;
         } finally {
           set({ isLoading: false });
         }
       },
 
       addLineAndOpen: async (merchandiseId, quantity = 1) => {
-        set({ isLoading: true });
-        const mapped = await addLineToCart(get().cartId, merchandiseId, quantity);
-        if (!mapped || !mapped.checkoutUrl) {
-          set({ isLoading: false });
-          return false;
+        const success = await get().addLine(merchandiseId, quantity);
+        if (success) {
+          set({ isOpen: true });
         }
-        // Open the slider and render the freshly mapped API data in one atomic update
-        set({ ...mapped, isOpen: true, isLoading: false });
-        return true;
+        return success;
       },
 
       updateLine: async (lineId, quantity) => {
         const cartId = get().cartId;
         if (!cartId) return;
-
-        const line = get().lines.find(l => l.id === lineId);
-        if (quantity <= 0) {
-          return get().removeLine(lineId);
-        }
-        
-        const finalQuantity = quantity;
-
+        if (quantity <= 0) return get().removeLine(lineId);
 
         set({ isLoading: true });
         try {
           const data = await storefrontApiRequest<any>(CART_LINES_UPDATE, {
             cartId,
-            lines: [{ id: lineId, quantity: finalQuantity }],
+            lines: [{ id: lineId, quantity }]
           });
           const result = data?.data?.cartLinesUpdate;
-          const cart = result?.cart;
-          notifyWarnings(result?.warnings, cart);
-          if (cart) set(mapCart(cart, result?.warnings));
+          handleUserErrors(result?.userErrors);
+          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
+          
+          const mapped = mapCart(result?.cart);
+          if (mapped) set(mapped);
+        } catch (e) {
+          toast.error("Something went wrong, please try again");
         } finally {
           set({ isLoading: false });
         }
@@ -308,10 +369,15 @@ export const useCartStore = create<CartState>()(
         try {
           const data = await storefrontApiRequest<any>(CART_LINES_REMOVE, {
             cartId,
-            lineIds: [lineId],
+            lineIds: [lineId]
           });
-          const cart = data?.data?.cartLinesRemove?.cart;
-          if (cart) set(mapCart(cart));
+          const result = data?.data?.cartLinesRemove;
+          handleUserErrors(result?.userErrors);
+          
+          const mapped = mapCart(result?.cart);
+          if (mapped) set(mapped);
+        } catch (e) {
+          toast.error("Something went wrong, please try again");
         } finally {
           set({ isLoading: false });
         }
