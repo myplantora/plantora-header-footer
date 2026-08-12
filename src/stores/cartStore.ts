@@ -184,8 +184,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         // OOS Warning or 0 quantity success (cache lag)
         if ((!lineInCart || warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) && retryCount < 2) {
-          console.log(`[CartStore] Cart consistency check failed (retry ${retryCount + 1}). Settle delay applied.`);
-          await new Promise(r => setTimeout(r, 1500));
+          console.log(`[CartStore] Cart consistency check failed (retry ${retryCount + 1}). Retrying immediately.`);
           return executeAdd(retryCount + 1);
         }
 
