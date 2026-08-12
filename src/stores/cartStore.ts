@@ -163,7 +163,11 @@ function isStaleReferenceError(errors: any[] | undefined) {
   if (!errors || !errors.length) return false;
   return errors.some((e) => {
     const msg = String(e?.message || "").toLowerCase();
-    const isCartNotFound = msg.includes("does not exist") || msg.includes("not found") || msg.includes("invalid id");
+    const isCartNotFound = 
+      msg.includes("does not exist") || 
+      msg.includes("not found") || 
+      msg.includes("invalid id") || 
+      msg.includes("invalid cartid"); // Added specific check for Brave/Safari variants
     const isLineNotFound = msg.includes("merchandise line");
     return isCartNotFound || isLineNotFound;
   });
@@ -322,8 +326,10 @@ export const useCartStore = create<CartState>()(
           let result;
 
           if (activeCartId) {
+            console.log("[Cart] Attempting add with activeCartId:", activeCartId);
             result = await addLinesToCart(activeCartId);
 
+            // DETAILED CHECK: If result is null/undefined or has stale errors
             if (!result || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
@@ -331,8 +337,10 @@ export const useCartStore = create<CartState>()(
               const recreatedCartId = recreated?.cart?.id;
               if (!recreatedCartId) {
                 console.error("[Cart] Failed to recreate cart");
+                console.groupEnd();
                 return false;
               }
+              console.log("[Cart] Retrying with recreatedCartId:", recreatedCartId);
               result = await addLinesToCart(recreatedCartId);
             }
           } else {
@@ -340,8 +348,10 @@ export const useCartStore = create<CartState>()(
             const createdCartId = created?.cart?.id;
             if (!createdCartId) {
               console.error("[Cart] Failed to create first cart");
+              console.groupEnd();
               return false;
             }
+            console.log("[Cart] Add with first createdCartId:", createdCartId);
             result = await addLinesToCart(createdCartId);
           }
 
@@ -354,7 +364,8 @@ export const useCartStore = create<CartState>()(
           // it usually means a session-level inventory lock or a corrupted cart state.
           // We will clear the cart and try ONE more time with a brand new cart ID.
           if (!lineAdded(result)) {
-            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.");
+            const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
+            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.", { hasOOSWarning });
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             
             const freshCart = await createEmptyCart();
