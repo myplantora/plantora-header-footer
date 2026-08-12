@@ -180,10 +180,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
     setAddError(null);
     triggerHaptic("medium"); // fire inside the gesture, before any await
     try {
-      const ok = await addLineAndOpen(variantId, quantity, {
-        availableForSale: variant.available ?? false,
-        quantityAvailable: variant.quantityAvailable ?? null,
-      });
+      const ok = await addLineAndOpen(variantId, quantity);
+
       if (!ok) return;
       trackAddToCart(product, quantity);
     } catch {

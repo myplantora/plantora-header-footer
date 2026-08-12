@@ -9,9 +9,8 @@ import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
-import { useCartAnalytics } from "@/lib/analytics/useCartAnalytics";
-import { useCartViewed } from "@/lib/analytics/useCartViewed";
-import { useCheckoutStarted } from "@/lib/analytics/useCheckoutStarted";
+import { trackCartViewed } from "@/lib/analytics";
+
 
 const PAYPAL_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Paypal.webp?v=1786466040";
 const GPAY_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Gpay.webp?v=1786466039";
@@ -23,12 +22,14 @@ export function CartDrawer() {
   const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate, totalQuantity } =
     useCartStore();
   const { trackInitiateCheckout } = useMetaTracking();
-  const handleCheckout = useCheckoutStarted();
-  const cartId = useCartStore((s) => s.cartId);
+  const handleCheckout = (url: string) => {
+    window.location.href = url;
+  };
 
-  // Monorail cart activity (browser-only, debounced, mount-skipped).
-  useCartAnalytics({ id: cartId, totalQuantity, totalPrice: subtotal?.amount ?? null });
-  useCartViewed(isOpen, { id: cartId, totalQuantity });
+  useEffect(() => {
+    if (isOpen) trackCartViewed(useCartStore.getState().cart);
+  }, [isOpen]);
+
 
   useEffect(() => {
     // Only fetch when the drawer opens with no locally known lines; otherwise

@@ -1,7 +1,10 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { storefrontApiRequest } from "@/services/shopify/client";
+import { storefrontFetch } from "@/lib/shopify";
+import * as queries from "@/lib/cartQueries";
+import * as analytics from "@/lib/analytics";
 import { toast } from "sonner";
+
+const LOCAL_STORAGE_KEY = 'plantora_cart_id';
 
 export type CartLine = {
   id: string;
@@ -17,572 +20,212 @@ export type CartLine = {
   productType: string;
 };
 
-export type CartDiscountCode = { code: string; applicable: boolean };
-
-type CartState = {
+interface CartState {
+  cart: any | null;
+  isOpen: boolean;
+  isLoading: boolean;
+  
+  // Getters for components
   cartId: string | null;
-  checkoutUrl: string | null;
   lines: CartLine[];
   totalQuantity: number;
   subtotal: { amount: number; currency: string } | null;
-  discountCodes: CartDiscountCode[];
-  isOpen: boolean;
-  isLoading: boolean;
-  isDiscountLoading: boolean;
-  openCart: () => void;
-  closeCart: () => void;
-  handleAddToCart: (
-    variantGid: string,
-    options?: { quantity?: number; availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
-  ) => Promise<boolean>;
-  addLine: (
-    merchandiseId: string,
-    quantity?: number,
-    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
-  ) => Promise<boolean>;
-  addLineAndOpen: (
-    merchandiseId: string,
-    quantity?: number,
-    variant?: { availableForSale?: boolean | undefined; quantityAvailable?: number | null | undefined },
-  ) => Promise<boolean>;
+  checkoutUrl: string | null;
+
+  initCart: () => Promise<void>;
+  hydrate: () => Promise<void>;
+  addToCart: (merchandiseId: string, quantity: number) => Promise<boolean>;
+  addLineAndOpen: (merchandiseId: string, quantity: number) => Promise<boolean>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
-  setDiscountCodes: (codes: string[]) => Promise<boolean>;
-  hydrate: () => Promise<void>;
-};
-
-const CART_LINE_FRAGMENT = `
-  fragment CartLineFragment on CartLine {
-    id
-    quantity
-    merchandise {
-      ... on ProductVariant {
-        id
-        title
-        availableForSale
-        quantityAvailable
-        price { amount currencyCode }
-        compareAtPrice { amount currencyCode }
-        product {
-          id
-          title
-          productType
-          handle
-          featuredImage { url altText }
-        }
-      }
-    }
-    cost {
-      totalAmount { amount currencyCode }
-      subtotalAmount { amount currencyCode }
-    }
-  }
-`;
-
-const CART_FRAGMENT = `
-  ${CART_LINE_FRAGMENT}
-  fragment CartFragment on Cart {
-    id
-    checkoutUrl
-    totalQuantity
-    lines(first: 50) {
-      edges { node { ...CartLineFragment } }
-    }
-    cost {
-      subtotalAmount { amount currencyCode }
-      totalAmount { amount currencyCode }
-      totalTaxAmount { amount currencyCode }
-    }
-    discountCodes { code applicable }
-  }
-`;
-
-const CART_CREATE = `
-  ${CART_FRAGMENT}
-  mutation CartCreate($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart { ...CartFragment }
-      userErrors { field message }
-      warnings { code message target }
-    }
-  }
-`;
-
-const CART_LINES_ADD = `
-  ${CART_FRAGMENT}
-  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
-    cartLinesAdd(cartId: $cartId, lines: $lines) {
-      cart { ...CartFragment }
-      userErrors { field message }
-      warnings { code message target }
-    }
-  }
-`;
-
-const CART_LINES_UPDATE = `
-  ${CART_FRAGMENT}
-  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
-    cartLinesUpdate(cartId: $cartId, lines: $lines) {
-      cart { ...CartFragment }
-      userErrors { field message }
-      warnings { code message target }
-    }
-  }
-`;
-
-const CART_LINES_REMOVE = `
-  ${CART_FRAGMENT}
-  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
-    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
-      cart { ...CartFragment }
-      userErrors { field message }
-    }
-  }
-`;
-
-const CART_DISCOUNT_CODES_UPDATE = `
-  ${CART_FRAGMENT}
-  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
-    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
-      cart { ...CartFragment }
-      userErrors { field message }
-    }
-  }
-`;
-
-const CART_QUERY = `
-  ${CART_FRAGMENT}
-  query GetCart($cartId: ID!) {
-    cart(id: $cartId) { ...CartFragment }
-  }
-`;
-
-// Errors that mean our persisted cart/line reference is stale (common in
-// Safari/Brave/mobile where storage survives longer than the Shopify cart).
-const STALE_CART_ERRORS = [
-  "cart not found",
-  "invalid cart id",
-  "invalid cartid",
-  "variable $cartid of type id!", // GraphQL type error on malformed ID
-  "throttled",                     // edge rejection
-  "merchandise line",              // specifically for stale line items
-  "does not exist",
-];
-
-function isStaleReferenceError(errors: any[] | undefined) {
-  if (!errors || !errors.length) return false;
-  return errors.some((e) => {
-    const msg = String(e?.message || "").toLowerCase();
-    return STALE_CART_ERRORS.some((pattern) => msg.includes(pattern));
-  });
+  clearCart: () => void;
+  openCart: () => void;
+  closeCart: () => void;
 }
 
-function handleUserErrors(errors: any[] | undefined) {
-  if (errors?.length) {
-    if (isStaleReferenceError(errors)) return true; // handled by recovery, don't toast
-    errors.forEach(err => {
-      toast.error(err.message || "Something went wrong with the cart");
-    });
-    return true;
-  }
-  return false;
-}
+const STALE_ERRORS = ['cart not found', 'invalid cart', 'variable $cartid', 'does not exist', 'expired'];
 
-function readPersistedCartId(): string | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    const raw = window.localStorage.getItem("plantora-cart");
-    if (!raw) return null;
-
-    const parsed = JSON.parse(raw) as { state?: { cartId?: string | null } };
-    const cartId = parsed?.state?.cartId;
-    return typeof cartId === "string" && cartId.length > 0 ? cartId : null;
-  } catch {
-    return null;
-  }
-}
-
-
-function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true) {
-  if (!warnings?.length) return;
-
-  warnings.forEach((warning) => {
-    // Suppress MERCHANDISE_OUT_OF_STOCK ONLY if:
-    // 1. The API correctly identifies the target line
-    // 2. We can see that the line actually has stock (availableForSale: true OR quantityAvailable > 0)
-    // In the user's "Not working" Brave trace, availableForSale is FALSE and quantityAvailable is 0,
-    // so this suppression should NOT trigger, and the user should see the "sold out" toast.
-    if (warning.code === "MERCHANDISE_OUT_OF_STOCK") {
-      const targetId = warning.target;
-      const affectedLine = lines.find((edge) => edge?.node?.id === targetId)?.node;
-      const merchandise = affectedLine?.merchandise;
-
-      const hasStock = merchandise?.availableForSale === true || (Number(merchandise?.quantityAvailable ?? 0) > 0);
-
-      if (hasStock) {
-        console.warn("[Cart] Suppressing MERCHANDISE_OUT_OF_STOCK for product with available stock:", warning.message);
-        return;
-      }
-    }
-
-    // Only show toast if we just tried to add this item and it failed
-    if (added) {
-      toast.warning(warning.message || "There was an issue with an item in your cart.");
-    }
-  });
-}
-
-
-function mapCart(cart: any) {
-  if (!cart) return null;
-  
-  return {
-    cartId: cart.id,
-    checkoutUrl: cart.checkoutUrl,
-    totalQuantity: cart.totalQuantity,
-    subtotal: cart.cost?.subtotalAmount
-      ? {
-          amount: Number(cart.cost.subtotalAmount.amount),
-          currency: cart.cost.subtotalAmount.currencyCode,
-        }
+function mapCartLines(cart: any): CartLine[] {
+  return (cart?.lines?.edges ?? []).map((edge: any) => ({
+    id: edge.node.id,
+    quantity: edge.node.quantity,
+    merchandiseId: edge.node.merchandise.id,
+    title: edge.node.merchandise.product.title,
+    handle: edge.node.merchandise.product.handle,
+    variantTitle: edge.node.merchandise.title,
+    imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
+    amount: Number(edge.node.merchandise.price.amount),
+    compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
+      ? Number(edge.node.merchandise.compareAtPrice.amount)
       : null,
-    discountCodes: (cart.discountCodes ?? []).map((d: any) => ({
-      code: String(d.code),
-      applicable: Boolean(d.applicable),
-    })) as CartDiscountCode[],
-    lines: (cart.lines?.edges ?? [])
-      .filter((edge: any) => Number(edge?.node?.quantity) > 0)
-      .map((edge: any) => ({
-        id: edge.node.id,
-        quantity: edge.node.quantity,
-        merchandiseId: edge.node.merchandise.id,
-        title: edge.node.merchandise.product.title,
-        handle: edge.node.merchandise.product.handle,
-        variantTitle: edge.node.merchandise.title,
-        imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
-        amount: Number(edge.node.merchandise.price.amount),
-        compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
-          ? Number(edge.node.merchandise.compareAtPrice.amount)
-          : null,
-        currency: edge.node.merchandise.price.currencyCode,
-        productType: edge.node.merchandise.product.productType,
-      })) as CartLine[],
-  };
+    currency: edge.node.merchandise.price.currencyCode,
+    productType: edge.node.merchandise.product.productType,
+  }));
 }
 
-export const useCartStore = create<CartState>()(
-  persist(
-    (set, get) => ({
-      cartId: null,
-      checkoutUrl: null,
-      lines: [],
-      totalQuantity: 0,
-      subtotal: null,
-      discountCodes: [],
-      isOpen: false,
-      isLoading: false,
-      isDiscountLoading: false,
-      openCart: () => set({ isOpen: true }),
-      closeCart: () => set({ isOpen: false }),
+export const useCartStore = create<CartState>((set, get) => ({
+  cart: null,
+  isOpen: false,
+  isLoading: false,
 
-      handleAddToCart: async (variantGid, options) => {
-        const quantity = options?.quantity ?? 1;
+  // Computed values
+  get cartId() { return get().cart?.id || null; },
+  get lines() { return mapCartLines(get().cart); },
+  get totalQuantity() { return get().cart?.totalQuantity || 0; },
+  get subtotal() { 
+    const amount = get().cart?.cost?.subtotalAmount;
+    return amount ? { amount: Number(amount.amount), currency: amount.currencyCode } : null;
+  },
+  get checkoutUrl() { return get().cart?.checkoutUrl || null; },
 
-        if (!variantGid || quantity <= 0) return false;
+  openCart: () => set({ isOpen: true }),
+  closeCart: () => set({ isOpen: false }),
 
-        console.group(`[Cart] handleAddToCart: ${variantGid}`);
-        console.log("Input Options:", options);
-        console.log("Current State:", {
-          cartId: get().cartId,
-          totalQuantity: get().totalQuantity,
-          lineCount: get().lines.length
+  clearCart: () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    set({ cart: null });
+  },
+
+  hydrate: async () => get().initCart(),
+
+  initCart: async () => {
+    const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!cartId) return;
+
+    try {
+      const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
+      if (data.cart) {
+        set({ cart: data.cart });
+      } else {
+        get().clearCart();
+      }
+    } catch (e) {
+      get().clearCart();
+    }
+  },
+
+  addLineAndOpen: async (merchandiseId: string, quantity: number) => {
+    const ok = await get().addToCart(merchandiseId, quantity);
+    if (ok) set({ isOpen: true });
+    return ok;
+  },
+
+  addToCart: async (merchandiseId: string, quantity: number) => {
+    set({ isLoading: true });
+
+    try {
+      // STEP 1: Check availability
+      const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
+      const variant = availabilityData.node;
+      if (!variant || !variant.availableForSale || variant.quantityAvailable === 0) {
+        toast.error("Out of Stock");
+        return false;
+      }
+
+      const executeAdd = async (retry = false): Promise<boolean> => {
+        let cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+        // STEP 2: Get or create cart
+        if (!cartId) {
+          const createData = await storefrontFetch<any>(queries.CART_CREATE);
+          if (createData.cartCreate?.userErrors?.length) {
+             throw new Error(createData.cartCreate.userErrors[0].message);
+          }
+          cartId = createData.cartCreate.cart.id;
+          localStorage.setItem(LOCAL_STORAGE_KEY, cartId!);
+          await new Promise(r => setTimeout(r, 500));
+        }
+
+        // STEP 3: Add lines
+        const addData = await storefrontFetch<any>(queries.CART_LINES_ADD, {
+          cartId,
+          lines: [{ merchandiseId, quantity }]
         });
 
-        set({ isLoading: true });
-        try {
-          const createEmptyCart = async () => {
-            console.log("[Cart] Creating fresh cart");
-            const data = await storefrontApiRequest<any>(CART_CREATE, {
-              input: {},
-            });
-            if (data?.errors) {
-               console.error("[Cart] GraphQL errors on cartCreate:", data.errors);
-            }
-            console.log("[Cart] cartCreate result:", data?.data?.cartCreate);
-            return data?.data?.cartCreate;
-          };
+        const { cart, userErrors, warnings } = addData.cartLinesAdd || {};
 
-          const addLinesToCart = async (cartId: string) => {
-            console.log("[Cart] Calling cartLinesAdd", { cartId, variantGid, quantity });
-            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
-              cartId,
-              lines: [{ merchandiseId: variantGid, quantity }],
-            });
-            if (data?.errors) {
-              console.error("[Cart] GraphQL errors on cartLinesAdd:", data.errors);
-            }
-            console.log("[Cart] cartLinesAdd result:", data?.data?.cartLinesAdd);
-            return data?.data?.cartLinesAdd;
-          };
+        // STEP 4: Handle response
+        if (userErrors?.length) {
+          const errorMsg = userErrors[0].message.toLowerCase();
+          const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
 
-          const createCartWithLines = async (variantId: string, qty: number) => {
-            console.log("[Cart] Creating cart with lines", { variantId, qty });
-            const data = await storefrontApiRequest<any>(CART_CREATE, {
-              input: {
-                lines: [{ merchandiseId: variantId, quantity: qty }]
-              },
-            });
-            if (data?.errors) {
-               console.error("[Cart] GraphQL errors on cartCreate with lines:", data.errors);
-            }
-            console.log("[Cart] cartCreate with lines result:", data?.data?.cartCreate);
-            return data?.data?.cartCreate;
-          };
-
-          const activeCartId = get().cartId ?? readPersistedCartId();
-          let result;
-
-          if (activeCartId) {
-            console.log("[Cart] Attempting add with activeCartId:", activeCartId);
-            result = await addLinesToCart(activeCartId);
-
-            // DETAILED CHECK: If result is null/undefined or has stale errors
-            if (!result || isStaleReferenceError(result?.userErrors)) {
-              console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
-              
-              // Clear session FIRST to prevent race conditions
-              set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-              if (typeof window !== "undefined") {
-                localStorage.removeItem("plantora-cart");
-              }
-
-              console.log("[Cart] Retrying by creating a new cart WITH lines directly");
-              result = await createCartWithLines(variantGid, quantity);
-            }
-          } else {
-            console.log("[Cart] No active cart, creating cart WITH lines directly");
-            result = await createCartWithLines(variantGid, quantity);
+          if (isStale && !retry) {
+            get().clearCart();
+            return executeAdd(true);
           }
-
-          const isLineActuallyAdded = (r: any) => {
-            const lines = mapCart(r?.cart)?.lines ?? [];
-            return lines.some(
-              (line) => line.merchandiseId === variantGid && line.quantity > 0,
-            );
-          };
-
-          // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
-          // it usually means a session-level inventory lock or a corrupted cart state.
-          // We will clear the cart and try ONE more time with a brand new cart ID and direct line creation.
-          const MAX_OOS_RETRIES = 2;
-          const SETTLE_DELAY_MS = 1500;
-          let retryCount = 0;
-
-          while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
-            const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
-            console.warn(`[Cart] Line quantity is 0 or missing. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning, cartId: result?.cart?.id });
-            
-            if (handleUserErrors(result?.userErrors)) {
-              console.warn("[Cart] User errors during retry, continuing recovery...");
-            }
-
-            // Clear session and localStorage FIRST
-            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-            if (typeof window !== "undefined") {
-              localStorage.removeItem("plantora-cart");
-            }
-            
-            // Wait for Shopify's cache to settle
-            await new Promise(r => setTimeout(r, SETTLE_DELAY_MS));
-            
-            console.log("[Cart] Retrying add by creating a completely fresh cart with lines");
-            result = await createCartWithLines(variantGid, quantity);
-            retryCount++;
-          }
-
-          if (!isLineActuallyAdded(result)) {
-            // If it STILL fails after retries, it's a real inventory issue or permanent failure
-            console.error("[Cart] Permanent failure: Product could not be added after recovery attempts.");
-            notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
-            console.groupEnd();
-            return false;
-          }
-
-          if (handleUserErrors(result?.userErrors)) {
-            console.error("[Cart] Aborting due to unresolved userErrors", result?.userErrors);
-            console.groupEnd();
-            return false;
-          }
-          
-          if (result?.warnings) {
-             notifyWarnings(result.warnings, result.cart?.lines?.edges ?? [], isLineActuallyAdded(result));
-          }
-
-          const mapped = mapCart(result?.cart);
-          console.log("[Cart] Final mapped state:", mapped);
-          
-          if (mapped) {
-            set(mapped);
-            if (isLineActuallyAdded(result)) {
-              console.log("[Cart] Success: Line added with quantity > 0");
-              console.groupEnd();
-              return true;
-            }
-          }
-          
-          console.error("[Cart] Failure: Line was not found in the final cart state");
-          console.groupEnd();
-          return false;
-        } catch (e: any) {
-          console.error("[Cart] handleAddToCart CRITICAL error:", e);
-          console.groupEnd();
-          toast.error(e?.message || "Something went wrong, please try again");
-          return false;
-        } finally {
-          set({ isLoading: false });
+          throw new Error(userErrors[0].message);
         }
-      },
 
-      hydrate: async () => {
-        const cartId = get().cartId;
-        if (!cartId) return;
-        set({ isLoading: true });
-        try {
-          const data = await storefrontApiRequest<any>(CART_QUERY, { cartId });
-          if (data?.errors) console.error("[Cart] Hydration GraphQL errors:", data.errors);
-          const cart = data?.data?.cart;
-          if (cart) {
-            set(mapCart(cart)!);
-          } else {
-            // Cart expired
-            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+        if (warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) {
+          if (!retry) {
+            get().clearCart();
+            await new Promise(r => setTimeout(r, 1500));
+            return executeAdd(true);
           }
-        } catch (e) {
-          console.error("Hydration error", e);
-        } finally {
-          set({ isLoading: false });
         }
-      },
 
-      setDiscountCodes: async (codes) => {
-        const cartId = get().cartId;
-        if (!cartId) return false;
-        set({ isDiscountLoading: true });
-        try {
-          const data = await storefrontApiRequest<any>(CART_DISCOUNT_CODES_UPDATE, {
-            cartId,
-            discountCodes: codes,
-          });
-          const result = data?.data?.cartDiscountCodesUpdate;
-          handleUserErrors(result?.userErrors);
-          
-          const cart = result?.cart;
-          if (!cart) return false;
-          
-          const mapped = mapCart(cart)!;
-          set(mapped);
-          
-          if (codes.length === 0) return true;
-          
-          const isValid = mapped.discountCodes.some(
-            d => d.applicable && codes.includes(d.code)
-          );
-          
-          if (!isValid && codes.length > 0) {
-            toast.error("Invalid or expired discount code.");
-          }
-          
-          return isValid;
-        } catch (e) {
-          toast.error("Something went wrong, please try again");
-          return false;
-        } finally {
-          set({ isDiscountLoading: false });
+        if (cart) {
+          set({ cart });
+          analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+          return true;
         }
-      },
 
-      addLine: async (merchandiseId, quantity = 1, variant) => {
-        return get().handleAddToCart(merchandiseId, {
-          quantity,
-          availableForSale: variant?.availableForSale,
-          quantityAvailable: variant?.quantityAvailable,
-        });
-      },
+        return false;
+      };
 
-      addLineAndOpen: async (merchandiseId, quantity = 1, variant) => {
-        const success = await get().addLine(merchandiseId, quantity, variant);
-        if (success) {
-          set({ isOpen: true });
-        }
-        return success;
-      },
+      return await executeAdd();
+    } catch (e: any) {
+      console.error("[CartStore] Error adding to cart:", e);
+      toast.error("Something went wrong, please try again");
+      return false;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
-      updateLine: async (lineId, quantity) => {
-        const cartId = get().cartId;
-        if (!cartId) return;
-        if (quantity <= 0) return get().removeLine(lineId);
+  updateLine: async (lineId: string, quantity: number) => {
+    const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!cartId) return;
 
-        set({ isLoading: true });
-        try {
-          const data = await storefrontApiRequest<any>(CART_LINES_UPDATE, {
-            cartId,
-            lines: [{ id: lineId, quantity }]
-          });
-          const result = data?.data?.cartLinesUpdate;
-          if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
-            console.warn("[Cart] Stale line on update, resyncing", result?.userErrors);
-            set({ isLoading: false });
-            await get().hydrate();
-            return;
-          }
-          handleUserErrors(result?.userErrors);
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
-          
-          const mapped = mapCart(result?.cart);
-          if (mapped) set(mapped);
-        } catch (e) {
-          toast.error("Something went wrong, please try again");
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+    set({ isLoading: true });
+    try {
+      const data = await storefrontFetch<any>(queries.CART_LINES_UPDATE, {
+        cartId,
+        lines: [{ id: lineId, quantity }]
+      });
+      const { cart, userErrors } = data.cartLinesUpdate || {};
+      if (userErrors?.length) throw new Error(userErrors[0].message);
+      if (cart) {
+        set({ cart });
+        analytics.trackCartUpdated(cart, 'update_cart');
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to update quantity");
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
-      removeLine: async (lineId) => {
-        const cartId = get().cartId;
-        if (!cartId) return;
-        set({ isLoading: true });
-        try {
-          const data = await storefrontApiRequest<any>(CART_LINES_REMOVE, {
-            cartId,
-            lineIds: [lineId]
-          });
-          const result = data?.data?.cartLinesRemove;
-          if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
-            console.warn("[Cart] Stale line on remove, resyncing", result?.userErrors);
-            set({ isLoading: false });
-            await get().hydrate();
-            return;
-          }
-          handleUserErrors(result?.userErrors);
-          
-          const mapped = mapCart(result?.cart);
-          if (mapped) set(mapped);
-        } catch (e) {
-          toast.error("Something went wrong, please try again");
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+  removeLine: async (lineId: string) => {
+    const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!cartId) return;
 
-    }),
-    {
-      name: "plantora-cart",
-      partialize: (state) => ({ cartId: state.cartId, checkoutUrl: state.checkoutUrl }),
-    },
-  ),
-);
-
-if (import.meta.env.DEV && typeof window !== 'undefined') {
-  (window as any).__CART_STORE__ = useCartStore;
-}
+    set({ isLoading: true });
+    try {
+      const data = await storefrontFetch<any>(queries.CART_LINES_REMOVE, {
+        cartId,
+        lineIds: [lineId]
+      });
+      const { cart, userErrors } = data.cartLinesRemove || {};
+      if (userErrors?.length) throw new Error(userErrors[0].message);
+      if (cart) {
+        set({ cart });
+        analytics.trackCartUpdated(cart, 'remove_from_cart');
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to remove item");
+    } finally {
+      set({ isLoading: false });
+    }
+  }
+}));

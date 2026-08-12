@@ -20,7 +20,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
-import { useShopifyPageView } from "@/hooks/useShopifyPageView";
+
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -156,9 +156,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function ShopifyAnalytics() {
   useShopifyCookies({ hasUserConsent: true });
-  useShopifyPageView();
   return null;
 }
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
