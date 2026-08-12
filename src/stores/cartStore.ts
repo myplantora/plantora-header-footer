@@ -314,8 +314,6 @@ export const useCartStore = create<CartState>()(
           if (activeCartId) {
             result = await addLinesToCart(activeCartId);
 
-            // If the cart doesn't exist OR the response is completely null/undefined
-            // it means the fetch failed or returned invalid data.
             if (!result || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
@@ -342,14 +340,25 @@ export const useCartStore = create<CartState>()(
               (line) => line.merchandiseId === variantGid && line.quantity > 0,
             );
 
-          if (activeCartId && !lineAdded(result)) {
-            console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
+          // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
+          // it usually means a session-level inventory lock or a corrupted cart state.
+          // We will clear the cart and try ONE more time with a brand new cart ID.
+          if (!lineAdded(result)) {
+            console.warn("[Cart] Line quantity is 0 despite 'success'. Forcing fresh cart retry.");
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-            const retryCart = await createEmptyCart();
-            const retryCartId = retryCart?.cart?.id;
-            if (retryCartId) {
-              const retry = await addLinesToCart(retryCartId);
-              if (retry?.cart) result = retry;
+            
+            const freshCart = await createEmptyCart();
+            const freshCartId = freshCart?.cart?.id;
+            
+            if (freshCartId) {
+              result = await addLinesToCart(freshCartId);
+              if (!lineAdded(result)) {
+                // If it STILL fails on a brand new cart, it's a real inventory issue from Shopify
+                console.error("[Cart] Permanent failure: Product is out of stock in Shopify backend.");
+                handleUserErrors(result?.userErrors);
+                notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
+                return false;
+              }
             }
           }
 
@@ -357,8 +366,10 @@ export const useCartStore = create<CartState>()(
           notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
 
           const mapped = mapCart(result?.cart);
-          if (mapped) set(mapped);
-          if (mapped && lineAdded(result)) return true;
+          if (mapped) {
+            set(mapped);
+            if (lineAdded(result)) return true;
+          }
           return false;
         } catch (e: any) {
           console.error("[Cart] handleAddToCart error:", e);
