@@ -119,9 +119,8 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   addLineAndOpen: async (merchandiseId: string, quantity: number) => {
-    const ok = await get().addToCart(merchandiseId, quantity);
-    if (ok) set({ isOpen: true });
-    return ok;
+    // We delegate the opening to addToCart success flow for better synchronization
+    return await get().addToCart(merchandiseId, quantity);
   },
 
   addToCart: async (merchandiseId: string, quantity: number) => {
@@ -189,9 +188,17 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
-          // Sync state and fire analytics
-          set({ cart });
+          // Fire analytics before syncing local state
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+
+          // SYNC local state immediately
+          set({ cart });
+          
+          // Force opening the drawer ONLY after we have the cart data
+          set({ isOpen: true });
+
+          // Force a final re-fetch of the cart in the background to ensure state is absolutely current
+
           
           // Force a final re-fetch of the cart to ensure state is absolutely current with Shopify's edge
           // This fixes the "0 items" issue in the drawer immediately after addition
@@ -203,10 +210,12 @@ export const useCartStore = create<CartState>((set, get) => ({
           return true;
         }
 
+        // If for some reason we got here without a cart but no error, we must fail
         return false;
       };
 
-      return await executeAdd();
+      const success = await executeAdd();
+      return success;
     } catch (e: any) {
       console.error("[CartStore] Add to cart failure:", e);
       const errorMsg = e.message?.toLowerCase() || '';

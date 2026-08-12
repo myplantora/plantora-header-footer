@@ -27,16 +27,14 @@ export function CartDrawer() {
   };
 
   useEffect(() => {
-    if (isOpen) trackCartViewed(useCartStore.getState().cart);
-  }, [isOpen]);
-
-
-  useEffect(() => {
-    // Only fetch when the drawer opens with no locally known lines; otherwise
-    // render instantly from the store and let mutations keep it in sync.
-    if (isOpen && lines.length === 0) void hydrate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+    if (isOpen) {
+      trackCartViewed(useCartStore.getState().cart);
+      // Ensure we have data if somehow we opened empty
+      if (lines.length === 0) {
+        hydrate();
+      }
+    }
+  }, [isOpen, lines.length, hydrate]);
 
   return (
     <div 
