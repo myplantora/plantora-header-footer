@@ -90,6 +90,7 @@ const CART_CREATE = `
     cartCreate(input: $input) {
       cart { ...CartFragment }
       userErrors { field message }
+      warnings { code message target }
     }
   }
 `;
