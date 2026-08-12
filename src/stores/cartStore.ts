@@ -135,7 +135,11 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   addToCart: async (merchandiseId: string, quantity: number) => {
-    set({ isLoading: true });
+    // Optimization: If we are already loading a change for this specific item, 
+    // we should still allow it to queue or process to ensure rapid clicks work.
+    // However, to prevent UI flickering, we only set global loading if not already open.
+    if (!get().isOpen) set({ isLoading: true });
+
 
     try {
       // STEP 1: Strict availability check
@@ -161,7 +165,7 @@ export const useCartStore = create<CartState>((set, get) => ({
           }
           currentCartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
-          await new Promise(r => setTimeout(r, 600));
+          await new Promise(r => setTimeout(r, 300)); // Reduced settle time for faster responsiveness
         }
 
         // STEP 3: Add lines separately
@@ -190,7 +194,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         if (!lineInCart && retryCount < 2) {
           console.log(`[CartStore] Item missing in response, retrying ${retryCount + 1}...`);
-          await new Promise(r => setTimeout(r, 800));
+          await new Promise(r => setTimeout(r, 400)); // Reduced retry delay
           return executeAdd(retryCount + 1);
         }
 
@@ -200,10 +204,12 @@ export const useCartStore = create<CartState>((set, get) => ({
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
 
           // Force local state update IMMEDIATELY
-          set({ cart });
-          
-          // Open drawer immediately
-          set({ isOpen: true });
+          set((state) => ({ 
+            cart, 
+            isLoading: false,
+            isOpen: true 
+          }));
+
 
           return true;
         }
