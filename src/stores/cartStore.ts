@@ -172,7 +172,7 @@ function handleUserErrors(errors: any[] | undefined) {
 }
 
 
-function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
+function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true) {
   if (!warnings?.length) return;
 
   const realWarnings = warnings.filter((w) => {
@@ -187,7 +187,7 @@ function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
     const handle = line?.node?.merchandise?.product?.handle || "";
 
     // Suppress if handle contains "combo" — these are CONTINUE policy products
-    const shouldSuppress = handle.toLowerCase().includes("combo");
+    const shouldSuppress = added && handle.toLowerCase().includes("combo");
 
     if (shouldSuppress) {
       console.warn("[Cart] Suppressed warning", w);
@@ -362,7 +362,7 @@ export const useCartStore = create<CartState>()(
           }
 
           handleUserErrors(result?.userErrors);
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
+          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
 
           const mapped = mapCart(result?.cart);
           if (mapped) set(mapped);
