@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Minus, Plus, Info, X, Loader2, AlertCircle } from "lucide-react";
 
@@ -49,6 +49,41 @@ export const Route = createFileRoute("/product/$handle")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
     };
+  },
+  errorComponent: ({ error, reset }) => {
+    const router = useRouter();
+    useEffect(() => {
+      console.error("[ProductPage Error]", error);
+    }, [error]);
+
+    return (
+      <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center bg-[#F8F8F8]">
+        <div className="size-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+          <AlertCircle className="size-8 text-destructive" />
+        </div>
+        <h2 className="text-2xl font-bold text-primary mb-2">Something went wrong</h2>
+        <p className="text-muted-foreground mb-6 max-w-md">
+          We encountered an error while loading this product. Please try refreshing the page.
+        </p>
+        <div className="flex gap-4">
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="rounded-full bg-primary px-8 py-3 font-bold text-white transition-transform active:scale-95"
+          >
+            Try again
+          </button>
+          <Link
+            to="/"
+            className="rounded-full border border-primary px-8 py-3 font-bold text-primary transition-transform active:scale-95"
+          >
+            Go home
+          </Link>
+        </div>
+      </div>
+    );
   },
   component: ProductPage,
 });
