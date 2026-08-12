@@ -169,12 +169,26 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         // Ensure cart exists
         if (!currentCartId || currentCartId.includes('FAKE')) {
-          const createData = await storefrontFetch<any>(queries.CART_CREATE);
+          const createData = await storefrontFetch<any>(queries.CART_CREATE, {
+            input: {
+              lines: [{ merchandiseId, quantity }],
+              buyerIdentity: { countryCode: "US" }
+            }
+          });
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
-          currentCartId = createData.cartCreate.cart.id;
+          const cart = createData.cartCreate.cart;
+          currentCartId = cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
+          
+          analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+          set({ 
+            ...deriveCartState(cart),
+            isLoading: pendingOperations > 1, 
+            isOpen: true 
+          });
+          return true;
         }
 
         // Add to cart
