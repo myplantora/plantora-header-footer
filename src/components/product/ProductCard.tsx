@@ -61,8 +61,8 @@ export function ProductCard({
 
     try {
       const ok = await addLineAndOpen(currentVariant.id, 1, {
-        availableForSale: currentVariant.available,
-        quantityAvailable: currentVariant.quantityAvailable,
+        availableForSale: currentVariant.available ?? false,
+        quantityAvailable: currentVariant.quantityAvailable ?? null,
       });
       if (!ok) return;
     } catch {

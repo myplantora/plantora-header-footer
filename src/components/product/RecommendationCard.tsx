@@ -204,8 +204,8 @@ export function RecommendationCard({ product, priority = false }: Props) {
                       );
                       if (matchingVariant) {
                         useCartStore.getState().addLineAndOpen(matchingVariant.id, 1, {
-                          availableForSale: matchingVariant.available,
-                          quantityAvailable: matchingVariant.quantityAvailable,
+                          availableForSale: matchingVariant.available ?? false,
+                          quantityAvailable: matchingVariant.quantityAvailable ?? null,
                         });
                       }
                     }}
