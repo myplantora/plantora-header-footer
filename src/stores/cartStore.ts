@@ -171,10 +171,12 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         const lineInCart = cart?.lines?.edges?.find((e: any) => 
-          e.node.merchandise.id === merchandiseId && e.node.quantity > 0
+          e.node.merchandise.id === merchandiseId
         );
 
-        if ((!lineInCart || warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) && retryCount < 2) {
+        if ((!lineInCart || lineInCart.node.quantity === 0) && retryCount < 2) {
+          console.log(`[CartStore] Item missing in response, retrying ${retryCount + 1}...`);
+          await new Promise(r => setTimeout(r, 800));
           return executeAdd(retryCount + 1);
         }
 
