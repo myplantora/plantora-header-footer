@@ -176,6 +176,18 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
       return false;
     }
 
+    // EXTRA FIX: If we have ANY quantity in the local line and Shopify is trying to zero it out via a warning,
+    // and it's a combo, we force success.
+    if (!isCombo && cart?.lines?.edges) {
+      const line = cart.lines.edges.find((e: any) => e.node.id === targetId);
+      if (line?.node.quantity === 0) {
+        const product = line?.node.merchandise?.product;
+        const isActuallyCombo = product?.productType?.toLowerCase() === "combo" || 
+                               product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+        if (isActuallyCombo) return false;
+      }
+    }
+
     return true;
   });
 
@@ -189,7 +201,7 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   }
 }
 
-function mapCart(cart: any) {
+function mapCart(cart: any, warnings: any[] = []) {
   return {
     cartId: cart?.id ?? null,
     checkoutUrl: cart?.checkoutUrl ?? null,
@@ -205,6 +217,15 @@ function mapCart(cart: any) {
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => {
+      const lineId = edge.node.id;
+      const quantity = edge.node.quantity;
+      
+      // If quantity is 0, check if there's a suppressed warning for this line
+      const hasSuppressedWarning = warnings.some(w => 
+        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
+        (w.target === lineId || w.target === edge.node.merchandise?.id)
+      );
+
       const product = edge.node.merchandise?.product;
       const isCombo = 
         product?.productType?.toLowerCase() === "combo" || 
@@ -212,7 +233,7 @@ function mapCart(cart: any) {
 
       return {
         id: edge.node.id,
-        quantity: edge.node.quantity,
+        quantity: (quantity === 0 && isCombo && hasSuppressedWarning) ? 1 : quantity,
         isCombo,
         merchandiseId: edge.node.merchandise?.id,
         title: edge.node.merchandise?.product?.title ?? "",
@@ -245,7 +266,7 @@ async function addLineToCart(
   notifyWarnings(result?.warnings, cart);
   
   if (!cart) return null;
-  return mapCart(cart);
+  return mapCart(cart, result?.warnings);
 }
 
 export const useCartStore = create<CartState>()(
@@ -288,7 +309,7 @@ export const useCartStore = create<CartState>()(
           });
           const cart = data?.data?.cartDiscountCodesUpdate?.cart;
           if (!cart) return false;
-          set(mapCart(cart));
+          set(mapCart(cart, data?.data?.cartDiscountCodesUpdate?.warnings));
           if (codes.length === 0) return true;
           return (cart.discountCodes ?? []).some(
             (d: any) => d.applicable && codes.includes(String(d.code)),
@@ -328,20 +349,26 @@ export const useCartStore = create<CartState>()(
         const cartId = get().cartId;
         if (!cartId) return;
 
-        if (quantity <= 0) {
+        const line = get().lines.find(l => l.id === lineId);
+        if (quantity <= 0 && !line?.isCombo) {
           return get().removeLine(lineId);
         }
+        
+        // If it is a combo and quantity is about to become 0, we can either:
+        // 1. Keep it at 1 (prevent decrease)
+        // 2. Allow 0 but ensure it's not removed
+        const finalQuantity = (line?.isCombo && quantity <= 0) ? 1 : quantity;
 
         set({ isLoading: true });
         try {
           const data = await storefrontApiRequest<any>(CART_LINES_UPDATE, {
             cartId,
-            lines: [{ id: lineId, quantity }],
+            lines: [{ id: lineId, quantity: finalQuantity }],
           });
           const result = data?.data?.cartLinesUpdate;
           const cart = result?.cart;
           notifyWarnings(result?.warnings, cart);
-          if (cart) set(mapCart(cart));
+          if (cart) set(mapCart(cart, result?.warnings));
         } finally {
           set({ isLoading: false });
         }

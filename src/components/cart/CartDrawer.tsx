@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { X, Minus, Plus, ChevronRight, ShoppingBag, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
@@ -146,6 +147,14 @@ export function CartDrawer() {
                       </p>
                     ) : null}
 
+                    {line.quantity === 0 && line.isCombo ? (
+                      <div className="flex flex-col gap-1">
+                        <p className="text-[10px] leading-tight text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
+                          Note: This combo is available, but individual stock varies. You can still checkout.
+                        </p>
+                      </div>
+                    ) : null}
+
                     <div className="flex items-end justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center rounded-full border border-border px-1 py-1">
@@ -153,8 +162,18 @@ export function CartDrawer() {
                             type="button"
                             aria-label="Decrease quantity"
                             disabled={isLoading}
-                            onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity - 1); }}
-                            className="grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                            onClick={() => { 
+                              if (line.quantity <= 1 && line.isCombo) {
+                                // For combos at 1, don't let it go to 0 via minus
+                                return;
+                              }
+                              triggerHaptic('light'); 
+                              updateLine(line.id, line.quantity - 1); 
+                            }}
+                            className={cn(
+                              "grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                              line.quantity <= 1 && line.isCombo && "opacity-20 cursor-not-allowed"
+                            )}
                           >
                             <Minus className="size-3" />
                           </button>
@@ -225,13 +244,20 @@ export function CartDrawer() {
                   checkoutUrl,
                   resolveRewardState(subtotal?.amount ?? 0).bestCode
                 );
-                if (url && url !== "#") {
-                  // Fires checkout_started (once, keepalive) then navigates.
+                
+                if (!url || url === "#") {
+                  toast.error("Checkout unavailable", {
+                    description: "Please ensure all items are in stock or contact support."
+                  });
+                  return;
+                }
+
+                // Fire checkout_started (once, keepalive) then navigates.
                   handleCheckout(url, (target) =>
                     window.open(target, "_blank", "noopener,noreferrer")
                   );
                 }
-              }}
+              }
               className="relative flex h-[44px] w-full items-center justify-center rounded-full bg-[#C3754C] px-8 text-sm font-normal text-primary-foreground transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <div className="flex items-center gap-[10px]">
