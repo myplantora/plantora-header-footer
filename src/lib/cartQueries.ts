@@ -48,10 +48,8 @@ export const CART_FRAGMENT = `
 
 export const CART_CREATE = `
   ${CART_FRAGMENT}
-  mutation CartCreate ${STOREFRONT_CONTEXT} {
-    cartCreate(input: {
-      buyerIdentity: { countryCode: US }
-    }) {
+  mutation CartCreate($input: CartInput!) ${STOREFRONT_CONTEXT} {
+    cartCreate(input: $input) {
       cart { ...CartFragment }
       userErrors { field message }
     }
