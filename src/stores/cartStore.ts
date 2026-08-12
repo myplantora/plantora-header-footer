@@ -201,7 +201,7 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   }
 }
 
-function mapCart(cart: any) {
+function mapCart(cart: any, warnings: any[] = []) {
   return {
     cartId: cart?.id ?? null,
     checkoutUrl: cart?.checkoutUrl ?? null,
@@ -217,6 +217,15 @@ function mapCart(cart: any) {
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => {
+      const lineId = edge.node.id;
+      const quantity = edge.node.quantity;
+      
+      // If quantity is 0, check if there's a suppressed warning for this line
+      const hasSuppressedWarning = warnings.some(w => 
+        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
+        (w.target === lineId || w.target === edge.node.merchandise?.id)
+      );
+
       const product = edge.node.merchandise?.product;
       const isCombo = 
         product?.productType?.toLowerCase() === "combo" || 
