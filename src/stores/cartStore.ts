@@ -423,22 +423,15 @@ export const useCartStore = create<CartState>()(
           }
           
           if (result?.warnings) {
-             notifyWarnings(result.warnings, result.cart?.lines?.edges ?? [], true);
+             notifyWarnings(result.warnings, result.cart?.lines?.edges ?? [], isLineActuallyAdded(result));
           }
-
-          if (handleUserErrors(result?.userErrors)) {
-            console.error("[Cart] Aborting due to userErrors", result?.userErrors);
-            console.groupEnd();
-            return false;
-          }
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
 
           const mapped = mapCart(result?.cart);
           console.log("[Cart] Final mapped state:", mapped);
           
           if (mapped) {
             set(mapped);
-            if (lineAdded(result)) {
+            if (isLineActuallyAdded(result)) {
               console.log("[Cart] Success: Line added with quantity > 0");
               console.groupEnd();
               return true;
