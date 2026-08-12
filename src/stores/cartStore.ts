@@ -371,7 +371,7 @@ export const useCartStore = create<CartState>()(
           const result = data?.data?.cartLinesUpdate;
           const cart = result?.cart;
           notifyWarnings(result?.warnings, cart);
-          if (cart) set(mapCart(cart));
+          if (cart) set(mapCart(cart, result?.warnings));
         } finally {
           set({ isLoading: false });
         }
