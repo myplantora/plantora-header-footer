@@ -54,9 +54,11 @@ const STALE_ERRORS = [
 ];
 
 function mapCartLines(cart: any): CartLine[] {
-  const edges = cart?.lines?.edges || [];
+  if (!cart) return [];
+  const edges = cart.lines?.edges || [];
   return edges.map((edge: any) => {
     const node = edge.node;
+    if (!node) return null;
     const merchandise = node.merchandise;
     const product = merchandise?.product;
     
@@ -75,7 +77,7 @@ function mapCartLines(cart: any): CartLine[] {
       currency: merchandise?.price?.currencyCode || 'USD',
       productType: product?.productType || '',
     };
-  });
+  }).filter(Boolean) as CartLine[];
 }
 
 
@@ -87,9 +89,8 @@ export const useCartStore = create<CartState>((set, get) => ({
   // Computed values
   get cartId() { return get().cart?.id || null; },
   get lines() { 
-    return mapCartLines(get().cart); 
+    return mapCartLines(get().cart);
   },
-
 
   get totalQuantity() { return get().cart?.totalQuantity || 0; },
   get subtotal() { 
@@ -204,11 +205,11 @@ export const useCartStore = create<CartState>((set, get) => ({
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
 
           // Force local state update IMMEDIATELY
-          set((state) => ({ 
-            cart, 
+          set({ 
+            cart: { ...cart }, 
             isLoading: false,
             isOpen: true 
-          }));
+          });
 
 
           return true;
