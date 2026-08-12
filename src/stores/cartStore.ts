@@ -406,7 +406,7 @@ export const useCartStore = create<CartState>()(
             }
           }
 
-          if (!lineAdded(result)) {
+          if (!isLineActuallyAdded(result)) {
             // If it STILL fails after retries, it's a real inventory issue or permanent failure
             console.error("[Cart] Permanent failure: Product could not be added after recovery attempts.");
             handleUserErrors(result?.userErrors);
