@@ -291,10 +291,7 @@ export const useCartStore = create<CartState>()(
         try {
           const data = await storefrontApiRequest<any>(CART_QUERY, { id: cartId });
           const cart = data?.data?.cart;
-  set(mapCart(cart, data?.data?.cart?.warnings)); // warnings are usually siblings to cart in queries or inside mutations
-  // Actually, in the hydrate query, warnings aren't returned usually. 
-  // Let's stick to mapCart(cart) if no warnings array is passed.
-  if (cart) set(mapCart(cart));
+          if (cart) set(mapCart(cart));
           else set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null });
         } finally {
           set({ isLoading: false });
