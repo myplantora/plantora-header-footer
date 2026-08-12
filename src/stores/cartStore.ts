@@ -348,8 +348,10 @@ export const useCartStore = create<CartState>()(
             const createdCartId = created?.cart?.id;
             if (!createdCartId) {
               console.error("[Cart] Failed to create first cart");
+              console.groupEnd();
               return false;
             }
+            console.log("[Cart] Add with first createdCartId:", createdCartId);
             result = await addLinesToCart(createdCartId);
           }
 
