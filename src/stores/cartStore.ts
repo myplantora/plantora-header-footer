@@ -326,6 +326,20 @@ export const useCartStore = create<CartState>()(
             return data?.data?.cartLinesAdd;
           };
 
+          const createCartWithLines = async (variantId: string, qty: number) => {
+            console.log("[Cart] Creating cart with lines", { variantId, qty });
+            const data = await storefrontApiRequest<any>(CART_CREATE, {
+              input: {
+                lines: [{ merchandiseId: variantId, quantity: qty }]
+              },
+            });
+            if (data?.errors) {
+               console.error("[Cart] GraphQL errors on cartCreate with lines:", data.errors);
+            }
+            console.log("[Cart] cartCreate with lines result:", data?.data?.cartCreate);
+            return data?.data?.cartCreate;
+          };
+
           const activeCartId = get().cartId ?? readPersistedCartId();
           let result;
 
@@ -343,27 +357,12 @@ export const useCartStore = create<CartState>()(
                 localStorage.removeItem("plantora-cart");
               }
 
-              const recreated = await createEmptyCart();
-              const recreatedCartId = recreated?.cart?.id;
-              if (!recreatedCartId) {
-                console.error("[Cart] Failed to recreate cart");
-                console.groupEnd();
-                return false;
-              }
-              console.log("[Cart] Retrying add with recreatedCartId:", recreatedCartId);
-              result = await addLinesToCart(recreatedCartId);
+              console.log("[Cart] Retrying by creating a new cart WITH lines directly");
+              result = await createCartWithLines(variantGid, quantity);
             }
           } else {
-            console.log("[Cart] No active cart, creating empty cart first...");
-            const created = await createEmptyCart();
-            const createdCartId = created?.cart?.id;
-            if (!createdCartId) {
-              console.error("[Cart] Failed to create first cart");
-              console.groupEnd();
-              return false;
-            }
-            console.log("[Cart] Now adding lines to new cartId:", createdCartId);
-            result = await addLinesToCart(createdCartId);
+            console.log("[Cart] No active cart, creating cart WITH lines directly");
+            result = await createCartWithLines(variantGid, quantity);
           }
 
           const isLineActuallyAdded = (r: any) => {
@@ -375,38 +374,31 @@ export const useCartStore = create<CartState>()(
 
           // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
           // it usually means a session-level inventory lock or a corrupted cart state.
-          // We will clear the cart and try ONE more time with a brand new cart ID.
+          // We will clear the cart and try ONE more time with a brand new cart ID and direct line creation.
           const MAX_OOS_RETRIES = 2;
           const SETTLE_DELAY_MS = 1500;
           let retryCount = 0;
 
-
           while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
             console.warn(`[Cart] Line quantity is 0 or missing. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning, cartId: result?.cart?.id });
+            
             if (handleUserErrors(result?.userErrors)) {
-              console.warn("[Cart] Stale reference during retry, force resetting...");
+              console.warn("[Cart] User errors during retry, continuing recovery...");
             }
 
             // Clear session and localStorage FIRST
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             if (typeof window !== "undefined") {
               localStorage.removeItem("plantora-cart");
-              localStorage.removeItem("cartId"); // Just in case another key was used
             }
             
-            const freshCart = await createEmptyCart();
-            const freshCartId = freshCart?.cart?.id;
+            // Wait for Shopify's cache to settle
+            await new Promise(r => setTimeout(r, SETTLE_DELAY_MS));
             
-            if (freshCartId) {
-              // Wait for Shopify's cache to settle
-              await new Promise(r => setTimeout(r, SETTLE_DELAY_MS));
-              
-              result = await addLinesToCart(freshCartId);
-              retryCount++;
-            } else {
-              break;
-            }
+            console.log("[Cart] Retrying add by creating a completely fresh cart with lines");
+            result = await createCartWithLines(variantGid, quantity);
+            retryCount++;
           }
 
           if (!isLineActuallyAdded(result)) {
