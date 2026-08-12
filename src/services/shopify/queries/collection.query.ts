@@ -1,4 +1,19 @@
-import { metafieldIdentifiersLiteral } from "../config";
+import globalConfig from "../../../../config/globalconf.json";
+const metafieldConfig = globalConfig.metafields;
+
+const metafieldIdentifiersLiteral = () => {
+  const media = metafieldConfig.media as Record<string, { namespace: string; key: string }>;
+  const badges = (metafieldConfig.badges as { namespace: string; key: string }[]) || [];
+  const reviews = metafieldConfig.reviews as Record<string, { namespace: string; key: string }>;
+
+  const identifiers = [
+    ...Object.values(media),
+    ...badges,
+    ...Object.values(reviews),
+  ].map((i) => `{ namespace: "${i.namespace}", key: "${i.key}" }`);
+
+  return `[${identifiers.join(", ")}]`;
+};
 
 const PRODUCT_CARD_FRAGMENT = `
   fragment ProductCardFields on Product {
