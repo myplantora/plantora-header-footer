@@ -137,7 +137,7 @@ export function CartDrawer() {
                   className="group flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50 relative"
                 >
                   {isLoading && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/40 backdrop-blur-[1px]">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/5 pointer-events-none">
                       <div className="size-5 animate-spin rounded-full border-2 border-brand border-t-transparent" />
                     </div>
                   )}

@@ -149,6 +149,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   addToCart: async (merchandiseId: string, quantity: number) => {
     pendingOperations++;
+    // Do not set global loading if cart is already open to allow background updates
     if (!get().isOpen) set({ isLoading: true });
 
     try {
@@ -261,7 +262,8 @@ export const useCartStore = create<CartState>((set, get) => ({
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
     pendingOperations++;
-    set({ isLoading: true });
+    // background update
+    if (!get().isOpen) set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_UPDATE, {
         cartId,
@@ -285,7 +287,8 @@ export const useCartStore = create<CartState>((set, get) => ({
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
     pendingOperations++;
-    set({ isLoading: true });
+    // background update
+    if (!get().isOpen) set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_REMOVE, {
         cartId,
