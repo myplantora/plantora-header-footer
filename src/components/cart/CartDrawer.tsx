@@ -199,7 +199,7 @@ export function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={isLoading || !checkoutUrl}
-              className="w-full rounded-full bg-brand py-4 text-sm font-bold text-white uppercase tracking-widest shadow-lg transition-all hover:bg-brand/90 active:scale-[0.98] disabled:opacity-50"
+              className="w-full rounded-full bg-[#C3754C] py-4 text-sm font-bold text-white uppercase tracking-widest shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? "PROCESSING..." : "SECURE CHECKOUT"}
             </button>
