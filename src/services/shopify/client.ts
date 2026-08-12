@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { SHOPIFY_STOREFRONT_URL, shopifyConfig } from "./config";
 
-const ADMIN_ONLY_STOREFRONT_FIELDS = /\binventoryPolicy\b/g;
+const ADMIN_ONLY_STOREFRONT_FIELDS = /\binventoryPolicy\b/;
 
 function sanitizeStorefrontQuery(query: string): string {
   if (!ADMIN_ONLY_STOREFRONT_FIELDS.test(query)) return query;
