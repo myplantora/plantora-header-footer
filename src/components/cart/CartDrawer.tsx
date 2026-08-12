@@ -76,18 +76,36 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <CartRewards />
           
-          {(!lines || lines.length === 0) ? (
+          {isLoading && lines.length === 0 ? (
+            <div className="mt-4 space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50 animate-pulse">
+                  <div className="size-24 shrink-0 rounded-xl bg-secondary" />
+                  <div className="flex flex-1 flex-col justify-between py-1">
+                    <div className="space-y-2">
+                      <div className="h-4 w-3/4 rounded bg-secondary" />
+                      <div className="h-3 w-1/2 rounded bg-secondary" />
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="h-8 w-24 rounded-full bg-secondary" />
+                      <div className="h-4 w-16 rounded bg-secondary" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : lines.length === 0 ? (
             <div className="flex flex-col items-center py-12 text-center">
               <div className="mb-6 grid size-20 place-items-center rounded-full bg-[#F1F8EE]">
                 <ShoppingBag className="size-10 text-[#74A84A]" />
               </div>
-              <h3 className="text-2xl font-semibold text-[#254838]">Your cart is empty</h3>
-              <p className="mt-2 text-muted-foreground">Add some greenery to your space!</p>
+              <h3 className="text-2xl font-semibold text-[#254838]">Your basket is empty</h3>
+              <p className="mt-2 text-muted-foreground px-8">It looks like you haven't added any plants yet. Let's find some greenery for your space!</p>
               <button
                 onClick={closeCart}
-                className="mt-8 w-full rounded-full bg-primary py-4 font-bold text-white uppercase tracking-widest transition-transform active:scale-95"
+                className="mt-8 w-full rounded-full bg-primary py-4 font-bold text-white uppercase tracking-widest transition-transform active:scale-95 shadow-md hover:shadow-lg"
               >
-                Start Shopping
+                Explore Collection
               </button>
             </div>
           ) : (
@@ -95,8 +113,13 @@ export function CartDrawer() {
               {lines.map((line) => (
                 <li
                   key={line.id}
-                  className="group flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50"
+                  className="group flex gap-4 rounded-2xl bg-white p-4 shadow-sm border border-border/50 relative"
                 >
+                  {isLoading && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/40 backdrop-blur-[1px]">
+                      <div className="size-5 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+                    </div>
+                  )}
                   <Link
                     to="/product/$handle"
                     params={{ handle: line.handle }}
@@ -117,7 +140,7 @@ export function CartDrawer() {
                       >
                         {line.title}
                       </Link>
-                      {line.variantTitle !== "Default Title" && (
+                      {line.variantTitle && line.variantTitle !== "Default Title" && (
                         <p className="text-xs text-muted-foreground">{line.variantTitle}</p>
                       )}
                     </div>
@@ -127,15 +150,15 @@ export function CartDrawer() {
                         <button
                           onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity - 1); }}
                           disabled={isLoading}
-                          className="p-1 hover:text-brand disabled:opacity-50"
+                          className="p-1 hover:text-brand disabled:opacity-50 transition-colors"
                         >
                           <Minus className="size-3" />
                         </button>
-                        <span className="w-8 text-center text-sm font-medium">{line.quantity}</span>
+                        <span className="w-8 text-center text-sm font-bold">{line.quantity}</span>
                         <button
                           onClick={() => { triggerHaptic('light'); updateLine(line.id, line.quantity + 1); }}
                           disabled={isLoading}
-                          className="p-1 hover:text-brand disabled:opacity-50"
+                          className="p-1 hover:text-brand disabled:opacity-50 transition-colors"
                         >
                           <Plus className="size-3" />
                         </button>
@@ -147,7 +170,8 @@ export function CartDrawer() {
                         </p>
                         <button
                           onClick={() => { triggerHaptic('heavy'); removeLine(line.id); }}
-                          className="p-1 opacity-60 hover:opacity-100"
+                          disabled={isLoading}
+                          className="p-1 opacity-60 hover:opacity-100 transition-opacity disabled:opacity-30"
                         >
                           <img src={BIN_CDN} alt="Remove" className="size-5" />
                         </button>
@@ -158,6 +182,7 @@ export function CartDrawer() {
               ))}
             </ul>
           )}
+
         </div>
 
         {lines.length > 0 && (
