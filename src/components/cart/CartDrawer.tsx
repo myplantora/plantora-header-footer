@@ -6,8 +6,8 @@ import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
-import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { trackCartViewed } from "@/lib/analytics";
+import { trackMetaEvent } from "@/lib/analytics/meta.events";
 import { resolveRewardState } from "@/lib/rewards";
 
 const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?v=1786470456";
@@ -17,8 +17,6 @@ export function CartDrawer() {
   const { isOpen, closeCart, cart, subtotal, lines, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
   
-  const { trackInitiateCheckout } = useMetaTracking();
-
   useEffect(() => {
     if (isOpen) {
       trackCartViewed(useCartStore.getState().cart);
@@ -43,7 +41,19 @@ export function CartDrawer() {
     const finalUrl = buildCheckoutUrl(checkoutUrl, rewardState.bestCode);
 
     try {
-      trackInitiateCheckout(currentCart);
+      trackMetaEvent("InitiateCheckout", {
+        content_ids: lines.map((line) => line.merchandiseId).filter(Boolean),
+        content_type: "product",
+        contents: lines.map((line) => ({
+          id: line.merchandiseId,
+          quantity: line.quantity,
+          price: line.amount,
+          title: line.title,
+        })),
+        value: Number(subtotalAmount),
+        currency: subtotal?.currency ?? lines[0]?.currency ?? "USD",
+        num_items: lines.reduce((total, line) => total + line.quantity, 0),
+      });
     } catch (err) {
       console.warn("[Checkout] tracking failed, continuing", err);
     } finally {
