@@ -33,7 +33,7 @@ export function CartDrawer() {
 
 
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (checkoutUrl) {
       const currentCart = useCartStore.getState().cart;
       const subtotalAmount = currentCart?.cost?.subtotalAmount?.amount ?? 0;
