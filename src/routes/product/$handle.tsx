@@ -167,7 +167,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
   useEffect(() => {
     trackViewContent(product);
-  }, [product, trackViewContent]);
+  }, [product.id]); // Only re-track if the product ID actually changes, not the whole object reference
 
 
   const variant = (product.variants.find((v) => v.id === variantId) ?? product.variants[0])!;
