@@ -55,9 +55,7 @@ function Index() {
         <MarqueeBanner />
 
 
-        <div className="max-w-[90vw] mx-auto py-12 px-4 border-t border-muted/20">
-          <div className="bg-muted/5 rounded-2xl p-8 shadow-sm">
-            <h3 className="text-xl font-fraunces font-bold text-brand mb-6 text-center">Implementation Details</h3>
+
             <pre className="text-[13px] text-muted-foreground/80 font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">
 {`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
