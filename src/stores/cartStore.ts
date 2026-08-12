@@ -365,10 +365,12 @@ export const useCartStore = create<CartState>()(
             result = await addLinesToCart(createdCartId);
           }
 
-          const lineAdded = (r: any) =>
-            (mapCart(r?.cart)?.lines ?? []).some(
+          const isLineActuallyAdded = (r: any) => {
+            const lines = mapCart(r?.cart)?.lines ?? [];
+            return lines.some(
               (line) => line.merchandiseId === variantGid && line.quantity > 0,
             );
+          };
 
           // FORCE RECOVERY: If the line was NOT added (quantity 0) despite Shopify claiming success,
           // it usually means a session-level inventory lock or a corrupted cart state.
