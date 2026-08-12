@@ -151,8 +151,8 @@ export function CartDrawer() {
                       <img src={line.imageUrl} alt={line.title} className="size-full object-cover transition-transform group-hover:scale-105" />
                     )}
                   </Link>
-                  <div className="flex flex-1 flex-col justify-between py-1">
-                    <div>
+                  <div className="flex flex-1 flex-col justify-between py-1 min-h-[112px]">
+                    <div className="min-h-[2.5rem]">
                       <Link
                         to="/product/$handle"
                         params={{ handle: line.handle }}
@@ -161,8 +161,10 @@ export function CartDrawer() {
                       >
                         {line.title}
                       </Link>
-                      {line.variantTitle && line.variantTitle !== "Default Title" && (
-                        <p className="text-xs text-muted-foreground">{line.variantTitle}</p>
+                      {line.variantTitle && line.variantTitle !== "Default Title" ? (
+                        <p className="text-xs text-muted-foreground line-clamp-1">{line.variantTitle}</p>
+                      ) : (
+                        <div className="h-4" /> 
                       )}
                     </div>
                     
