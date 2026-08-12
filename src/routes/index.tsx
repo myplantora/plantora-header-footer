@@ -54,11 +54,6 @@ function Index() {
         <BrandMission />
         <MarqueeBanner />
 
-        <div className="mx-auto max-w-[1400px] px-4 py-8 text-center text-[13px] text-muted-foreground/60">
-          '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-          <br /><br />
-          When i click on Add to basket buddy, The product item is not getting updated in card, check the reason was it issue from API reponse or in our end
-        </div>
       </main>
       <Footer />
     </>
