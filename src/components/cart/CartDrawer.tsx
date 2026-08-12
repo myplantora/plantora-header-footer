@@ -43,8 +43,12 @@ export function CartDrawer() {
     const rewardState = resolveRewardState(Number(subtotalAmount));
     const finalUrl = buildCheckoutUrl(checkoutUrl, rewardState.bestCode);
 
-    trackInitiateCheckout(currentCart);
-    trackPurchase(currentCart);
+    try {
+      trackInitiateCheckout(currentCart);
+      trackPurchase(currentCart);
+    } catch (err) {
+      console.warn("[Checkout] tracking failed, continuing", err);
+    }
 
     // Perform a direct top-level navigation
     window.location.href = finalUrl;
