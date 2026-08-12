@@ -141,19 +141,12 @@ export function CartDrawer() {
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
 
-                    {line.quantity === 0 && !line.isCombo ? (
+                    {line.quantity === 0 ? (
                       <p className="text-xs font-medium text-[#C3754C]">
                         Sold out &mdash; unavailable for checkout
                       </p>
                     ) : null}
 
-                    {line.quantity === 0 && line.isCombo ? (
-                      <div className="flex flex-col gap-1">
-                        <p className="text-[10px] leading-tight text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
-                          Note: This combo is available, but individual stock varies. You can still checkout.
-                        </p>
-                      </div>
-                    ) : null}
 
                     <div className="flex items-end justify-between gap-2">
                       <div className="flex items-center gap-2">

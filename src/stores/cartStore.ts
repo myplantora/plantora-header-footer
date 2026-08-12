@@ -6,7 +6,6 @@ import { toast } from "sonner";
 export type CartLine = {
   id: string;
   quantity: number;
-  isCombo?: boolean;
   merchandiseId: string;
   title: string;
   handle: string;
@@ -16,6 +15,7 @@ export type CartLine = {
   compareAtAmount: number | null;
   currency: string;
 };
+
 
 export type CartDiscountCode = { code: string; applicable: boolean };
 
@@ -158,24 +158,9 @@ function mapCart(cart: any, warnings: any[] = []) {
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
     lines: (cart?.lines?.edges ?? []).map((edge: any) => {
-      const lineId = edge.node.id;
-      const quantity = edge.node.quantity;
-      
-      // If quantity is 0, check if there's a suppressed warning for this line
-      const hasSuppressedWarning = warnings.some(w => 
-        w.code === "MERCHANDISE_OUT_OF_STOCK" && 
-        (w.target === lineId || w.target === edge.node.merchandise?.id)
-      );
-
-      const product = edge.node.merchandise?.product;
-      const isCombo = 
-        product?.productType?.toLowerCase() === "combo" || 
-        product?.tags?.some((t: string) => t.toLowerCase() === "combo-product");
-
       return {
         id: edge.node.id,
-        quantity: (quantity === 0 && isCombo && hasSuppressedWarning) ? 1 : quantity,
-        isCombo,
+        quantity: edge.node.quantity,
         merchandiseId: edge.node.merchandise?.id,
         title: edge.node.merchandise?.product?.title ?? "",
         handle: edge.node.merchandise?.product?.handle ?? "",
@@ -291,14 +276,12 @@ export const useCartStore = create<CartState>()(
         if (!cartId) return;
 
         const line = get().lines.find(l => l.id === lineId);
-        if (quantity <= 0 && !line?.isCombo) {
+        if (quantity <= 0) {
           return get().removeLine(lineId);
         }
         
-        // If it is a combo and quantity is about to become 0, we can either:
-        // 1. Keep it at 1 (prevent decrease)
-        // 2. Allow 0 but ensure it's not removed
-        const finalQuantity = (line?.isCombo && quantity <= 0) ? 1 : quantity;
+        const finalQuantity = quantity;
+
 
         set({ isLoading: true });
         try {
