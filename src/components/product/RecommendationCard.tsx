@@ -40,7 +40,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
     setPending(true);
     try {
       const ok = await addLineAndOpen(variantId, 1, {
-        availableForSale: selectedVariant?.available,
+        availableForSale: selectedVariant?.available ?? false,
         quantityAvailable: selectedVariant?.quantityAvailable ?? null,
       });
       if (ok) {
