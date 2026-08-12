@@ -8,6 +8,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { trackCartViewed } from "@/lib/analytics";
+import { resolveRewardState } from "@/lib/rewards";
 
 const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?v=1786470456";
 
@@ -16,7 +17,7 @@ export function CartDrawer() {
   const { isOpen, closeCart, cart, subtotal, lines, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
   
-  const { trackInitiateCheckout, trackPurchase } = useMetaTracking();
+  const { trackInitiateCheckout } = useMetaTracking();
 
   useEffect(() => {
     if (isOpen) {
@@ -33,25 +34,22 @@ export function CartDrawer() {
 
 
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (!checkoutUrl) return;
 
     const currentCart = useCartStore.getState().cart;
     const subtotalAmount = currentCart?.cost?.subtotalAmount?.amount ?? 0;
-
-    const { resolveRewardState } = await import("@/lib/rewards");
     const rewardState = resolveRewardState(Number(subtotalAmount));
     const finalUrl = buildCheckoutUrl(checkoutUrl, rewardState.bestCode);
 
     try {
       trackInitiateCheckout(currentCart);
-      trackPurchase(currentCart);
     } catch (err) {
       console.warn("[Checkout] tracking failed, continuing", err);
+    } finally {
+      // Checkout navigation must never depend on analytics succeeding.
+      window.location.assign(finalUrl);
     }
-
-    // Perform a direct top-level navigation
-    window.location.href = finalUrl;
   };
 
   return (
