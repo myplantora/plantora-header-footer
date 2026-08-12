@@ -230,6 +230,7 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
 
         if (cart) {
+          console.log(`[Cart Updated] Cart ID: ${cart.id} | Total lines: ${cart.lines?.edges?.length}`);
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
           // Force shallow clone for immediate reactivity
           set({ 
