@@ -16,6 +16,9 @@ export function buildCheckoutUrl(checkoutUrl: string | null, code: string | null
   if (!checkoutUrl) return "#";
   try {
     const url = new URL(checkoutUrl);
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      return checkoutUrl;
+    }
     url.searchParams.set("channel", "online_store");
     if (code) {
       url.searchParams.set("discount", code.toUpperCase());
