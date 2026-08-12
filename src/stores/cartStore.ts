@@ -413,10 +413,19 @@ export const useCartStore = create<CartState>()(
           if (!isLineActuallyAdded(result)) {
             // If it STILL fails after retries, it's a real inventory issue or permanent failure
             console.error("[Cart] Permanent failure: Product could not be added after recovery attempts.");
-            handleUserErrors(result?.userErrors);
             notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], true);
             console.groupEnd();
             return false;
+          }
+
+          if (handleUserErrors(result?.userErrors)) {
+            console.error("[Cart] Aborting due to unresolved userErrors", result?.userErrors);
+            console.groupEnd();
+            return false;
+          }
+          
+          if (result?.warnings) {
+             notifyWarnings(result.warnings, result.cart?.lines?.edges ?? [], true);
           }
 
           if (handleUserErrors(result?.userErrors)) {
