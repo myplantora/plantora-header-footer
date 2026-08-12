@@ -172,7 +172,7 @@ function handleUserErrors(errors: any[] | undefined) {
 }
 
 
-function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
+function notifyWarnings(warnings: any[] | undefined, lines: any[], added = true) {
   if (!warnings?.length) return;
 
   const realWarnings = warnings.filter((w) => {
@@ -187,7 +187,7 @@ function notifyWarnings(warnings: any[] | undefined, lines: any[]) {
     const handle = line?.node?.merchandise?.product?.handle || "";
 
     // Suppress if handle contains "combo" — these are CONTINUE policy products
-    const shouldSuppress = handle.toLowerCase().includes("combo");
+    const shouldSuppress = added && handle.toLowerCase().includes("combo");
 
     if (shouldSuppress) {
       console.warn("[Cart] Suppressed warning", w);
@@ -345,17 +345,30 @@ export const useCartStore = create<CartState>()(
             result = await createCart();
           }
 
-          handleUserErrors(result?.userErrors);
-          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? []);
-          
-          const mapped = mapCart(result?.cart);
-          const addedLine = mapped?.lines.find((line) => line.merchandiseId === merchandiseId);
-          if (mapped && addedLine && addedLine.quantity > 0) {
-            set(mapped);
-            return true;
+          const lineAdded = (r: any) =>
+            (mapCart(r?.cart)?.lines ?? []).some(
+              (line) => line.merchandiseId === merchandiseId && line.quantity > 0
+            );
+
+          // Some carts get stuck in a bad state on Shopify's side: the mutation
+          // succeeds but the line comes back with quantity 0 (reported as
+          // MERCHANDISE_OUT_OF_STOCK). Retry once from a brand new cart before
+          // treating it as a genuine stock failure.
+          if (get().cartId && !lineAdded(result)) {
+            console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
+            set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+            const retry = await createCart();
+            if (retry?.cart) result = retry;
           }
+
+          handleUserErrors(result?.userErrors);
+          notifyWarnings(result?.warnings, result?.cart?.lines?.edges ?? [], lineAdded(result));
+
+          const mapped = mapCart(result?.cart);
           if (mapped) set(mapped);
+          if (mapped && lineAdded(result)) return true;
           return false;
+
         } catch (e) {
           toast.error("Something went wrong, please try again");
           return false;
