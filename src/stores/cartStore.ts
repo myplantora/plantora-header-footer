@@ -1,5 +1,4 @@
 import { create } from "zustand";
-if (typeof window !== 'undefined') { (window as any).useCartStore = () => (useCartStore as any).getState(); }
 import { storefrontFetch } from "@/lib/shopify";
 import * as queries from "@/lib/cartQueries";
 import * as analytics from "@/lib/analytics";
