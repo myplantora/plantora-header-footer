@@ -43,7 +43,15 @@ interface CartState {
   closeCart: () => void;
 }
 
-const STALE_ERRORS = ['cart not found', 'invalid cart', 'variable $cartid', 'does not exist', 'expired'];
+const STALE_ERRORS = [
+  'cart not found', 
+  'invalid cart', 
+  'variable $cartid', 
+  'does not exist', 
+  'expired', 
+  'fakeid',
+  'throttled'
+];
 
 function mapCartLines(cart: any): CartLine[] {
   return (cart?.lines?.edges ?? []).map((edge: any) => ({
@@ -90,7 +98,10 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   initCart: async () => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!cartId) return;
+    if (!cartId || cartId.includes('FAKE')) {
+      get().clearCart();
+      return;
+    }
 
     try {
       const data = await storefrontFetch<any>(queries.GET_CART, { cartId });
@@ -99,8 +110,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       } else {
         get().clearCart();
       }
-    } catch (e) {
-      get().clearCart();
+    } catch (e: any) {
+      const errorMsg = e.message?.toLowerCase() || '';
+      if (STALE_ERRORS.some(err => errorMsg.includes(err))) {
+        get().clearCart();
+      }
     }
   },
 
@@ -115,8 +129,6 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     try {
       // STEP 1: Strict availability check
-      // Note: We use quantityAvailable if present, but some stores don't expose it.
-      // availableForSale is the primary source of truth for Storefront API.
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
       
@@ -128,29 +140,29 @@ export const useCartStore = create<CartState>((set, get) => ({
       }
 
       const executeAdd = async (retryCount = 0): Promise<boolean> => {
-        let cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
+        let currentCartId = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        // STEP 2: Ensure a valid cart exists
-        if (!cartId || cartId.includes('FAKE')) {
+        // STEP 2: Ensure a valid cart exists (Empty first flow)
+        if (!currentCartId || currentCartId.includes('FAKE')) {
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
-          cartId = createData.cartCreate.cart.id;
-          localStorage.setItem(LOCAL_STORAGE_KEY, cartId!);
-          // Small delay to allow Shopify edge to propagate the new cart ID
+          currentCartId = createData.cartCreate.cart.id;
+          localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
+          // Propagation delay for Shopify edge
           await new Promise(r => setTimeout(r, 500));
         }
 
-        // STEP 3: Add lines
+        // STEP 3: Add lines separately
         const addData = await storefrontFetch<any>(queries.CART_LINES_ADD, {
-          cartId,
+          cartId: currentCartId,
           lines: [{ merchandiseId, quantity }]
         });
 
         const { cart, userErrors, warnings } = addData.cartLinesAdd || {};
 
-        // STEP 4: Handle response
+        // STEP 4: Handle user errors (stale ID recovery)
         if (userErrors?.length) {
           const errorMsg = userErrors[0].message.toLowerCase();
           const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
@@ -162,26 +174,16 @@ export const useCartStore = create<CartState>((set, get) => ({
           throw new Error(userErrors[0].message);
         }
 
-        // Handle the "added with quantity 0" edge case (Shopify cache lag)
-        const lineAdded = cart?.lines?.edges?.find((e: any) => 
+        // STEP 5: Handle warnings and cache lag
+        const lineInCart = cart?.lines?.edges?.find((e: any) => 
           e.node.merchandise.id === merchandiseId && e.node.quantity > 0
         );
 
-        if (!lineAdded && !warnings?.length && retryCount < 2) {
-          // If Shopify returned success but quantity is 0, wait and retry
-          console.log('[CartStore] Shopify returned 0 quantity for success mutation. Retrying...');
-          await new Promise(r => setTimeout(r, 1000));
+        // OOS Warning or 0 quantity success (cache lag)
+        if ((!lineInCart || warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) && retryCount < 2) {
+          console.log(`[CartStore] Cart consistency check failed (retry ${retryCount + 1}). Settle delay applied.`);
+          await new Promise(r => setTimeout(r, 1500));
           return executeAdd(retryCount + 1);
-        }
-
-        if (warnings?.some((w: any) => w.code === 'MERCHANDISE_OUT_OF_STOCK')) {
-          if (retryCount < 2) {
-            console.log('[CartStore] OOS warning. Retrying after settle delay...');
-            await new Promise(r => setTimeout(r, 1500));
-            return executeAdd(retryCount + 1);
-          }
-          toast.error("Item unavailable", { description: "We couldn't add this item right now." });
-          return false;
         }
 
         if (cart) {
@@ -195,13 +197,13 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       return await executeAdd();
     } catch (e: any) {
-      console.error("[CartStore] Error adding to cart:", e);
-      // If we hit a hard error, try clearing the cart ID to recover next time
-      if (STALE_ERRORS.some(err => e.message?.toLowerCase().includes(err))) {
+      console.error("[CartStore] Add to cart failure:", e);
+      const errorMsg = e.message?.toLowerCase() || '';
+      if (STALE_ERRORS.some(err => errorMsg.includes(err))) {
         get().clearCart();
       }
-      toast.error("Could not add to basket", {
-        description: "Please refresh and try again."
+      toast.error("Shopping cart error", {
+        description: "Please try adding the item again."
       });
       return false;
     } finally {
