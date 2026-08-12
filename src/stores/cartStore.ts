@@ -385,7 +385,10 @@ export const useCartStore = create<CartState>()(
           while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
             console.warn(`[Cart] Line quantity is 0 or missing. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning, cartId: result?.cart?.id });
-            
+            if (handleUserErrors(result?.userErrors)) {
+              console.warn("[Cart] Stale reference during retry, force resetting...");
+            }
+
             // Clear session FIRST
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
             if (typeof window !== "undefined") {
