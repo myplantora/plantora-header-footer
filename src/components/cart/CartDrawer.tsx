@@ -36,14 +36,8 @@ export function CartDrawer() {
   const handleCheckout = () => {
     if (checkoutUrl) {
       trackInitiateCheckout(useCartStore.getState().cart);
-      // Use window.open with specific features to avoid security/policy blocks in some browsers
-      const checkoutWindow = window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
-      if (checkoutWindow) {
-        checkoutWindow.focus();
-      } else {
-        // Fallback for popup blockers
-        window.location.assign(checkoutUrl);
-      }
+      // Perform a direct top-level navigation to ensure Shopify's checkout processes correctly
+      window.location.href = checkoutUrl;
     }
   };
 
