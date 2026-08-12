@@ -55,10 +55,26 @@ export function useMetaTracking() {
     });
   }, [track]);
 
+  const trackPurchase = useCallback((cart: any) => {
+    track('Purchase', {
+      content_ids: cart.lines.map((l: any) => l.id),
+      contents: cart.lines.map((l: any) => ({
+        id: l.id,
+        quantity: l.quantity,
+        price: l.amount
+      })),
+      value: cart.subtotal?.amount || 0,
+      currency: cart.subtotal?.currency || 'USD',
+      num_items: cart.totalQuantity,
+      content_type: 'product'
+    });
+  }, [track]);
+
   return {
     track,
     trackAddToCart,
     trackViewContent,
-    trackInitiateCheckout
+    trackInitiateCheckout,
+    trackPurchase
   };
 }

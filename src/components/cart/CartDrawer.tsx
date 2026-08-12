@@ -16,7 +16,7 @@ export function CartDrawer() {
   const { isOpen, closeCart, cart, subtotal, lines, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
     useCartStore();
   
-  const { trackInitiateCheckout } = useMetaTracking();
+  const { trackInitiateCheckout, trackPurchase } = useMetaTracking();
 
   useEffect(() => {
     if (isOpen) {
