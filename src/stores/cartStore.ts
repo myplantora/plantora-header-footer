@@ -142,16 +142,19 @@ export const useCartStore = create<CartState>((set, get) => ({
       const executeAdd = async (retryCount = 0): Promise<boolean> => {
         let currentCartId = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-        // STEP 2: Ensure a valid cart exists (Empty first flow)
+        // STEP 2: Ensure a valid cart exists (Empty first flow - Shopify Recommended)
         if (!currentCartId || currentCartId.includes('FAKE')) {
+          console.log("[CartStore] Creating fresh empty cart...");
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
           if (createData.cartCreate?.userErrors?.length) {
              throw new Error(createData.cartCreate.userErrors[0].message);
           }
           currentCartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
-          // Propagation delay for Shopify edge
-          await new Promise(r => setTimeout(r, 500));
+          
+          // Shopify documentation recommends this two-step flow.
+          // We add a short delay to ensure the new cart is indexed before adding lines.
+          await new Promise(r => setTimeout(r, 600));
         }
 
         // STEP 3: Add lines separately
