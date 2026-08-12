@@ -177,6 +177,8 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
   });
 
   if (outOfStock.length) {
+    // Only show the toast if we actually have out-of-stock items that weren't suppressed.
+    // The warnings might also affect the quantity of existing items in the cart.
     toast.error("Some items are sold out", {
       description: outOfStock.map((w) => w.message).join(" "),
       position: "top-center",
