@@ -19,18 +19,17 @@ export function CartDrawer() {
 
   useEffect(() => {
     if (isOpen) {
-      console.log("[CartDrawer] Opened. Lines length:", lines.length);
       trackCartViewed(useCartStore.getState().cart);
     }
-  }, [isOpen, lines.length]);
+  }, [isOpen]);
 
   // Force a sync when opening to ensure we have the latest state
   useEffect(() => {
     if (isOpen) {
-      console.log("[CartDrawer] Triggering hydration on open...");
       void hydrate();
     }
   }, [isOpen, hydrate]);
+
 
 
   const handleCheckout = () => {

@@ -52,15 +52,9 @@ function Index() {
         <WhyChooseKyari />
         <BrandMission />
         <MarqueeBanner />
-        <div className="bg-[#F8F8F8] py-8 text-center text-xs text-muted-foreground/30 px-6">
-          <p className="max-w-xl mx-auto leading-relaxed">
-            '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-            <br /><br />
-            I can see the values in cart get received from api, but still its not redered in card slider, can you please check why
-          </p>
-        </div>
       </main>
       <Footer />
+
 
     </>
   );

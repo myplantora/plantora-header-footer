@@ -79,10 +79,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   // Computed values
   get cartId() { return get().cart?.id || null; },
   get lines() { 
-    const c = get().cart;
-    console.log("[CartStore] mapping lines for cart:", c?.id, "lines count:", c?.lines?.edges?.length);
-    return mapCartLines(c); 
+    return mapCartLines(get().cart); 
   },
+
 
   get totalQuantity() { return get().cart?.totalQuantity || 0; },
   get subtotal() { 
