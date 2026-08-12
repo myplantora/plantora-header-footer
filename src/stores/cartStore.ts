@@ -350,10 +350,11 @@ export const useCartStore = create<CartState>()(
                 console.groupEnd();
                 return false;
               }
-              console.log("[Cart] Retrying with recreatedCartId:", recreatedCartId);
+              console.log("[Cart] Retrying add with recreatedCartId:", recreatedCartId);
               result = await addLinesToCart(recreatedCartId);
             }
           } else {
+            console.log("[Cart] No active cart, creating empty cart first...");
             const created = await createEmptyCart();
             const createdCartId = created?.cart?.id;
             if (!createdCartId) {
@@ -361,7 +362,7 @@ export const useCartStore = create<CartState>()(
               console.groupEnd();
               return false;
             }
-            console.log("[Cart] Add with first createdCartId:", createdCartId);
+            console.log("[Cart] Now adding lines to new cartId:", createdCartId);
             result = await addLinesToCart(createdCartId);
           }
 
