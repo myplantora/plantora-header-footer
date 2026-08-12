@@ -109,6 +109,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       if (data.cart) {
         set({ cart: data.cart });
         console.log("[CartStore] initCart: data.cart.lines.edges.length:", data.cart?.lines?.edges?.length);
+        console.log("[CartStore] initCart: first line sample:", data.cart?.lines?.edges?.[0]?.node);
       } else {
         get().clearCart();
       }
