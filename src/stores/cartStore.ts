@@ -185,13 +185,13 @@ function notifyWarnings(warnings: any[] | undefined, lines: any[], _added = true
     );
     const merchandise = line?.node?.merchandise;
 
-    // Genuinely sold out per Shopify inventory data -> surface it.
+    // Suppress only when Shopify inventory confirms the item is truly sold out.
     if (merchandise?.availableForSale === false && merchandise?.quantityAvailable === 0) {
-      return true;
+      console.warn("[Cart] Suppressed out-of-stock warning", w);
+      return false;
     }
 
-    console.warn("[Cart] Suppressed stale out-of-stock warning", w);
-    return false;
+    return true;
   });
 
   if (realWarnings.length) {
