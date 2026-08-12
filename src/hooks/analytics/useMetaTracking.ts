@@ -4,12 +4,14 @@ import { MetaEventData, MetaUserData } from '@/lib/analytics/meta.types';
 /**
  * Hook for easy access to Meta tracking
  */
-export function useMetaTracking() {
-  const track = (eventName: string, data?: MetaEventData, userData?: MetaUserData) => {
-    trackMetaEvent(eventName, data, userData);
-  };
+import { useCallback } from 'react';
 
-  const trackAddToCart = (product: any, quantity: number = 1) => {
+export function useMetaTracking() {
+  const track = useCallback((eventName: string, data?: MetaEventData, userData?: MetaUserData) => {
+    trackMetaEvent(eventName, data, userData);
+  }, []);
+
+  const trackAddToCart = useCallback((product: any, quantity: number = 1) => {
     const value = (product.price?.amount || 0) * quantity;
     const currency = product.price?.currencyCode || 'USD';
 
@@ -27,9 +29,9 @@ export function useMetaTracking() {
       currency,
       num_items: quantity
     });
-  };
+  }, [track]);
 
-  const trackViewContent = (product: any) => {
+  const trackViewContent = useCallback((product: any) => {
     track('ViewContent', {
       content_ids: [product.id],
       content_name: product.title,
@@ -37,9 +39,9 @@ export function useMetaTracking() {
       value: (product.price?.amount || 0),
       currency: product.price?.currencyCode || 'USD'
     });
-  };
+  }, [track]);
 
-  const trackInitiateCheckout = (cart: any) => {
+  const trackInitiateCheckout = useCallback((cart: any) => {
     track('InitiateCheckout', {
       content_ids: cart.lines.map((l: any) => l.id),
       contents: cart.lines.map((l: any) => ({
@@ -51,7 +53,7 @@ export function useMetaTracking() {
       currency: cart.subtotal?.currency || 'USD',
       num_items: cart.totalQuantity
     });
-  };
+  }, [track]);
 
   return {
     track,
