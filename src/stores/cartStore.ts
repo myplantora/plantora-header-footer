@@ -184,10 +184,6 @@ function handleUserErrors(errors: any[] | undefined) {
   return false;
 }
 
-function hasOutOfStockWarning(warnings: any[] | undefined): boolean {
-  return Boolean(warnings?.some((warning) => warning?.code === "MERCHANDISE_OUT_OF_STOCK"));
-}
-
 function readPersistedCartId(): string | null {
   if (typeof window === "undefined") return null;
 
@@ -204,33 +200,9 @@ function readPersistedCartId(): string | null {
 }
 
 
-function notifyWarnings(warnings: any[] | undefined, lines: any[], _added = true) {
-  if (!warnings?.length) return;
-
-  const realWarnings = warnings.filter((w) => {
-    if (w?.code !== "MERCHANDISE_OUT_OF_STOCK") return true;
-
-    const targetId = w.target;
-    const line = lines.find(
-      (l) => l.node.id === targetId || l.node.merchandise.id === targetId,
-    );
-    const merchandise = line?.node?.merchandise;
-
-    // Suppress only when Shopify inventory confirms the item is truly sold out.
-    if (merchandise?.availableForSale === false && merchandise?.quantityAvailable === 0) {
-      console.warn("[Cart] Suppressed out-of-stock warning", w);
-      return false;
-    }
-
-    return true;
-  });
-
-  if (realWarnings.length) {
-    toast.error("Item is low or out of stock", {
-      description: realWarnings.map((w) => w.message).join(" "),
-      position: "top-center",
-    });
-  }
+function notifyWarnings(_warnings: any[] | undefined, _lines: any[], _added = true) {
+  // Intentionally no-op: warning surfacing is handled in Shopify/admin flows.
+  return;
 }
 
 
@@ -290,37 +262,43 @@ export const useCartStore = create<CartState>()(
         const quantity = options?.quantity ?? 1;
 
         if (!variantGid || quantity <= 0) return false;
-        if (options?.availableForSale === false || options?.quantityAvailable === 0) {
-          toast.error("Out of stock");
-          return false;
-        }
 
         set({ isLoading: true });
         try {
-          const createCart = async () => {
+          const createEmptyCart = async () => {
             const data = await storefrontApiRequest<any>(CART_CREATE, {
-              input: { lines: [{ merchandiseId: variantGid, quantity }] },
+              input: {},
             });
             return data?.data?.cartCreate;
+          };
+
+          const addLinesToCart = async (cartId: string) => {
+            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
+              cartId,
+              lines: [{ merchandiseId: variantGid, quantity }],
+            });
+            return data?.data?.cartLinesAdd;
           };
 
           const activeCartId = get().cartId ?? readPersistedCartId();
           let result;
 
           if (activeCartId) {
-            const data = await storefrontApiRequest<any>(CART_LINES_ADD, {
-              cartId: activeCartId,
-              lines: [{ merchandiseId: variantGid, quantity }],
-            });
-            result = data?.data?.cartLinesAdd;
+            result = await addLinesToCart(activeCartId);
 
             if (!result?.cart || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Stale cart detected, recreating", result?.userErrors);
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-              result = await createCart();
+              const recreated = await createEmptyCart();
+              const recreatedCartId = recreated?.cart?.id;
+              if (!recreatedCartId) return false;
+              result = await addLinesToCart(recreatedCartId);
             }
           } else {
-            result = await createCart();
+            const created = await createEmptyCart();
+            const createdCartId = created?.cart?.id;
+            if (!createdCartId) return false;
+            result = await addLinesToCart(createdCartId);
           }
 
           const lineAdded = (r: any) =>
@@ -331,19 +309,12 @@ export const useCartStore = create<CartState>()(
           if (activeCartId && !lineAdded(result)) {
             console.warn("[Cart] Line rejected on existing cart, retrying with a fresh cart");
             set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
-            const retry = await createCart();
-            if (retry?.cart) result = retry;
-          }
-
-          if (hasOutOfStockWarning(result?.warnings)) {
-            toast.error("Out of stock", {
-              description: result?.warnings
-                ?.filter((w: any) => w?.code === "MERCHANDISE_OUT_OF_STOCK")
-                .map((w: any) => w?.message)
-                .filter(Boolean)
-                .join(" "),
-            });
-            return false;
+            const retryCart = await createEmptyCart();
+            const retryCartId = retryCart?.cart?.id;
+            if (retryCartId) {
+              const retry = await addLinesToCart(retryCartId);
+              if (retry?.cart) result = retry;
+            }
           }
 
           if (handleUserErrors(result?.userErrors)) return false;
