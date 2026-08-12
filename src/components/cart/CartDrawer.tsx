@@ -140,7 +140,7 @@ export function CartDrawer() {
                       <p className="truncate text-xs text-muted-foreground">{line.variantTitle}</p>
                     ) : null}
 
-                    {line.quantity === 0 ? (
+                    {line.quantity === 0 && !line.isCombo ? (
                       <p className="text-xs font-medium text-[#C3754C]">
                         Sold out &mdash; unavailable for checkout
                       </p>
