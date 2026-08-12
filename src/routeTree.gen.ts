@@ -19,6 +19,7 @@ import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrackOrderRouteImport } from './routes/track-order'
+import { Route as ApiDocsRouteImport } from './routes/api/docs'
 import { Route as CollectionsIndexRouteImport } from './routes/collections/index'
 import { Route as CollectionsHandleRouteImport } from './routes/collections/$handle'
 import { Route as CollectionsBigSavingsCombosRouteImport } from './routes/collections/big-savings-combos'
@@ -74,6 +75,11 @@ const TrackOrderRoute = TrackOrderRouteImport.update({
   path: '/track-order',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDocsRoute = ApiDocsRouteImport.update({
+  id: '/api/docs',
+  path: '/api/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollectionsIndexRoute = CollectionsIndexRouteImport.update({
   id: '/collections/',
   path: '/collections/',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/shipping': typeof ShippingRoute
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
+  '/api/docs': typeof ApiDocsRoute
   '/collections/$handle': typeof CollectionsHandleRoute
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/shipping': typeof ShippingRoute
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
+  '/api/docs': typeof ApiDocsRoute
   '/collections/$handle': typeof CollectionsHandleRoute
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/shipping': typeof ShippingRoute
   '/terms': typeof TermsRoute
   '/track-order': typeof TrackOrderRoute
+  '/api/docs': typeof ApiDocsRoute
   '/collections/$handle': typeof CollectionsHandleRoute
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/terms'
     | '/track-order'
+    | '/api/docs'
     | '/collections/$handle'
     | '/collections/big-savings-combos'
     | '/product/$handle'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/terms'
     | '/track-order'
+    | '/api/docs'
     | '/collections/$handle'
     | '/collections/big-savings-combos'
     | '/product/$handle'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/terms'
     | '/track-order'
+    | '/api/docs'
     | '/collections/$handle'
     | '/collections/big-savings-combos'
     | '/product/$handle'
@@ -207,6 +219,7 @@ export interface RootRouteChildren {
   ShippingRoute: typeof ShippingRoute
   TermsRoute: typeof TermsRoute
   TrackOrderRoute: typeof TrackOrderRoute
+  ApiDocsRoute: typeof ApiDocsRoute
   CollectionsHandleRoute: typeof CollectionsHandleRoute
   CollectionsBigSavingsCombosRoute: typeof CollectionsBigSavingsCombosRoute
   ProductHandleRoute: typeof ProductHandleRoute
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackOrderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/docs': {
+      id: '/api/docs'
+      path: '/api/docs'
+      fullPath: '/api/docs'
+      preLoaderRoute: typeof ApiDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collections/': {
       id: '/collections/'
       path: '/collections'
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShippingRoute: ShippingRoute,
   TermsRoute: TermsRoute,
   TrackOrderRoute: TrackOrderRoute,
+  ApiDocsRoute: ApiDocsRoute,
   CollectionsHandleRoute: CollectionsHandleRoute,
   CollectionsBigSavingsCombosRoute: CollectionsBigSavingsCombosRoute,
   ProductHandleRoute: ProductHandleRoute,
