@@ -121,7 +121,11 @@ const CART_QUERY = `${CART_FRAGMENT}
 
 function notifyWarnings(warnings: any[] | undefined) {
   if (!warnings?.length) return;
-  const outOfStock = warnings.filter((w) => w?.code === "MERCHANDISE_OUT_OF_STOCK");
+  const outOfStock = warnings.filter(
+    (w) =>
+      w?.code === "MERCHANDISE_OUT_OF_STOCK" &&
+      !w?.message?.toLowerCase().includes("combo"),
+  );
   if (outOfStock.length) {
     toast.error("Some items are sold out", {
       description: outOfStock.map((w) => w.message).join(" "),
