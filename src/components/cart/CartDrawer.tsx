@@ -13,8 +13,11 @@ const BIN_CDN = "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/bin.png?
 
 export function CartDrawer() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate } =
+  const { isOpen, closeCart, lines, subtotal, checkoutUrl, updateLine, removeLine, isLoading, hydrate, cart } =
     useCartStore();
+  
+  // Debug log to see why items aren't rendering
+  console.log("[CartDrawer] Rendering. isOpen:", isOpen, "lines.length:", lines.length, "cartId:", cart?.id);
   const { trackInitiateCheckout } = useMetaTracking();
 
   useEffect(() => {
