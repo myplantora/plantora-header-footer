@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { X, Minus, Plus, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
-import { CartRewards } from "@/components/cart/CartRewards";
+import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
@@ -34,44 +34,20 @@ export function CartDrawer() {
 
 
   const handleCheckout = async () => {
-    if (checkoutUrl) {
-      const currentCart = useCartStore.getState().cart;
-      const subtotalAmount = currentCart?.cost?.subtotalAmount?.amount ?? 0;
-      
-      try {
-        const url = new URL(checkoutUrl);
-        
-        // Ensure only https is used
-        if (url.protocol !== 'https:') {
-          console.warn("[Checkout] Unsafe protocol detected, forcing https");
-          url.protocol = 'https:';
-        }
+    if (!checkoutUrl) return;
 
-        // Apply best earned discount code from rewards state
-        const { resolveRewardState } = await import("@/lib/rewards");
-        const rewardState = resolveRewardState(Number(subtotalAmount));
-        if (rewardState.bestCode) {
-          url.searchParams.set("discount", rewardState.bestCode);
-          console.log(`[Checkout] Applied reward code: ${rewardState.bestCode}`);
-        }
+    const currentCart = useCartStore.getState().cart;
+    const subtotalAmount = currentCart?.cost?.subtotalAmount?.amount ?? 0;
 
-        // Track events
-        trackInitiateCheckout(currentCart);
-        trackPurchase(currentCart);
-        
-        console.log(`[Checkout] Redirecting to sanitized URL: ${url.toString()}`);
-        
-        // Perform a direct top-level navigation
-        window.location.href = url.toString();
-      } catch (e) {
-        console.error("[Checkout] Invalid checkout URL:", checkoutUrl, e);
-        if (checkoutUrl.startsWith('http')) {
-          trackInitiateCheckout(currentCart);
-          trackPurchase(currentCart);
-          window.location.href = checkoutUrl;
-        }
-      }
-    }
+    const { resolveRewardState } = await import("@/lib/rewards");
+    const rewardState = resolveRewardState(Number(subtotalAmount));
+    const finalUrl = buildCheckoutUrl(checkoutUrl, rewardState.bestCode);
+
+    trackInitiateCheckout(currentCart);
+    trackPurchase(currentCart);
+
+    // Perform a direct top-level navigation
+    window.location.href = finalUrl;
   };
 
   return (
