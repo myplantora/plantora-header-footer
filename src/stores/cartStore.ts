@@ -6,6 +6,7 @@ import { toast } from "sonner";
 export type CartLine = {
   id: string;
   quantity: number;
+  isCombo?: boolean;
   merchandiseId: string;
   title: string;
   handle: string;
