@@ -196,6 +196,11 @@ export const useCartStore = create<CartState>((set, get) => ({
           currentCartId = cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
           
+          console.log(
+            `[Cart Created] Cart ID: ${cart.id} | Checkout URL: ${cart.checkoutUrl} | Total: ${cart.cost.totalAmount.amount} ${cart.cost.totalAmount.currencyCode}`
+          );
+          console.log(`[Checkout URL] ${cart.checkoutUrl}`);
+
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
           set({ 
             ...deriveCartState(cart),
@@ -215,6 +220,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
         if (userErrors?.length) {
           const errorMsg = userErrors[0].message.toLowerCase();
+          console.log(`[Cart Error] ${userErrors.map((e: any) => e.field + ': ' + e.message).join(' | ')}`);
           const isStale = STALE_ERRORS.some(e => errorMsg.includes(e));
           if (isStale && retryCount < 1) {
             get().clearCart();
