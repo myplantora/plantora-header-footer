@@ -19,18 +19,17 @@ export function CartDrawer() {
 
   useEffect(() => {
     if (isOpen) {
-      console.log("[CartDrawer] Opened. Lines length:", lines.length);
       trackCartViewed(useCartStore.getState().cart);
     }
-  }, [isOpen, lines.length]);
+  }, [isOpen]);
 
   // Force a sync when opening to ensure we have the latest state
   useEffect(() => {
     if (isOpen) {
-      console.log("[CartDrawer] Triggering hydration on open...");
       void hydrate();
     }
   }, [isOpen, hydrate]);
+
 
 
   const handleCheckout = () => {
@@ -77,7 +76,7 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <CartRewards />
           
-          {lines.length === 0 ? (
+          {(!lines || lines.length === 0) ? (
             <div className="flex flex-col items-center py-12 text-center">
               <div className="mb-6 grid size-20 place-items-center rounded-full bg-[#F1F8EE]">
                 <ShoppingBag className="size-10 text-[#74A84A]" />

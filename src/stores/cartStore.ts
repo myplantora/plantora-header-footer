@@ -54,22 +54,30 @@ const STALE_ERRORS = [
 ];
 
 function mapCartLines(cart: any): CartLine[] {
-  return (cart?.lines?.edges ?? []).map((edge: any) => ({
-    id: edge.node.id,
-    quantity: edge.node.quantity,
-    merchandiseId: edge.node.merchandise.id,
-    title: edge.node.merchandise.product.title,
-    handle: edge.node.merchandise.product.handle,
-    variantTitle: edge.node.merchandise.title,
-    imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
-    amount: Number(edge.node.merchandise.price.amount),
-    compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
-      ? Number(edge.node.merchandise.compareAtPrice.amount)
-      : null,
-    currency: edge.node.merchandise.price.currencyCode,
-    productType: edge.node.merchandise.product.productType,
-  }));
+  const edges = cart?.lines?.edges || [];
+  return edges.map((edge: any) => {
+    const node = edge.node;
+    const merchandise = node.merchandise;
+    const product = merchandise?.product;
+    
+    return {
+      id: node.id,
+      quantity: node.quantity,
+      merchandiseId: merchandise?.id || '',
+      title: product?.title || merchandise?.title || 'Unknown Product',
+      handle: product?.handle || '',
+      variantTitle: merchandise?.title || 'Default Title',
+      imageUrl: product?.featuredImage?.url || merchandise?.image?.url || null,
+      amount: Number(merchandise?.price?.amount || 0),
+      compareAtAmount: merchandise?.compareAtPrice?.amount
+        ? Number(merchandise.compareAtPrice.amount)
+        : null,
+      currency: merchandise?.price?.currencyCode || 'USD',
+      productType: product?.productType || '',
+    };
+  });
 }
+
 
 export const useCartStore = create<CartState>((set, get) => ({
   cart: null,
@@ -79,10 +87,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   // Computed values
   get cartId() { return get().cart?.id || null; },
   get lines() { 
-    const c = get().cart;
-    console.log("[CartStore] mapping lines for cart:", c?.id, "lines count:", c?.lines?.edges?.length);
-    return mapCartLines(c); 
+    return mapCartLines(get().cart); 
   },
+
 
   get totalQuantity() { return get().cart?.totalQuantity || 0; },
   get subtotal() { 
@@ -175,15 +182,18 @@ export const useCartStore = create<CartState>((set, get) => ({
           throw new Error(userErrors[0].message);
         }
 
-        const lineInCart = cart?.lines?.edges?.find((e: any) => 
+        // Step 4: Verify the item was actually added to the cart object
+        // We look for the merchandiseId in the lines edges
+        const lineInCart = cart?.lines?.edges?.some((e: any) => 
           e.node.merchandise.id === merchandiseId
         );
 
-        if ((!lineInCart || lineInCart.node.quantity === 0) && retryCount < 2) {
+        if (!lineInCart && retryCount < 2) {
           console.log(`[CartStore] Item missing in response, retrying ${retryCount + 1}...`);
           await new Promise(r => setTimeout(r, 800));
           return executeAdd(retryCount + 1);
         }
+
 
         if (cart) {
           // Fire analytics
