@@ -61,7 +61,7 @@ export function CartDrawer() {
         "absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-background shadow-2xl transition-transform duration-500 ease-out sm:rounded-l-3xl",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <header className="flex items-center justify-between border-b border-border px-3 py-4">
+        <header className="flex items-center justify-between border-b border-border px-3 py-2.5">
           <div className="w-8" />
           <h2 className="text-xl font-bold text-primary">Your basket</h2>
           <button
