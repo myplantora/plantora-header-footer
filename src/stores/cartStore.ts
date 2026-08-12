@@ -266,7 +266,7 @@ async function addLineToCart(
   notifyWarnings(result?.warnings, cart);
   
   if (!cart) return null;
-  return mapCart(cart);
+  return mapCart(cart, result?.warnings);
 }
 
 export const useCartStore = create<CartState>()(
