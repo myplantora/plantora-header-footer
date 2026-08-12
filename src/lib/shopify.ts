@@ -1,7 +1,8 @@
 import { toast } from "sonner";
 import globalConfig from "../../config/globalconf.json";
 
-const { shopDomain, storefrontToken: storefrontAccessToken, apiVersion } = globalConfig.shopify;
+const { storeDomain: shopDomain, storefrontToken: storefrontAccessToken, apiVersion } = globalConfig.shopify;
+
 
 export async function storefrontFetch<T>(
   query: string,
