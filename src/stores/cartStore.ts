@@ -336,7 +336,13 @@ export const useCartStore = create<CartState>()(
             // DETAILED CHECK: If result is null/undefined or has stale errors
             if (!result || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
+              
+              // Clear session FIRST to prevent race conditions
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("plantora-cart");
+              }
+
               const recreated = await createEmptyCart();
               const recreatedCartId = recreated?.cart?.id;
               if (!recreatedCartId) {
