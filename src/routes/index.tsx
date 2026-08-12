@@ -237,7 +237,9 @@ All console.log outputs are concatenated strings, not console.log(object)`}
             </pre>
           </div>
         </div>
-
+      </main>
+      <Footer />
     </>
   );
 }
+
