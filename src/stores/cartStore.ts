@@ -48,7 +48,7 @@ const CART_LINE_FRAGMENT = `
         id
         title
         availableForSale
-        inventoryPolicy
+        
         # quantityAvailable removed due to insufficient permissions
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
