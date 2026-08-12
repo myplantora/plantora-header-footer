@@ -222,7 +222,7 @@ export function CartDrawer() {
               disabled={isLoading || !checkoutUrl}
               className={cn(
                 "w-full rounded-full bg-[#C3754C] py-3.5 text-xs font-bold text-white uppercase tracking-widest shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50",
-                isLoading && "relative overflow-hidden after:absolute after:inset-0 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent"
+                isLoading && "relative overflow-hidden after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:animate-shimmer"
               )}
             >
               {isLoading ? "UPDATING..." : "SECURE CHECKOUT"}
