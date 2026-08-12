@@ -134,7 +134,7 @@ export function CartDrawer() {
               {lines.map((line) => (
                 <li
                   key={line.id}
-                  className="group flex gap-4 rounded-2xl bg-white p-3 shadow-sm border border-border/50 relative"
+                  className="group flex gap-3 sm:gap-4 rounded-2xl bg-white p-2.5 sm:p-3 shadow-sm border border-border/50 relative"
                 >
                   {isLoading && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/5 pointer-events-none">
