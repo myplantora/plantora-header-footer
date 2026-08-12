@@ -195,10 +195,6 @@ export function CartDrawer() {
               </span>
             </div>
             
-            <div className="flex items-center gap-2 rounded-xl bg-[#F8F8F8] p-3 text-xs text-muted-foreground">
-              <CheckCircle2 className="size-4 text-brand" />
-              <span>30-day healthy plant replacement guarantee</span>
-            </div>
 
             <button
               onClick={handleCheckout}
