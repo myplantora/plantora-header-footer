@@ -377,7 +377,14 @@ export const useCartStore = create<CartState>()(
           const SETTLE_DELAY_MS = 1500;
           let retryCount = 0;
 
-          while (!lineAdded(result) && retryCount < MAX_OOS_RETRIES) {
+          const isLineActuallyAdded = (r: any) =>
+            (mapCart(r?.cart)?.lines ?? []).some(
+              (line) => line.merchandiseId === variantGid && line.quantity > 0,
+            );
+
+          while (!isLineActuallyAdded(result) && retryCount < MAX_OOS_RETRIES) {
+            const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
+            console.warn(`[Cart] Line quantity is 0 or missing. Recovery attempt ${retryCount + 1}/${MAX_OOS_RETRIES}.`, { hasOOSWarning, result: result?.cart?.id });
             const hasOOSWarning = result?.warnings?.some((w: any) => w.code === "MERCHANDISE_OUT_OF_STOCK");
             if (!hasOOSWarning && result?.cart) {
                // If there's no OOS warning and we have a cart, but line wasn't added, 
