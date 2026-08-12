@@ -189,11 +189,6 @@ export const useCartStore = create<CartState>((set, get) => ({
           // Open drawer immediately
           set({ isOpen: true });
 
-          // Perform a background sync just in case
-          storefrontFetch<any>(queries.GET_CART, { cartId: currentCartId }).then(data => {
-            if (data.cart) set({ cart: data.cart });
-          });
-
           return true;
         }
 
