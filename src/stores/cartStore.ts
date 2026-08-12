@@ -326,8 +326,10 @@ export const useCartStore = create<CartState>()(
           let result;
 
           if (activeCartId) {
+            console.log("[Cart] Attempting add with activeCartId:", activeCartId);
             result = await addLinesToCart(activeCartId);
 
+            // DETAILED CHECK: If result is null/undefined or has stale errors
             if (!result || isStaleReferenceError(result?.userErrors)) {
               console.warn("[Cart] Cart rejected or result empty, recreating", result?.userErrors);
               set({ cartId: null, checkoutUrl: null, lines: [], totalQuantity: 0, subtotal: null, discountCodes: [] });
@@ -335,8 +337,10 @@ export const useCartStore = create<CartState>()(
               const recreatedCartId = recreated?.cart?.id;
               if (!recreatedCartId) {
                 console.error("[Cart] Failed to recreate cart");
+                console.groupEnd();
                 return false;
               }
+              console.log("[Cart] Retrying with recreatedCartId:", recreatedCartId);
               result = await addLinesToCart(recreatedCartId);
             }
           } else {
