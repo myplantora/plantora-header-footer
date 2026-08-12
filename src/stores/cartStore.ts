@@ -92,6 +92,8 @@ function deriveCartState(cart: any) {
   };
 }
 
+let pendingOperations = 0;
+
 export const useCartStore = create<CartState>((set, get) => ({
   cart: null,
   isOpen: false,
@@ -146,9 +148,11 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   addToCart: async (merchandiseId: string, quantity: number) => {
+    pendingOperations++;
     if (!get().isOpen) set({ isLoading: true });
 
     try {
+      // Step 1: Pre-fetch availability check
       const availabilityData = await storefrontFetch<any>(queries.CHECK_VARIANT_AVAILABILITY, { id: merchandiseId });
       const variant = availabilityData.node;
       
@@ -159,9 +163,11 @@ export const useCartStore = create<CartState>((set, get) => ({
         return false;
       }
 
+      // Recursive execution function for retries/recovery
       const executeAdd = async (retryCount = 0): Promise<boolean> => {
         let currentCartId = localStorage.getItem(LOCAL_STORAGE_KEY);
 
+        // Ensure cart exists
         if (!currentCartId || currentCartId.includes('FAKE')) {
           const createData = await storefrontFetch<any>(queries.CART_CREATE);
           if (createData.cartCreate?.userErrors?.length) {
@@ -169,9 +175,9 @@ export const useCartStore = create<CartState>((set, get) => ({
           }
           currentCartId = createData.cartCreate.cart.id;
           localStorage.setItem(LOCAL_STORAGE_KEY, currentCartId!);
-          await new Promise(r => setTimeout(r, 300));
         }
 
+        // Add to cart
         const addData = await storefrontFetch<any>(queries.CART_LINES_ADD, {
           cartId: currentCartId,
           lines: [{ merchandiseId, quantity }]
@@ -189,20 +195,12 @@ export const useCartStore = create<CartState>((set, get) => ({
           throw new Error(userErrors[0].message);
         }
 
-        const lineInCart = cart?.lines?.edges?.some((e: any) => 
-          e.node.merchandise.id === merchandiseId
-        );
-
-        if (!lineInCart && retryCount < 2) {
-          await new Promise(r => setTimeout(r, 400));
-          return executeAdd(retryCount + 1);
-        }
-
         if (cart) {
           analytics.trackCartUpdated(cart, 'add_to_cart', { merchandiseId, quantity });
+          // Force shallow clone for immediate reactivity
           set({ 
             ...deriveCartState(cart),
-            isLoading: false,
+            isLoading: pendingOperations > 1, 
             isOpen: true 
           });
           return true;
@@ -217,13 +215,17 @@ export const useCartStore = create<CartState>((set, get) => ({
       toast.error("Shopping cart error", { description: "Please try again." });
       return false;
     } finally {
-      set({ isLoading: false });
+      pendingOperations--;
+      if (pendingOperations <= 0) {
+        set({ isLoading: false });
+      }
     }
   },
 
   updateLine: async (lineId: string, quantity: number) => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
+    pendingOperations++;
     set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_UPDATE, {
@@ -233,19 +235,21 @@ export const useCartStore = create<CartState>((set, get) => ({
       const { cart, userErrors } = data.cartLinesUpdate || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
       if (cart) {
-        set(deriveCartState(cart));
+        set({ ...deriveCartState(cart) });
         analytics.trackCartUpdated(cart, 'update_cart');
       }
     } catch (e: any) {
       toast.error(e.message || "Failed to update quantity");
     } finally {
-      set({ isLoading: false });
+      pendingOperations--;
+      if (pendingOperations <= 0) set({ isLoading: false });
     }
   },
 
   removeLine: async (lineId: string) => {
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId) return;
+    pendingOperations++;
     set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_REMOVE, {
@@ -255,13 +259,14 @@ export const useCartStore = create<CartState>((set, get) => ({
       const { cart, userErrors } = data.cartLinesRemove || {};
       if (userErrors?.length) throw new Error(userErrors[0].message);
       if (cart) {
-        set(deriveCartState(cart));
+        set({ ...deriveCartState(cart) });
         analytics.trackCartUpdated(cart, 'remove_from_cart');
       }
     } catch (e: any) {
       toast.error(e.message || "Failed to remove item");
     } finally {
-      set({ isLoading: false });
+      pendingOperations--;
+      if (pendingOperations <= 0) set({ isLoading: false });
     }
   }
 }));
