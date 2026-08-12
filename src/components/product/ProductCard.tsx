@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/stores/cartStore";
@@ -65,9 +64,9 @@ export function ProductCard({
         availableForSale: currentVariant.available,
         quantityAvailable: currentVariant.quantityAvailable,
       });
-      if (!ok) toast.error("Could not add to basket");
+      if (!ok) return;
     } catch {
-      toast.error("Could not add to basket");
+      console.error("[Cart] Unexpected add-to-cart failure");
     } finally {
       setPending(false);
     }

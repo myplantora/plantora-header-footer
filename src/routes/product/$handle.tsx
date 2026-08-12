@@ -184,10 +184,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
         availableForSale: variant.available,
         quantityAvailable: variant.quantityAvailable,
       });
-      if (!ok) {
-        setAddError("Could not add to basket. Please try again.");
-        return;
-      }
+      if (!ok) return;
       trackAddToCart(product, quantity);
     } catch {
       setAddError("Could not add to basket. Please try again.");

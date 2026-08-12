@@ -34,11 +34,9 @@ export function RecommendationCard({ product, priority = false }: Props) {
     );
   }, [product.variants, selected]);
 
-  const soldOut = product.availability === "out_of_stock" || !selectedVariant?.available;
-
   async function handleAdd() {
     const variantId = selectedVariant?.id ?? product.defaultVariantId;
-    if (!variantId || soldOut || pending) return;
+    if (!variantId || pending) return;
     setPending(true);
     try {
       const ok = await addLineAndOpen(variantId, 1, {
@@ -54,7 +52,7 @@ export function RecommendationCard({ product, priority = false }: Props) {
           style: { background: "#1D4D44", color: "#fff", border: "none" },
         });
       } else {
-        toast.error("Could not add to basket. Please try again.");
+        return;
       }
     } catch {
       toast.error("Could not add to basket. Please try again.");
@@ -231,10 +229,10 @@ export function RecommendationCard({ product, priority = false }: Props) {
         <button
           type="button"
           onClick={handleAdd}
-          disabled={soldOut || pending || !selectedVariant?.id}
+          disabled={pending || !selectedVariant?.id}
           className="mt-auto inline-flex h-10 w-full items-center justify-center rounded-full bg-primary px-4 font-button text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-soft disabled:pointer-events-none disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
-          {soldOut ? "Sold out" : "Add to Basket"}
+          Add to Basket
         </button>
       </div>
     </article>
