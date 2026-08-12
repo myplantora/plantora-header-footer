@@ -134,13 +134,32 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
     const targetId = w.target;
     let isCombo = false;
 
+    // First check: Find product by comparing targetId to line node ID or merchandise ID
     if (targetId && cart?.lines?.edges) {
-      const line = cart.lines.edges.find((e: any) => e.node.merchandise?.id === targetId || e.node.id === targetId);
+      const line = cart.lines.edges.find((e: any) => 
+        e.node.id === targetId || 
+        e.node.merchandise?.id === targetId
+      );
       const product = line?.node.merchandise?.product;
       if (product) {
         isCombo = 
           product.productType?.toLowerCase() === "combo" || 
           product.tags?.some((t: string) => t.toLowerCase() === "combo-product");
+      }
+    }
+
+    // Second check: If not found, check ALL lines in the cart for any combo product
+    // This handles cases where Shopify doesn't provide a precise targetId or targetId is ambiguous
+    if (!isCombo && cart?.lines?.edges) {
+      const hasAnyCombo = cart.lines.edges.some((e: any) => {
+        const product = e.node.merchandise?.product;
+        return product && (
+          product.productType?.toLowerCase() === "combo" || 
+          product.tags?.some((t: string) => t.toLowerCase() === "combo-product")
+        );
+      });
+      if (hasAnyCombo) {
+        isCombo = true;
       }
     }
 
@@ -150,7 +169,7 @@ function notifyWarnings(warnings: any[] | undefined, cart: any = null) {
     }
 
     if (isCombo) {
-      console.warn("[Cart] Suppressing MERCHANDISE_OUT_OF_STOCK warning for Combo product:", w.message);
+      console.warn("[Cart] Suppressed MERCHANDISE_OUT_OF_STOCK for Combo product. Target:", targetId, "Msg:", w.message);
       return false;
     }
 
