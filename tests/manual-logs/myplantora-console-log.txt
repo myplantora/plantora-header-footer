@@ -1,0 +1,4 @@
+# Console messages captured during add-to-cart + checkout attempt (Chrome DevTools MCP)
+
+1. [issue] Response was blocked by CORB (Cross-Origin Read Blocking)
+2. [warn] [Cart] Suppressed out-of-stock warning [object Object]
