@@ -147,11 +147,6 @@ export function CartDrawer() {
                       </p>
                     ) : null}
 
-                    {line.quantity === 1 && line.title.includes("Air Purifying Combo") ? (
-                      <p className="text-[10px] leading-tight text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
-                        Note: Stock status for this item is currently updating, but it remains available for checkout.
-                      </p>
-                    ) : null}
 
 
 
@@ -163,15 +158,12 @@ export function CartDrawer() {
                             aria-label="Decrease quantity"
                             disabled={isLoading}
                             onClick={() => { 
-                              if (line.quantity <= 1 && line.title.includes("Air Purifying Combo")) {
-                                return;
-                              }
                               triggerHaptic('light'); 
                               updateLine(line.id, line.quantity - 1); 
                             }}
                             className={cn(
                               "grid size-6 place-items-center rounded-full text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                              line.quantity <= 1 && line.title.includes("Air Purifying Combo") && "opacity-20 cursor-not-allowed"
+                              
                             )}
 
                           >
