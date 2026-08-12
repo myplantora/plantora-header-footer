@@ -200,21 +200,23 @@ function mapCart(cart: any) {
       code: String(d.code),
       applicable: Boolean(d.applicable),
     })) as CartDiscountCode[],
-    lines: (cart.lines?.edges ?? []).map((edge: any) => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandiseId: edge.node.merchandise.id,
-      title: edge.node.merchandise.product.title,
-      handle: edge.node.merchandise.product.handle,
-      variantTitle: edge.node.merchandise.title,
-      imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
-      amount: Number(edge.node.merchandise.price.amount),
-      compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
-        ? Number(edge.node.merchandise.compareAtPrice.amount)
-        : null,
-      currency: edge.node.merchandise.price.currencyCode,
-      productType: edge.node.merchandise.product.productType,
-    })) as CartLine[],
+    lines: (cart.lines?.edges ?? [])
+      .filter((edge: any) => Number(edge?.node?.quantity) > 0)
+      .map((edge: any) => ({
+        id: edge.node.id,
+        quantity: edge.node.quantity,
+        merchandiseId: edge.node.merchandise.id,
+        title: edge.node.merchandise.product.title,
+        handle: edge.node.merchandise.product.handle,
+        variantTitle: edge.node.merchandise.title,
+        imageUrl: edge.node.merchandise.product.featuredImage?.url ?? null,
+        amount: Number(edge.node.merchandise.price.amount),
+        compareAtAmount: edge.node.merchandise.compareAtPrice?.amount
+          ? Number(edge.node.merchandise.compareAtPrice.amount)
+          : null,
+        currency: edge.node.merchandise.price.currencyCode,
+        productType: edge.node.merchandise.product.productType,
+      })) as CartLine[],
   };
 }
 
