@@ -52,15 +52,6 @@ function Index() {
         <WhyChooseKyari />
         <BrandMission />
         <MarqueeBanner />
-        <div className="max-w-[90vw] mx-auto py-12 px-4 border-t border-muted/20">
-          <div className="bg-muted/5 rounded-2xl p-8 shadow-sm">
-            <p className="text-[13px] text-muted-foreground/80 font-mono whitespace-pre-wrap leading-relaxed text-center">
-{`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-
-Fix my cart slider so products reliably appear immediately after I click Add to basket.`}
-            </p>
-          </div>
-        </div>
       </main>
       <Footer />
     </>
