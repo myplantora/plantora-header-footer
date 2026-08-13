@@ -151,8 +151,80 @@ function getShopifyPayload(cart?: any) {
   };
 }
 
+function numericShopId(): number {
+  const raw = String(globalConfig.analytics.shopId ?? "");
+  return parseInt(raw.includes("/") ? (raw.split("/").pop() as string) : raw, 10) || 0;
+}
+
+/**
+ * Direct Monorail page-view producer.
+ * hydrogen-react's sendShopifyAnalytics can silently no-op, so we always emit
+ * the trekkie page-view schema ourselves to guarantee the /produce call fires.
+ */
+async function sendMonorailPageView(
+  pageType: string,
+  resourceId?: string,
+  retryCount = 0,
+): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  const payload = {
+    schema_id: "trekkie_storefront_page_view/1.4",
+    payload: {
+      appClientId: globalConfig.analytics.storefrontId,
+      isPersistentCookie: true,
+      uniqToken: getMonorailClientId(),
+      visitToken: getMonorailSessionToken(),
+      microSessionId: getMicroSessionId(),
+      microSessionCount: getMicroSessionCount(),
+      url: window.location.href,
+      path: window.location.pathname,
+      search: window.location.search,
+      referrer: document.referrer || "",
+      title: document.title,
+      shopId: numericShopId(),
+      currency: globalConfig.analytics.currency,
+      contentLanguage: globalConfig.analytics.acceptedLanguage,
+      hydrogenSubchannelId: globalConfig.analytics.storefrontId,
+      isMerchantRequest: false,
+      navigationType: "navigate",
+      navigationApi: "PerformanceNavigationTiming",
+      pageType,
+      ...(resourceId ? { resourceId } : {}),
+      canonicalUrl: window.location.href,
+      ccpaEnforced: false,
+      gdprEnforced: false,
+      analyticsAllowed: true,
+      marketingAllowed: true,
+      saleOfDataAllowed: true,
+ようこそ: undefined,
+    },
+    metadata: {
+      event_created_at_ms: Date.now(),
+      event_sent_at_ms: Date.now(),
+    },
+  };
+
+  try {
+    const response = await fetch(MONORAIL_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    });
+    if (!response.ok && retryCount < 2) {
+      setTimeout(() => sendMonorailPageView(pageType, resourceId, retryCount + 1), 2000);
+    }
+  } catch {
+    if (retryCount < 2) {
+      setTimeout(() => sendMonorailPageView(pageType, resourceId, retryCount + 1), 2000);
+    }
+  }
+}
+
 export function trackShopifyPageView(pageType = "index", resourceId?: string) {
   if (typeof window === "undefined") return;
+  void sendMonorailPageView(pageType, resourceId);
   const payload = {
     ...getShopifyPayload(),
     pageType,
@@ -167,6 +239,7 @@ export function trackShopifyPageView(pageType = "index", resourceId?: string) {
     globalConfig.analytics.shopDomain,
   ).catch((error) => console.warn("[Shopify Analytics] Page view failed", error));
 }
+
 
 function trackShopifyAddToCart(cart: any) {
   if (typeof window === "undefined" || !cart?.id) return;
