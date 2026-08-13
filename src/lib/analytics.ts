@@ -9,6 +9,12 @@ import type {
   ShopifyPageViewPayload,
 } from "@shopify/hydrogen-react";
 import { trackMetaEvent } from "@/lib/analytics/meta.events";
+import {
+  getClientId as getVisitorId,
+  getSessionToken as getVisitToken,
+  getMicroSessionId,
+  getMicroSessionCount,
+} from "@/lib/analytics/identity";
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
 
@@ -173,8 +179,8 @@ async function sendMonorailPageView(
     payload: {
       appClientId: globalConfig.analytics.storefrontId,
       isPersistentCookie: true,
-      uniqToken: getMonorailClientId(),
-      visitToken: getMonorailSessionToken(),
+      uniqToken: getVisitorId(),
+      visitToken: getVisitToken(),
       microSessionId: getMicroSessionId(),
       microSessionCount: getMicroSessionCount(),
       url: window.location.href,
@@ -197,7 +203,6 @@ async function sendMonorailPageView(
       analyticsAllowed: true,
       marketingAllowed: true,
       saleOfDataAllowed: true,
-ようこそ: undefined,
     },
     metadata: {
       event_created_at_ms: Date.now(),
