@@ -90,7 +90,7 @@ function BigSavingsPage() {
       </main>
       
       <SelfWateringSection />
-      <MarqueeBanner />
+      <SelfWateringSection />
     </div>
   );
 }
