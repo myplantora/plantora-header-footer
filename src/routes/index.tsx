@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Footer } from "@/components/layout/Footer";
 import { CartProvider, useCart } from "@/components/layout/CartContext";
 
 
@@ -58,7 +57,6 @@ function Index() {
         <BrandMission />
         <MarqueeBanner />
       </main>
-      <Footer />
     </>
   );
 }

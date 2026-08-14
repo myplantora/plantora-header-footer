@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { posthogService } from "@/lib/analytics/posthog";
 
-import { Footer } from "@/components/layout/Footer";
+
 import { getCollectionById } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
@@ -91,7 +91,6 @@ function BigSavingsPage() {
       
       <SelfWateringSection />
       <MarqueeBanner />
-      <Footer />
     </div>
   );
 }

@@ -18,6 +18,8 @@ import { MetaPixelProvider } from "@/components/analytics/MetaPixelProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { posthogService } from "@/lib/analytics/posthog";
 import { useRouterState } from "@tanstack/react-router";
+import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+import { Footer } from "@/components/layout/Footer";
 
 
 import appCss from "../styles.css?url";
@@ -176,6 +178,8 @@ function RootComponent() {
       <Header />
       <CartDrawer />
       <Outlet />
+      <MarqueeBanner />
+      <Footer />
       <Analytics />
       <Toaster position="bottom-right" />
     </QueryClientProvider>
