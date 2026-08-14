@@ -1,4 +1,4 @@
-import globalConfig from "../../config/globalconf.json";
+import globalConfig from "@/config/globalconf.json";
 import type { PostHog } from "posthog-js";
 
 // Types for our abstraction
@@ -17,7 +17,7 @@ export interface AnalyticsProduct {
 }
 
 class PostHogService {
-  private posthog: PostHog | null = null;
+  private posthog: any = null;
   private initialized = false;
   private queue: Array<() => void> = [];
   private readonly MAX_QUEUE_SIZE = 50;
@@ -29,11 +29,12 @@ class PostHogService {
   }
 
   private initAsynchronously() {
-    const config = globalConfig.analytics.posthog;
+    // @ts-ignore
+    const config = globalConfig.analytics?.posthog;
     if (!config?.enabled || !config.apiKey) return;
 
     // Use requestIdleCallback if available, fallback to setTimeout
-    const scheduleInit = window.requestIdleCallback || ((cb) => setTimeout(cb, 1000));
+    const scheduleInit = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1000));
 
     scheduleInit(async () => {
       try {
@@ -46,7 +47,7 @@ class PostHogService {
           capture_pageview: false, // We handle this via SPA router
           persistence: "localStorage",
           session_recording: {
-            maskAllInputFields: true, // Privacy first
+            maskAllInputs: true, // Privacy first
             maskTextSelector: ".mask-text", // Custom masking
           },
           loaded: (phInstance) => {
@@ -68,7 +69,7 @@ class PostHogService {
     }
   }
 
-  private runSafely(task: (ph: PostHog) => void) {
+  private runSafely(task: (ph: any) => void) {
     if (this.initialized && this.posthog) {
       try {
         task(this.posthog);
@@ -77,7 +78,7 @@ class PostHogService {
         if (import.meta.env.DEV) console.error("[PostHog] Event capture failed", e);
       }
     } else if (this.queue.length < this.MAX_QUEUE_SIZE) {
-      this.queue.push(() => task(this.posthog!));
+      this.queue.push(() => task(this.posthog));
     }
   }
 
