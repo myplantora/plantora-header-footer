@@ -5,7 +5,7 @@ import { Minus, Plus, Info, X, Loader2, AlertCircle } from "lucide-react";
 
 import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
-import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+
 import { SectionContainer } from "@/components/layout/SectionContainer";
 
 
@@ -109,7 +109,7 @@ function ProductPage() {
       <ProductView product={data.product} />
       <ProductRecommendations currentProductHandle={handle} />
       <MarqueeBanner />
-      <SelfWateringSection />
+      
       <Footer />
     </div>
   );
