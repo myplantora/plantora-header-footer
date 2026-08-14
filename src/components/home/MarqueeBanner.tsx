@@ -3,8 +3,8 @@ import React from "react";
 export const MarqueeBanner = () => {
   const items = [
     "Guaranteed Replacement",
-    "Cash on Delivery Available",
-    "Free shipping on orders above ₹399",
+    "Expert Plant Care Support",
+    "Free shipping on orders above $50",
   ];
 
   // Repeat items to ensure smooth infinite loop
