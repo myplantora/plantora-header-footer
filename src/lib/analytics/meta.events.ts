@@ -79,30 +79,39 @@ export const initMetaPixel = (userData?: MetaUserData) => {
 
   if (window._fbq) return; // Prevent double init
 
-  /* eslint-disable */
-  (function(f: any, b: any, e: string, v: string, n?: any, t?: any, s?: any) {
-    if (f.fbq) return;
-    n = f.fbq = function() {
-      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = !0;
-    n.version = '2.0';
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = !0;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    if (s && s.parentNode) {
-      s.parentNode.insertBefore(t, s);
-    }
-  })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-  /* eslint-enable */
+  // Use requestIdleCallback if available, fallback to setTimeout to ensure non-blocking
+  const scheduleInit = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1000));
 
-  if (userData) {
-    window.fbq('init', pixelId, userData);
-  } else {
-    window.fbq('init', pixelId);
-  }
+  scheduleInit(() => {
+    try {
+      /* eslint-disable */
+      (function(f: any, b: any, e: string, v: string, n?: any, t?: any, s?: any) {
+        if (f.fbq) return;
+        n = f.fbq = function() {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        if (s && s.parentNode) {
+          s.parentNode.insertBefore(t, s);
+        }
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      /* eslint-enable */
+
+      if (userData) {
+        window.fbq('init', pixelId, userData);
+      } else {
+        window.fbq('init', pixelId);
+      }
+    } catch (error) {
+      console.warn('Meta Pixel initialization deferred/failed:', error);
+    }
+  });
 };
