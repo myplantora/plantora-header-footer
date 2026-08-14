@@ -40,11 +40,11 @@ export const SelfWateringSection = () => {
                 {/* Step 2 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
-                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
+                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666" 
                         alt="Step 2" 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover scale-110"
                       />
                     </div>
                   </div>
