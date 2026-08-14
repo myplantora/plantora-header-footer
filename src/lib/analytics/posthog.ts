@@ -44,8 +44,8 @@ class PostHogService {
 
         ph.init(config.apiKey, {
           api_host: config.apiHost || "https://us.i.posthog.com",
-          autocapture: false, // We prefer explicit tracking
-          capture_pageview: false, // We handle this via SPA router
+          autocapture: true, // Standard PostHog setup
+          capture_pageview: false, // We handle this via SPA router to ensure context is correct
           persistence: "localStorage",
           session_recording: {
             maskAllInputs: true, // Privacy first
