@@ -2,9 +2,9 @@ import React from "react";
 
 export const SelfWateringSection = () => {
   return (
-    <div className="w-full bg-[#1D4D44] py-8 lg:py-24 my-6 lg:my-20">
+    <div className="w-full bg-[#1D4D44] py-8 lg:py-16 my-6 lg:my-10">
       <div className="container mx-auto px-5 max-w-7xl">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-16">
           
           {/* Main Content Side */}
           <div className="w-full lg:w-[50%] text-white text-center lg:text-left order-2 lg:order-1">
