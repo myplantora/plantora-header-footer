@@ -328,3 +328,25 @@ export const trackCheckoutStarted = (cart: any) => {
     item_count: cart?.totalQuantity ?? 0,
   });
 };
+
+export const trackPurchase = (cart: any, orderId: string) => {
+  const products = getAnalyticsProducts(cart).map((p: any) => ({
+    product_id: p.productGid,
+    product_handle: p.productGid,
+    product_title: p.name,
+    variant_id: p.variantGid,
+    price: Number(p.price),
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    quantity: p.quantity,
+    product_type: p.category,
+    vendor: p.brand,
+  }));
+
+  posthogService.trackPurchase({
+    order_id: orderId,
+    value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    item_count: cart?.totalQuantity ?? 0,
+    products,
+  });
+};
