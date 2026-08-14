@@ -26,7 +26,7 @@ export const SelfWateringSection = () => {
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
                     <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
                       <img 
-                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
+                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666" 
                         alt="Fill reservoir" 
                         className="w-full h-full object-cover"
                       />
@@ -76,7 +76,7 @@ export const SelfWateringSection = () => {
           <div className="w-full lg:w-[45%] order-1 lg:order-2 mb-10 lg:mb-0">
             <div className="rounded-[22px] lg:rounded-[40px] overflow-hidden shadow-2xl">
               <img 
-                src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666" 
+                src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
                 alt="Self-watering planter demonstration" 
                 className="w-full h-auto object-cover"
               />
