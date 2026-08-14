@@ -16,6 +16,11 @@
     "meta": {
       "enabled": true,
       "pixelId": "1569434781341235"
+    },
+    "posthog": {
+      "enabled": true,
+      "apiKey": "phc_your_key_here",
+      "apiHost": "https://us.i.posthog.com"
     }
   },
   "pagination": {
