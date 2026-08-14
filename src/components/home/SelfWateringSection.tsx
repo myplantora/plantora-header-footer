@@ -2,53 +2,67 @@ import React from 'react';
 
 export const SelfWateringSection = () => {
   return (
-    <section className="bg-[#1D4D44] py-12 px-4 md:py-20">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-fraunces text-3xl md:text-5xl text-white mb-4">
+    <section className="bg-[#1D4D44] py-8 px-2.5 md:py-20 overflow-hidden">
+      <div className="max-w-[1400px] mx-auto">
+        {/* Main Image Banner */}
+        <div className="mb-10 px-2.5 md:px-0">
+          <div className="relative aspect-[4/3] md:aspect-[21/9] w-full overflow-hidden rounded-[20px] md:rounded-[40px]">
+            <img 
+              src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
+              alt="About Self-Watering Planters"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="text-center mb-10 px-4">
+          <h2 className="font-fraunces text-[28px] md:text-5xl text-white mb-3">
             About Self-Watering Planters
           </h2>
-          <p className="font-quicksand text-white/80 max-w-2xl mx-auto">
-            Experience the future of plant care with our innovative self-watering technology. 
-            Perfect for busy plant parents who want their greenery to thrive.
+          <p className="font-quicksand text-white/90 text-[15px] md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Self-watering planters provide consistent moisture, prevent overwatering, and simplify care for healthy plant growth.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="text-center mb-10">
+          <h3 className="font-fraunces text-2xl text-white">How it works</h3>
+        </div>
+
+        {/* Steps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-4 px-2.5">
           {[
             {
               step: "1",
-              title: "Water Reservoir",
-              description: "The bottom chamber holds water, keeping it separate from the soil to prevent root rot.",
-              image: "https://kyari.co/cdn/shop/files/PT1.webp?v=1762848088"
+              title: "Fill the Water Reservoir",
+              image: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666"
             },
             {
               step: "2",
-              title: "Capillary Action",
-              description: "Special wicks or soil bridges pull moisture upward only as the plant needs it.",
-              image: "https://kyari.co/cdn/shop/files/PT1.webp?v=1762848088"
+              title: "Water reaches the soil as needed",
+              image: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666"
             },
             {
               step: "3",
-              title: "Thriving Plants",
-              description: "Your plants enjoy consistent hydration for up to 2-4 weeks without manual watering.",
-              image: "https://kyari.co/cdn/shop/files/PT1.webp?v=1762848088"
+              title: "Healthy and Happy Plant",
+              image: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666"
             }
           ].map((item, index) => (
-            <div key={index} className="relative bg-white/5 rounded-2xl p-6 border border-white/10">
-              <div className="absolute -top-4 left-6 w-8 h-8 bg-[#C3754C] rounded-full flex items-center justify-center text-white font-bold">
-                {item.step}
+            <div key={index} className="flex flex-col items-center">
+              <div className="relative w-full max-w-[320px] md:max-w-none aspect-square mb-6">
+                <div className="absolute -top-[14px] md:-top-[24px] left-1/2 -translate-x-1/2 z-10 w-9 h-9 md:w-12 md:h-12 bg-[#C3754C] rounded-full flex items-center justify-center text-white font-bold text-lg md:text-2xl shadow-lg border-2 border-white/20">
+                  {item.step}
+                </div>
+                <div className="w-full h-full overflow-hidden rounded-[20px] bg-white/5">
+                  <img 
+                    src={item.image} 
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
-              <div className="aspect-square mb-6 overflow-hidden rounded-xl">
-                <img 
-                  src={item.image} 
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
-                />
-              </div>
-              <h3 className="font-fraunces text-xl text-white mb-2">{item.title}</h3>
-              <p className="font-quicksand text-sm text-white/70 leading-relaxed">
-                {item.description}
+              <p className="font-quicksand text-center text-white text-[15px] md:text-lg font-medium px-4">
+                {item.title}
               </p>
             </div>
           ))}
