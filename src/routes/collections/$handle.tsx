@@ -9,6 +9,7 @@ import { getCollection } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 
 const collectionQuery = (handle: string) =>
   queryOptions({
@@ -86,6 +87,7 @@ function CollectionPage() {
           <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
+      <SelfWateringSection />
       <MarqueeBanner />
       <Footer />
     </div>
