@@ -23,13 +23,16 @@ export const SelfWateringSection = () => {
               <div className="flex flex-row justify-center lg:justify-start gap-3 lg:gap-8">
                 {/* Step 1 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
-                  <div className="relative mb-3 lg:mb-4 w-full aspect-square">
+                  <div className="relative mb-3 lg:mb-4 w-full aspect-square mt-2 lg:mt-4">
                     <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666" 
                         alt="Step 1" 
-                        className="w-full h-full object-cover scale-110"
+                        className="w-full h-full object-cover"
                       />
+                    </div>
+                    <div className="absolute -top-2 lg:-top-4 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10">
+                      1
                     </div>
                   </div>
                   <p className="text-[10px] lg:text-[15px] font-sans leading-snug px-1">
@@ -39,13 +42,16 @@ export const SelfWateringSection = () => {
 
                 {/* Step 2 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
-                  <div className="relative mb-3 lg:mb-4 w-full aspect-square">
+                  <div className="relative mb-3 lg:mb-4 w-full aspect-square mt-2 lg:mt-4">
                     <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666" 
                         alt="Step 2" 
-                        className="w-full h-full object-cover scale-110"
+                        className="w-full h-full object-cover"
                       />
+                    </div>
+                    <div className="absolute -top-2 lg:-top-4 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10">
+                      2
                     </div>
                   </div>
                   <p className="text-[10px] lg:text-[15px] font-sans leading-snug px-1">
@@ -55,13 +61,16 @@ export const SelfWateringSection = () => {
 
                 {/* Step 3 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
-                  <div className="relative mb-3 lg:mb-4 w-full aspect-square">
+                  <div className="relative mb-3 lg:mb-4 w-full aspect-square mt-2 lg:mt-4">
                     <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666" 
                         alt="Step 3" 
-                        className="w-full h-full object-cover scale-110"
+                        className="w-full h-full object-cover"
                       />
+                    </div>
+                    <div className="absolute -top-2 lg:-top-4 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10">
+                      3
                     </div>
                   </div>
                   <p className="text-[10px] lg:text-[15px] font-sans leading-snug px-1">
