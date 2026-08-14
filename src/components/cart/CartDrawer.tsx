@@ -57,6 +57,7 @@ export function CartDrawer() {
       });
     } catch (err) {
       console.warn("[Checkout] tracking failed, continuing", err);
+      posthogService.captureException(err, { context: "handleCheckout" });
     } finally {
       // Checkout navigation must never depend on analytics succeeding.
       window.location.assign(finalUrl);
