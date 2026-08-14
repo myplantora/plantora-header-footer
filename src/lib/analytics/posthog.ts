@@ -34,10 +34,8 @@ class PostHogService {
     const config = globalConfig.analytics?.posthog;
     if (!config?.enabled || !config.apiKey) return;
 
-    // Use requestIdleCallback if available, fallback to setTimeout
-    const scheduleInit = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1000));
-
-    scheduleInit(async () => {
+    // Direct initialization instead of waiting for idle to ensure capture in tests/first load
+    const initialize = async () => {
       try {
         const phModule = await import("posthog-js");
         const ph = phModule.default;
