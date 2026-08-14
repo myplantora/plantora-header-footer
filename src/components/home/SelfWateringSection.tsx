@@ -73,13 +73,12 @@ export const SelfWateringSection = () => {
           </div>
 
           {/* Large Demonstration Image */}
-          <div className="w-full lg:w-[45%] order-1 lg:order-2 mb-10 lg:mb-0">
-            <div className="rounded-[22px] lg:rounded-[40px] overflow-hidden shadow-2xl">
+          <div className="w-full lg:w-[45%] order-1 lg:order-2 mb-6 lg:mb-0">
+            <div className="rounded-[22px] lg:rounded-[40px] overflow-hidden shadow-2xl mx-auto max-w-[500px] lg:max-w-none">
               <img 
                 src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
-
                 alt="Self-watering planter demonstration" 
-                className="w-full h-auto object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
           </div>
