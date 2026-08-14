@@ -30,7 +30,7 @@ export const SelfWateringSection = () => {
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-4 px-2.5">
+        <div className="flex flex-row justify-between gap-2.5 md:gap-8 mb-4 px-2.5">
           {[
             {
               step: "1",
@@ -48,9 +48,12 @@ export const SelfWateringSection = () => {
               image: "https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666"
             }
           ].map((item, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div className="relative w-full max-w-[320px] md:max-w-none aspect-square mb-6">
-                <div className="w-full h-full overflow-hidden rounded-[20px] bg-white/5">
+            <div key={index} className="flex flex-col items-center flex-1 min-w-0 relative">
+              <div className="absolute -top-[14px] md:-top-[24px] left-1/2 -translate-x-1/2 z-10 w-7 h-7 md:w-12 md:h-12 bg-[#C3754C] rounded-full flex items-center justify-center text-white font-bold text-sm md:text-2xl shadow-lg border-2 border-white/20">
+                {item.step}
+              </div>
+              <div className="relative w-full aspect-square mb-3">
+                <div className="w-full h-full overflow-hidden rounded-[10px] md:rounded-[20px] bg-white/5">
                   <img 
                     src={item.image} 
                     alt={item.title}
@@ -58,7 +61,7 @@ export const SelfWateringSection = () => {
                   />
                 </div>
               </div>
-              <p className="font-quicksand text-center text-white text-[15px] md:text-lg font-medium px-4">
+              <p className="font-quicksand text-center text-white text-[10px] md:text-lg font-medium leading-tight">
                 {item.title}
               </p>
             </div>
