@@ -31,7 +31,7 @@ export const SelfWateringSection = () => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="absolute -top-3 lg:-top-5 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10 leading-none">
+                    <div className="absolute -top-[12px] lg:-top-[22px] left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-7 h-7 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-[12px] lg:text-[18px] font-bold border-2 border-[#1D4D44] z-10 leading-none pb-[1px] lg:pb-0">
                       1
                     </div>
                   </div>
@@ -50,7 +50,7 @@ export const SelfWateringSection = () => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="absolute -top-3 lg:-top-5 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10 leading-none">
+                    <div className="absolute -top-[12px] lg:-top-[22px] left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-7 h-7 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-[12px] lg:text-[18px] font-bold border-2 border-[#1D4D44] z-10 leading-none pb-[1px] lg:pb-0">
                       2
                     </div>
                   </div>
@@ -69,7 +69,7 @@ export const SelfWateringSection = () => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="absolute -top-3 lg:-top-5 left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[12px] lg:text-[16px] font-bold border-2 border-[#1D4D44] z-10 leading-none">
+                    <div className="absolute -top-[12px] lg:-top-[22px] left-1/2 -translate-x-1/2 bg-[#C3754C] text-white w-7 h-7 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-[12px] lg:text-[18px] font-bold border-2 border-[#1D4D44] z-10 leading-none pb-[1px] lg:pb-0">
                       3
                     </div>
                   </div>
