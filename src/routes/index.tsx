@@ -58,7 +58,6 @@ function Index() {
         <BrandMission />
         <MarqueeBanner />
       </main>
-      <Footer />
     </>
   );
 }
