@@ -2,7 +2,7 @@ import React from 'react';
 
 export const SelfWateringSection = () => {
   return (
-    <section className="bg-[#2A564D] py-8 px-2.5 md:py-20 overflow-hidden">
+    <section className="bg-[#355F56] py-8 px-2.5 md:py-20 overflow-hidden">
       <div className="max-w-[1400px] mx-auto">
         {/* Main Image Banner */}
         <div className="mb-10 px-2.5 md:px-0">
