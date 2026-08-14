@@ -309,13 +309,29 @@ export const useCartStore = create<CartState>((set, get) => ({
         lines: [{ id: lineId, quantity }]
       });
       const { cart: updatedCart, userErrors } = data.cartLinesUpdate || {};
-      if (userErrors?.length) throw new Error(userErrors[0].message);
+
+      if (userErrors?.length) {
+        const errorMsg = userErrors[0].message.toLowerCase();
+        if (errorMsg.includes("does not exist") || errorMsg.includes("conflict")) {
+          console.log("[CartStore] Line update conflict or missing, refreshing cart state");
+          await get().initCart();
+          return;
+        }
+        throw new Error(userErrors[0].message);
+      }
+
       if (updatedCart) {
         set(deriveCartState(updatedCart));
         analytics.trackCartUpdated(updatedCart, 'update_cart');
       }
     } catch (e: any) {
-      console.error("[CartStore] Update rollback:", e);
+      console.error("[CartStore] Update failure:", e);
+      analytics.posthogService.captureException(e, { 
+        context: "updateLine",
+        lineId,
+        quantity,
+        cartId
+      });
       set(previousState);
       toast.error(e.message || "Failed to update quantity");
     }
