@@ -219,7 +219,7 @@
     to { transform: translateX(-33.33%); }
   }
   .animate-marquee {
-    animation: marquee 10s linear infinite;
+    animation: marquee 20s linear infinite;
   }
   .animate-marquee:hover {
     animation-play-state: paused;
