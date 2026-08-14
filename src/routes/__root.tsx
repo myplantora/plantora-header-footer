@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 
 import { useShopifyCookies } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/layout/CartContext";
@@ -166,6 +167,7 @@ function RootComponent() {
       <Header />
       <CartDrawer />
       <Outlet />
+      <SelfWateringSection />
       <Analytics />
       <Toaster position="bottom-right" />
     </QueryClientProvider>
