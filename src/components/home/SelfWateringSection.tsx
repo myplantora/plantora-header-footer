@@ -50,9 +50,6 @@ export const SelfWateringSection = () => {
           ].map((item, index) => (
             <div key={index} className="flex flex-col items-center">
               <div className="relative w-full max-w-[320px] md:max-w-none aspect-square mb-6">
-                <div className="absolute -top-[14px] md:-top-[24px] left-1/2 -translate-x-1/2 z-10 w-9 h-9 md:w-12 md:h-12 bg-[#C3754C] rounded-full flex items-center justify-center text-white font-bold text-lg md:text-2xl shadow-lg border-2 border-white/20">
-                  {item.step}
-                </div>
                 <div className="w-full h-full overflow-hidden rounded-[20px] bg-white/5">
                   <img 
                     src={item.image} 
