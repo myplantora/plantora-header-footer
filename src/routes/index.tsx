@@ -8,7 +8,7 @@ import { CollectionScroller, collectionByIdQuery } from "@/components/home/Colle
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 import { BrandMission } from "@/components/home/BrandMission";
-import { MarqueeBanner } from "@/components/home/MarqueeBanner";
+
 
 
 
@@ -55,7 +55,7 @@ function Index() {
         <WhyChooseKyari />
         <SelfWateringSection />
         <BrandMission />
-        <MarqueeBanner />
+        
       </main>
     </>
   );
