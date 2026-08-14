@@ -322,10 +322,25 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
 
 export const trackCheckoutStarted = (cart: any) => {
   sendMonorailEvent("checkout_started", cart);
+  const products = getAnalyticsProducts(cart);
+  
   posthogService.trackCheckoutStarted({
     cart_value: Number(cart?.cost?.totalAmount?.amount ?? 0),
     currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
     item_count: cart?.totalQuantity ?? 0,
+  });
+
+  // Explicit conversion event for funnel tracking
+  posthogService.capture("begin_checkout", {
+    value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    item_count: cart?.totalQuantity ?? 0,
+    products: products.map(p => ({
+      id: p.variantGid,
+      name: p.name,
+      price: Number(p.price),
+      quantity: p.quantity
+    }))
   });
 };
 
@@ -348,5 +363,13 @@ export const trackPurchase = (cart: any, orderId: string) => {
     currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
     item_count: cart?.totalQuantity ?? 0,
     products,
+  });
+
+  // Explicit conversion event for funnel tracking
+  posthogService.capture("purchase_completed", {
+    order_id: orderId,
+    value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    item_count: cart?.totalQuantity ?? 0
   });
 };
