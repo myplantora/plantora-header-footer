@@ -170,13 +170,19 @@ export const useCartStore = create<CartState>((set, get) => ({
         return false;
       }
 
-      if (variant?.quantityAvailable !== null && variant?.quantityAvailable < quantity) {
-        console.log(`[Add to Cart] Blocked — insufficient stock. Requested: ${quantity} | Available: ${variant.quantityAvailable}`);
+      // NOTE: quantityAvailable is only exposed when the Storefront token has
+      // `unauthenticated_read_product_inventory`. Without it Shopify returns 0
+      // (not null), which previously blocked every add-to-cart. Only trust it
+      // when it is a positive number; otherwise rely on availableForSale.
+      const qty = typeof variant?.quantityAvailable === "number" ? variant.quantityAvailable : null;
+      if (qty !== null && qty > 0 && qty < quantity) {
+        console.log(`[Add to Cart] Blocked — insufficient stock. Requested: ${quantity} | Available: ${qty}`);
         toast.error("Insufficient Stock", {
-          description: `Only ${variant.quantityAvailable} items available.`
+          description: `Only ${qty} items available.`
         });
         return false;
       }
+
 
       // Recursive execution function for retries/recovery
       const executeAdd = async (retryCount = 0): Promise<boolean> => {
