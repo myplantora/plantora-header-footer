@@ -8,7 +8,6 @@ import { posthogService } from "@/lib/analytics/posthog";
 import { getCollection } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
-import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 
 
