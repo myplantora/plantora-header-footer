@@ -19,7 +19,7 @@
     },
     "posthog": {
       "enabled": true,
-      "apiKey": "phc_your_key_here",
+      "apiKey": "phc_tqmKxGXtW8NJZQsZkUR7nC3XCNbuHEwtAtpSvoR3uroi",
       "apiHost": "https://us.i.posthog.com"
     }
   },

@@ -21,6 +21,7 @@ import { getProduct } from "@/services/shopify/product.service";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
+import { posthogService } from "@/lib/analytics/posthog";
 
 const productQuery = (handle: string) =>
   queryOptions({ queryKey: ["product", handle], queryFn: () => getProduct(handle) });
@@ -203,7 +204,22 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
   useEffect(() => {
     trackViewContent(product);
-  }, [product.id]); // Only re-track if the product ID actually changes, not the whole object reference
+    posthogService.trackProductViewed({
+      product_id: product.id,
+      product_handle: product.handle,
+      product_title: product.title,
+      variant_id: product.defaultVariantId || "",
+      price: Number(product.variants[0]?.price.amount || 0),
+      currency: product.variants[0]?.price.currency || "USD",
+      quantity: 1,
+      product_type: "", // Not available on normalized PlantoraProduct yet
+      vendor: "Plantora",
+    });
+    // Track monorail/posthog page view
+    import("@/lib/analytics").then(({ trackShopifyPageView }) => {
+      trackShopifyPageView("product", product.id);
+    });
+  }, [product.id]);
 
 
   const variant = (product.variants.find((v) => v.id === variantId) ?? product.variants[0])!;

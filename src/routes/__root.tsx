@@ -16,6 +16,8 @@ import { useShopifyCookies } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/layout/CartContext";
 import { MetaPixelProvider } from "@/components/analytics/MetaPixelProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { posthogService } from "@/lib/analytics/posthog";
+import { useRouterState } from "@tanstack/react-router";
 
 
 import appCss from "../styles.css?url";
@@ -157,6 +159,14 @@ function ShopifyAnalytics() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const state = useRouterState();
+
+  useEffect(() => {
+    posthogService.trackPageView({
+      url: state.location.href,
+      pathname: state.location.pathname,
+    });
+  }, [state.location.href]);
 
   return (
     <QueryClientProvider client={queryClient}>
