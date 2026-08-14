@@ -66,6 +66,10 @@ function CollectionPage() {
         collection_title: collection.title,
         product_count: collection.products?.length,
       });
+      // Also track general shopify page view for monorail/posthog
+      import("@/lib/analytics").then(({ trackShopifyPageView }) => {
+        trackShopifyPageView("collection", collection.id);
+      });
     }
   }, [collection]);
 

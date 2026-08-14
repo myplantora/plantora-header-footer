@@ -48,8 +48,8 @@ class PostHogService {
           capture_pageview: false, // We handle this via SPA router to ensure context is correct
           persistence: "localStorage",
           session_recording: {
-            maskAllInputs: true, // Privacy first
-            maskTextSelector: ".mask-text", // Custom masking
+            maskAllInputs: false, // Standard recording setup
+            maskTextSelector: ".mask-text",
           },
           loaded: (phInstance) => {
             this.posthog = phInstance;
