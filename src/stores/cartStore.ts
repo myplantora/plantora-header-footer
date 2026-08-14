@@ -248,6 +248,12 @@ export const useCartStore = create<CartState>((set, get) => ({
       return await executeAdd();
     } catch (e: any) {
       console.error("[CartStore] Add to cart failure:", e);
+      // Capture exception for monitoring
+      analytics.posthogService.captureException(e, { 
+        context: "addToCart",
+        merchandiseId,
+        quantity
+      });
       toast.error("Shopping cart error", { description: "Please try again." });
       return false;
     } finally {
