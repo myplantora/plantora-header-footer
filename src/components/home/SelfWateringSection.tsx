@@ -7,11 +7,11 @@ export const SelfWateringSection = () => {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-16">
           
           {/* Main Content Side */}
-          <div className="w-full lg:w-[50%] text-white text-center lg:text-left order-2 lg:order-1">
-            <h2 className="text-[28px] lg:text-[44px] font-serif mb-3 lg:mb-4 leading-tight">
+          <div className="w-full lg:w-[45%] text-white text-center lg:text-left order-2 lg:order-1">
+            <h2 className="text-[28px] lg:text-[40px] font-serif mb-2 lg:mb-3 leading-tight">
               About Self-Watering Planters
             </h2>
-            <p className="text-[14px] lg:text-[17px] opacity-90 mb-8 lg:mb-10 font-sans leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <p className="text-[14px] lg:text-[16px] opacity-90 mb-6 lg:mb-8 font-sans leading-relaxed max-w-2xl mx-auto lg:mx-0">
               Self-watering planters provide consistent moisture, prevent overwatering, and simplify care for healthy plant growth.
             </p>
 
