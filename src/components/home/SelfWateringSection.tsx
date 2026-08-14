@@ -26,9 +26,9 @@ export const SelfWateringSection = () => {
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
                     <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
                       <img 
-                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666" 
-                        alt="Fill reservoir" 
-                        className="w-full h-full object-cover"
+                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666" 
+                        alt="Step 1" 
+                        className="w-full h-full object-contain"
                       />
                     </div>
                   </div>
@@ -40,11 +40,11 @@ export const SelfWateringSection = () => {
                 {/* Step 2 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
-                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
+                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10 bg-white/5">
                       <img 
-                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666" 
-                        alt="Water reaches soil" 
-                        className="w-full h-full object-cover"
+                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
+                        alt="Step 2" 
+                        className="w-full h-full object-contain"
                       />
                     </div>
                   </div>
@@ -56,11 +56,11 @@ export const SelfWateringSection = () => {
                 {/* Step 3 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
-                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
+                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10 bg-white/5">
                       <img 
-                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666" 
-                        alt="Healthy plant" 
-                        className="w-full h-full object-cover"
+                        src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666" 
+                        alt="Step 3" 
+                        className="w-full h-full object-contain"
                       />
                     </div>
                   </div>
