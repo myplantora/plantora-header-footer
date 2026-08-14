@@ -3,7 +3,6 @@ import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-rout
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Minus, Plus, Info, X, Loader2, AlertCircle } from "lucide-react";
 
-import { Footer } from "@/components/layout/Footer";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 import { SectionContainer } from "@/components/layout/SectionContainer";
@@ -110,8 +109,6 @@ function ProductPage() {
       <ProductRecommendations currentProductHandle={handle} />
       <SelfWateringSection />
       <MarqueeBanner />
-      
-      <Footer />
     </div>
   );
 }
