@@ -6,11 +6,11 @@ export const SelfWateringSection = () => {
       <div className="max-w-[1400px] mx-auto">
         {/* Main Image Banner */}
         <div className="mb-10 px-2.5 md:px-0">
-          <div className="relative aspect-[4/3] md:aspect-[21/9] w-full overflow-hidden rounded-[20px] md:rounded-[40px]">
+          <div className="relative w-full overflow-hidden rounded-[20px] md:rounded-[40px]">
             <img 
               src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT1.webp?v=1786000666" 
               alt="About Self-Watering Planters"
-              className="w-full h-full object-cover"
+              className="w-full h-auto block"
             />
           </div>
         </div>
