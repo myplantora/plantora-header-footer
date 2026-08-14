@@ -94,7 +94,7 @@ function CollectionPage() {
       </main>
       
       <SelfWateringSection />
-      <MarqueeBanner />
+      <SelfWateringSection />
     </div>
   );
 }
