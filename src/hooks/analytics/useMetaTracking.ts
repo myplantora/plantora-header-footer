@@ -1,4 +1,5 @@
 import { trackMetaEvent } from '@/lib/analytics/meta.events';
+import { posthogService } from '@/lib/analytics/posthog';
 import { MetaEventData, MetaUserData } from '@/lib/analytics/meta.types';
 
 /**
@@ -38,6 +39,18 @@ export function useMetaTracking() {
       content_type: 'product',
       value: (product.price?.amount || 0),
       currency: product.price?.currencyCode || 'USD'
+    });
+
+    posthogService.trackProductViewed({
+      product_id: product.id,
+      product_handle: product.handle,
+      product_title: product.title,
+      variant_id: product.defaultVariantId || product.id,
+      price: Number(product.price?.amount || 0),
+      currency: product.price?.currencyCode || 'USD',
+      quantity: 1,
+      product_type: product.productType,
+      vendor: product.vendor,
     });
   }, [track]);
 

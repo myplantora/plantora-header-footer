@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
+import { posthogService } from "@/lib/analytics/posthog";
 
 import { Footer } from "@/components/layout/Footer";
 import { getCollectionById } from "@/services/shopify/collection.service";
@@ -57,6 +58,12 @@ function BigSavingsPage() {
       track('ViewCategory', {
         content_name: collection.title,
         content_category: collection.title
+      });
+      posthogService.trackCollectionViewed({
+        collection_id: collection.id,
+        collection_handle: collection.handle,
+        collection_title: collection.title,
+        product_count: collection.products?.length,
       });
     }
   }, [collection, track]);
