@@ -7,8 +7,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
-
-
+import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 import { BrandMission } from "@/components/home/BrandMission";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 
@@ -55,7 +54,7 @@ function Index() {
         <CollectionScroller collectionId={BIG_SAVINGS_COMBO_ID} />
         <CollectionScroller collectionId={HOME_COLLECTION_ID} />
         <WhyChooseKyari />
-        
+        <SelfWateringSection />
         <BrandMission />
         <MarqueeBanner />
       </main>
