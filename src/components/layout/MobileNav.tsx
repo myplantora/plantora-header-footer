@@ -93,11 +93,6 @@ export function MobileNav({ open, onClose }: Props) {
                         {isExpanded ? <Minus className="size-4" /> : <Plus className="size-4" />}
                       </button>
                     )}
-                    {!hasSubmenu && (
-                      <div className="p-4 text-muted-foreground/30">
-                        <ChevronRight className="size-4" />
-                      </div>
-                    )}
                   </div>
                   
                   {hasSubmenu && isExpanded && (

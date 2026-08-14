@@ -36,38 +36,20 @@ export const navItems: NavItem[] = [
   },
   {
     label: "Outdoor Plants",
-    href: "/collections/outdoor-plants",
+    href: "/collections/659679805733",
     mega: [
       {
         title: "Shop Outdoor",
         links: [
+          { label: "XL Plants", href: "/collections/659679805733" },
           { label: "Flowering", href: "/collections/flowering" },
           { label: "Shrubs", href: "/collections/shrubs" },
           { label: "Balcony", href: "/collections/balcony" },
           { label: "Garden", href: "/collections/garden" },
-          { label: "Seasonal", href: "/collections/seasonal" },
         ],
       },
     ],
   },
-  {
-    label: "Planters",
-    href: "/collections/planters",
-    mega: [
-      {
-        title: "Shop Planters",
-        links: [
-          { label: "Ceramic", href: "/collections/ceramic" },
-          { label: "Concrete", href: "/collections/concrete" },
-          { label: "Metal", href: "/collections/metal" },
-          { label: "Wooden", href: "/collections/wooden" },
-          { label: "Hanging", href: "/collections/hanging" },
-        ],
-      },
-    ],
-  },
-  { label: "Plant Care", href: "/plant-care" },
-  { label: "Best Sellers", href: "/collections/best-sellers" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

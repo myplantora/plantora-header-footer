@@ -15,11 +15,14 @@ import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 
 
 const HOME_COLLECTION_ID = "659339542821";
+const XL_PLANTS_COLLECTION_ID = "659679805733";
+const BIG_SAVINGS_COMBO_ID = "659519504677";
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(collectionByIdQuery(HOME_COLLECTION_ID));
-    context.queryClient.ensureQueryData(collectionByIdQuery("659519504677"));
+    context.queryClient.ensureQueryData(collectionByIdQuery(BIG_SAVINGS_COMBO_ID));
+    context.queryClient.ensureQueryData(collectionByIdQuery(XL_PLANTS_COLLECTION_ID));
   },
   head: () => ({
     meta: [
@@ -48,16 +51,15 @@ function Index() {
     <>
       <main>
         <BannerSection />
-        <CollectionScroller collectionId="659519504677" />
-        <CollectionScroller collectionId="659339542821" />
+        <CollectionScroller collectionId={XL_PLANTS_COLLECTION_ID} />
+        <CollectionScroller collectionId={BIG_SAVINGS_COMBO_ID} />
+        <CollectionScroller collectionId={HOME_COLLECTION_ID} />
         <WhyChooseKyari />
         <SelfWateringSection />
         <BrandMission />
         <MarqueeBanner />
       </main>
       <Footer />
-
-
     </>
   );
 }
