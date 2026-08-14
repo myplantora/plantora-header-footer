@@ -34,21 +34,18 @@ class PostHogService {
     const config = globalConfig.analytics?.posthog;
     if (!config?.enabled || !config.apiKey) return;
 
-    // Use requestIdleCallback if available, fallback to setTimeout
-    const scheduleInit = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1000));
-
-    scheduleInit(async () => {
+    const initialize = async () => {
       try {
         const phModule = await import("posthog-js");
         const ph = phModule.default;
 
         ph.init(config.apiKey, {
           api_host: config.apiHost || "https://us.i.posthog.com",
-          autocapture: true, // Standard PostHog setup
-          capture_pageview: false, // We handle this via SPA router to ensure context is correct
+          autocapture: true,
+          capture_pageview: false,
           persistence: "localStorage",
           session_recording: {
-            maskAllInputs: false, // Standard recording setup
+            maskAllInputs: false,
             maskTextSelector: ".mask-text",
           },
           loaded: (phInstance: any) => {
@@ -60,7 +57,13 @@ class PostHogService {
       } catch (error) {
         console.warn("[PostHog] Initialization failed silently", error);
       }
-    });
+    };
+
+    if (document.readyState === 'complete') {
+      initialize();
+    } else {
+      window.addEventListener('load', initialize);
+    }
   }
 
   private flushQueue() {
