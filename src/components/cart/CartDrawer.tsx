@@ -6,7 +6,7 @@ import { formatMoney } from "@/lib/money";
 import { CartRewards, buildCheckoutUrl } from "@/components/cart/CartRewards";
 import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
-import { trackCartViewed, trackCheckoutStarted } from "@/lib/analytics";
+import { trackCartViewed, trackCheckoutStarted, trackPurchase } from "@/lib/analytics";
 import { trackMetaEvent } from "@/lib/analytics/meta.events";
 import { resolveRewardState } from "@/lib/rewards";
 
@@ -55,6 +55,10 @@ export function CartDrawer() {
         currency: subtotal?.currency ?? lines[0]?.currency ?? "USD",
         num_items: lines.reduce((total, line) => total + line.quantity, 0),
       });
+
+      // Track purchase as well as requested, though usually this happens on a thank you page
+      // We generate a temporary ID to ensure the event is captured at checkout start as requested
+      trackPurchase(currentCart, `checkout_${Date.now()}`);
     } catch (err) {
       console.warn("[Checkout] tracking failed, continuing", err);
     } finally {
