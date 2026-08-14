@@ -14,10 +14,24 @@ export const Route = createFileRoute('/contact')({
 
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+    
+    try {
+      // In a real app, this would call a server function or API
+      // For now, we simulate a successful submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setSubmitted(true);
+    } catch (err) {
+      setError("Failed to send message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -130,11 +144,25 @@ function ContactPage() {
                 />
               </div>
 
+              {error && (
+                <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-[#C3754C] text-white font-bold py-5 rounded-2xl hover:bg-[#C3754C]/90 transition-all shadow-lg active:scale-[0.98]"
+                disabled={isSubmitting}
+                className="w-full bg-[#C3754C] text-white font-bold py-5 rounded-2xl hover:bg-[#C3754C]/90 transition-all shadow-lg active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Send Message
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  'Send Message'
+                )}
               </button>
             </form>
           )}
