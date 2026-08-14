@@ -11,7 +11,6 @@ import { CartProvider } from "@/components/layout/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 
 import { ProductRating } from "@/components/product/ProductRating";
-import { DeliveryEstimator } from "@/components/product/DeliveryEstimator";
 import { ProductRecommendations } from "@/components/product/ProductRecommendations";
 import { formatMoney } from "@/lib/money";
 import { cn } from "@/lib/utils";
@@ -554,8 +553,6 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
               </div>
             </div>
           </div>
-
-          <DeliveryEstimator />
 
           <div className="flex items-center gap-3 rounded-[5px] bg-[#EBE8D8] p-3">
             <img
