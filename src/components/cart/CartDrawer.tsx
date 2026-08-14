@@ -55,10 +55,6 @@ export function CartDrawer() {
         currency: subtotal?.currency ?? lines[0]?.currency ?? "USD",
         num_items: lines.reduce((total, line) => total + line.quantity, 0),
       });
-
-      // Track purchase as well as requested, though usually this happens on a thank you page
-      // We generate a temporary ID to ensure the event is captured at checkout start as requested
-      trackPurchase(currentCart, `checkout_${Date.now()}`);
     } catch (err) {
       console.warn("[Checkout] tracking failed, continuing", err);
     } finally {

@@ -116,10 +116,13 @@ class PostHogService {
   }
 
   trackAddToCart(product: AnalyticsProduct, cartValue: number) {
-    this.capture("add_to_cart", {
+    const payload = {
       ...product,
       cart_value: cartValue,
-    });
+    };
+    this.capture("add_to_cart", payload);
+    // Standard event for funnel analysis
+    this.capture("product_added_to_cart", payload);
   }
 
   trackRemoveFromCart(product: Pick<AnalyticsProduct, "product_id" | "variant_id" | "quantity">, cartValue: number) {
@@ -154,6 +157,8 @@ class PostHogService {
     products: AnalyticsProduct[];
   }) {
     this.capture("purchase", order);
+    // Standard conversion event
+    this.capture("order_completed", order);
   }
 }
 
