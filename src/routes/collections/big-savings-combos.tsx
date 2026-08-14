@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { getCollectionById } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
+import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 
 const BIG_SAVINGS_ID = "659519504677";
 
@@ -78,6 +79,7 @@ function BigSavingsPage() {
           <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
+      <MarqueeBanner />
       <Footer />
     </div>
   );
