@@ -309,13 +309,29 @@ export const useCartStore = create<CartState>((set, get) => ({
         lines: [{ id: lineId, quantity }]
       });
       const { cart: updatedCart, userErrors } = data.cartLinesUpdate || {};
-      if (userErrors?.length) throw new Error(userErrors[0].message);
+
+      if (userErrors?.length) {
+        const errorMsg = userErrors[0].message.toLowerCase();
+        if (errorMsg.includes("does not exist") || errorMsg.includes("conflict")) {
+          console.log("[CartStore] Line update conflict or missing, refreshing cart state");
+          await get().initCart();
+          return;
+        }
+        throw new Error(userErrors[0].message);
+      }
+
       if (updatedCart) {
         set(deriveCartState(updatedCart));
         analytics.trackCartUpdated(updatedCart, 'update_cart');
       }
     } catch (e: any) {
-      console.error("[CartStore] Update rollback:", e);
+      console.error("[CartStore] Update failure:", e);
+      analytics.posthogService.captureException(e, { 
+        context: "updateLine",
+        lineId,
+        quantity,
+        cartId
+      });
       set(previousState);
       toast.error(e.message || "Failed to update quantity");
     }
@@ -325,6 +341,13 @@ export const useCartStore = create<CartState>((set, get) => ({
     const { cart } = get();
     const cartId = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!cartId || !cart) return;
+
+    // Verify line existence in current state to prevent stale deletions
+    const lineExists = cart.lines?.edges?.some((edge: any) => edge.node.id === lineId);
+    if (!lineExists) {
+      console.warn("[CartStore] Attempted to remove non-existent line:", lineId);
+      return;
+    }
 
     // Save previous state for rollback
     const previousState = deriveCartState(cart);
@@ -347,13 +370,30 @@ export const useCartStore = create<CartState>((set, get) => ({
         lineIds: [lineId]
       });
       const { cart: updatedCart, userErrors } = data.cartLinesRemove || {};
-      if (userErrors?.length) throw new Error(userErrors[0].message);
+
+      if (userErrors?.length) {
+        const errorMsg = userErrors[0].message.toLowerCase();
+        // If the line is already gone, consider it a success and just refresh
+        if (errorMsg.includes("does not exist") || errorMsg.includes("conflict")) {
+          console.log("[CartStore] Line already removed or conflict, refreshing cart state");
+          await get().initCart();
+          return;
+        }
+        throw new Error(userErrors[0].message);
+      }
+
       if (updatedCart) {
         set(deriveCartState(updatedCart));
         analytics.trackCartUpdated(updatedCart, 'remove_from_cart');
       }
     } catch (e: any) {
-      console.error("[CartStore] Remove rollback:", e);
+      console.error("[CartStore] Remove failure:", e);
+      // Capture exception for monitoring
+      analytics.posthogService.captureException(e, { 
+        context: "removeLine",
+        lineId,
+        cartId
+      });
       set(previousState);
       toast.error(e.message || "Failed to remove item");
     }
