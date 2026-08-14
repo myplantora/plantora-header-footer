@@ -7,7 +7,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
 import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
-import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+
 
 import { BrandMission } from "@/components/home/BrandMission";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
