@@ -55,7 +55,7 @@ function Index() {
         <CollectionScroller collectionId={BIG_SAVINGS_COMBO_ID} />
         <CollectionScroller collectionId={HOME_COLLECTION_ID} />
         <WhyChooseKyari />
-        <SelfWateringSection />
+        
         <BrandMission />
         <MarqueeBanner />
       </main>
