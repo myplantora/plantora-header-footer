@@ -94,7 +94,6 @@ function CollectionPage() {
       </main>
       
       <SelfWateringSection />
-      <SelfWateringSection />
     </div>
   );
 }
