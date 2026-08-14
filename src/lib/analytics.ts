@@ -15,6 +15,7 @@ import {
   getMicroSessionId,
   getMicroSessionCount,
 } from "@/lib/analytics/identity";
+import { posthogService } from "@/lib/analytics/posthog";
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
 
@@ -230,6 +231,7 @@ async function sendMonorailPageView(
 export function trackShopifyPageView(pageType = "index", resourceId?: string) {
   if (typeof window === "undefined") return;
   void sendMonorailPageView(pageType, resourceId);
+  posthogService.trackPageView({ page_type: pageType, resource_id: resourceId });
   const payload = {
     ...getShopifyPayload(),
     pageType,
@@ -263,6 +265,11 @@ function trackShopifyAddToCart(cart: any) {
 
 export const trackCartViewed = (cart: any) => {
   sendMonorailEvent("cart_viewed", cart);
+  posthogService.trackCartViewed({
+    item_count: cart?.totalQuantity ?? 0,
+    cart_value: Number(cart?.cost?.subtotalAmount?.amount ?? 0),
+    currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+  });
 };
 
 export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_from_cart' | 'update_cart', item?: { merchandiseId: string; quantity: number }) => {
@@ -273,6 +280,18 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
     const products = getAnalyticsProducts(cart);
     const addedProduct = products.find((product: any) => product.variantGid === item?.merchandiseId);
     if (addedProduct) {
+      posthogService.trackAddToCart({
+        product_id: addedProduct.productGid,
+        product_handle: addedProduct.productGid, // If handle isn't in addedProduct, use ID as fallback
+        product_title: addedProduct.name,
+        variant_id: addedProduct.variantGid,
+        price: Number(addedProduct.price),
+        currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+        quantity: item?.quantity ?? addedProduct.quantity ?? 1,
+        product_type: addedProduct.category,
+        vendor: addedProduct.brand,
+      }, Number(cart?.cost?.subtotalAmount?.amount ?? 0));
+      
       trackMetaEvent("AddToCart", {
         content_ids: [addedProduct.productGid],
         content_name: addedProduct.name,
@@ -303,4 +322,9 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
 
 export const trackCheckoutStarted = (cart: any) => {
   sendMonorailEvent("checkout_started", cart);
+  posthogService.trackCheckoutStarted({
+    cart_value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    item_count: cart?.totalQuantity ?? 0,
+  });
 };
