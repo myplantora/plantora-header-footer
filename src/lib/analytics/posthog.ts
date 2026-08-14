@@ -78,11 +78,36 @@ class PostHogService {
       try {
         task(this.posthog);
       } catch (e) {
-        // Fail silently in production
+        // Capture exceptions for monitoring as requested
+        this.captureException(e, { context: "PostHog event capture" });
         if (import.meta.env.DEV) console.error("[PostHog] Event capture failed", e);
       }
     } else if (this.queue.length < this.MAX_QUEUE_SIZE) {
       this.queue.push(() => task(this.posthog));
+    }
+  }
+
+  /**
+   * Captures exceptions to PostHog for monitoring.
+   * This aligns with the request to "capture the exceptions in all layer".
+   */
+  captureException(error: any, properties?: Record<string, any>) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    
+    this.capture("exception_captured", {
+      error_message: errorMsg,
+      error_stack: errorStack,
+      ...properties,
+      url: typeof window !== 'undefined' ? window.location.href : 'server',
+      timestamp: new Date().toISOString()
+    });
+    
+    // Also use PostHog's built-in error capture if available in future versions/plugins
+    if (this.posthog?.captureException) {
+      try {
+        this.posthog.captureException(error, { properties });
+      } catch (e) {}
     }
   }
 

@@ -235,7 +235,8 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
       const ok = await addLineAndOpen(variantId, quantity);
 
       if (!ok) return;
-    } catch {
+    } catch (e) {
+      posthogService.captureException(e, { context: "ProductPage handleAdd", variantId, quantity });
       setAddError("Could not add to basket. Please try again.");
     }
   }

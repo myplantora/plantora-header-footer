@@ -15,6 +15,7 @@ import {
   getMicroSessionId,
   getMicroSessionCount,
 } from "@/lib/analytics/identity";
+export { posthogService } from "@/lib/analytics/posthog";
 import { posthogService } from "@/lib/analytics/posthog";
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
