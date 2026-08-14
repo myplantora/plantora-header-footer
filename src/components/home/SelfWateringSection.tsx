@@ -28,7 +28,7 @@ export const SelfWateringSection = () => {
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666" 
                         alt="Step 1" 
-                        className="w-full h-full object-contain bg-white/5"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
@@ -40,11 +40,11 @@ export const SelfWateringSection = () => {
                 {/* Step 2 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
-                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10 bg-white/5">
+                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT3.webp?v=1786000666" 
                         alt="Step 2" 
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
@@ -56,11 +56,11 @@ export const SelfWateringSection = () => {
                 {/* Step 3 */}
                 <div className="flex flex-col items-center text-center w-1/3 max-w-[160px]">
                   <div className="relative mb-3 lg:mb-4 w-full aspect-square">
-                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10 bg-white/5">
+                    <div className="w-full h-full rounded-[15px] lg:rounded-[22px] overflow-hidden border-2 border-white/10">
                       <img 
                         src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT4.webp?v=1786000666" 
                         alt="Step 3" 
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
@@ -78,7 +78,7 @@ export const SelfWateringSection = () => {
               <img 
                 src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/PT2.webp?v=1786000666" 
                 alt="Self-watering planter demonstration" 
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-cover"
               />
             </div>
           </div>
