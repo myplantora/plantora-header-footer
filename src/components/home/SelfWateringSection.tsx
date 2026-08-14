@@ -15,8 +15,8 @@ export const SelfWateringSection = () => {
               Self-watering planters provide consistent moisture, prevent overwatering, and simplify care for healthy plant growth.
             </p>
 
-            <div className="mt-8 lg:mt-12">
-              <h3 className="text-[22px] lg:text-[32px] font-serif mb-8 lg:mb-12">
+            <div className="mt-6 lg:mt-8">
+              <h3 className="text-[20px] lg:text-[28px] font-serif mb-6 lg:mb-8">
                 How it works
               </h3>
               
