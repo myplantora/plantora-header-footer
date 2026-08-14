@@ -1,4 +1,4 @@
-import globalConfig from "@/config/globalconf.json";
+import globalConfig from "../../config/globalconf.json";
 import type { PostHog } from "posthog-js";
 
 // Types for our abstraction
