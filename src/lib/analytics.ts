@@ -123,6 +123,7 @@ function getAnalyticsProducts(cart: any) {
     return {
       productGid: product.id ?? merchandise.productId ?? merchandise.id,
       variantGid: merchandise.id ?? line?.merchandiseId,
+      handle: product.handle ?? "",
       name: product.title ?? line?.title ?? "Product",
       variantName: merchandise.title ?? line?.variantTitle,
       brand: product.vendor ?? "Plantora",
@@ -282,7 +283,7 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
     if (addedProduct) {
       posthogService.trackAddToCart({
         product_id: addedProduct.productGid,
-        product_handle: addedProduct.productGid, // If handle isn't in addedProduct, use ID as fallback
+        product_handle: addedProduct.handle || addedProduct.productGid,
         product_title: addedProduct.name,
         variant_id: addedProduct.variantGid,
         price: Number(addedProduct.price),

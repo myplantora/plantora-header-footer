@@ -157,6 +157,8 @@ class PostHogService {
     products: AnalyticsProduct[];
   }) {
     this.capture("purchase", order);
+    // Standard conversion event
+    this.capture("order_completed", order);
   }
 }
 
