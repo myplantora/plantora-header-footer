@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "test:analytics": "python3 scripts/tests/verify-analytics.py"
+    "test:analytics": "python3 scripts/tests/verify-analytics.py",
+    "test:conversions": "python3 scripts/tests/verify-conversions.py"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
