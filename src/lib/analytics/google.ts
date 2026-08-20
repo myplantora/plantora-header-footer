@@ -48,7 +48,7 @@ export const initGoogleAnalytics = () => {
   const measurementId = getGaMeasurementId();
   if (!measurementId || typeof window === "undefined") return;
 
-  if (window.gtag) return;
+  if (typeof window.gtag === "function") return;
 
   // Standard gtag.js snippet
   const script = document.createElement("script");
@@ -73,7 +73,6 @@ export const initGoogleAnalytics = () => {
 export const trackGooglePageView = (path: string, title?: string) => {
   const measurementId = getGaMeasurementId();
   if (!measurementId || typeof window.gtag !== "function") return;
-
 
   window.gtag("event", "page_view", {
     page_path: path,
