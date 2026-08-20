@@ -242,6 +242,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
 
     import("@/lib/analytics/google").then(({ trackGoogleEvent }) => {
       const v = product.variants.find(v => v.id === variantId) || product.variants[0];
+      if (!v) return;
       trackGoogleEvent("view_item", {
         currency: v.price.currency,
         value: Number(v.price.amount),
@@ -251,7 +252,7 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
           price: Number(v.price.amount),
           quantity: 1,
           item_brand: "Plantora",
-          item_category: product.tags?.join(", "),
+          item_category: product.tags?.join(", ") || "",
         }]
       });
     });
