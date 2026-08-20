@@ -114,9 +114,10 @@ function ProductPage() {
       <SectionContainer className="bg-[#F8F8F8] py-0">
         <DynamicInternalLinks 
           currentHandle={handle} 
-          tags={data.product.tags} 
+          tags={data.product.tags || []} 
           type="product" 
         />
+
       </SectionContainer>
 
       <ProductRecommendations currentProductHandle={handle} />
