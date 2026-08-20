@@ -20,6 +20,8 @@ import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { posthogService } from "@/lib/analytics/posthog";
 import { StructuredData, getProductSchema } from "@/components/seo/SEOProvider";
+import { DynamicInternalLinks } from "@/components/seo/DynamicInternalLinks";
+
 
 
 const productQuery = (handle: string) =>
@@ -108,8 +110,17 @@ function ProductPage() {
     <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: bgColor }}>
       {productSchema && <StructuredData data={productSchema} />}
       <ProductView product={data.product} />
+      
+      <SectionContainer className="bg-[#F8F8F8] py-0">
+        <DynamicInternalLinks 
+          currentHandle={handle} 
+          tags={data.product.tags} 
+          type="product" 
+        />
+      </SectionContainer>
 
       <ProductRecommendations currentProductHandle={handle} />
+
       <SelfWateringSection />
     </div>
   );
