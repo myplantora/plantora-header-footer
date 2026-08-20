@@ -64,6 +64,9 @@ export const initGoogleAnalytics = () => {
   window.gtag("js", new Date());
   window.gtag("config", measurementId, {
     send_page_view: false, // We'll handle this manually on route changes
+    linker: {
+      domains: [config.shopify.storeDomain, config.analytics.shopDomain].filter(Boolean)
+    }
   });
 };
 
