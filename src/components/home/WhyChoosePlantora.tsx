@@ -5,26 +5,26 @@ const PLANTORA_FEATURES = [
   {
     title: "Self Watering Planters",
     description: "Designed for ease and elegance.",
-    image: "//kyari.co/cdn/shop/files/Group_1000009773_1.svg?v=1761197523&width=480",
+    image: "//plantora.co/cdn/shop/files/Group_1000009773_1.svg?v=1761197523&width=480",
   },
   {
     title: "Aesthetic Designs",
     description: "Stylish planters to match modern interiors.",
-    image: "//kyari.co/cdn/shop/files/Group_1000009772_1.svg?v=1761197525&width=480",
+    image: "//plantora.co/cdn/shop/files/Group_1000009772_1.svg?v=1761197525&width=480",
   },
   {
     title: "Innovative Plant Care",
     description: "Let your customers know about local pickup",
-    image: "//kyari.co/cdn/shop/files/Group_1000009771_1.svg?v=1761197526&width=480",
+    image: "//plantora.co/cdn/shop/files/Group_1000009771_1.svg?v=1761197526&width=480",
   },
   {
     title: "Healthy Plants",
     description: "Handpicked and nurtured for 3 months.",
-    image: "//kyari.co/cdn/shop/files/Group_1000010020_1.svg?v=1761197528&width=480",
+    image: "//plantora.co/cdn/shop/files/Group_1000010020_1.svg?v=1761197528&width=480",
   },
 ];
 
-export function WhyChooseKyari() {
+export function WhyChoosePlantora() {
   return (
     <SectionContainer className="bg-[#F8F8F8] py-8 md:py-12">
       <div className="mb-4 text-center md:mb-8">
