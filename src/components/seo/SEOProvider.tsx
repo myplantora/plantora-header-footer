@@ -73,3 +73,30 @@ export function getOrganizationSchema() {
     ]
   };
 }
+
+export function getCollectionSchema(collection: any, products: any[]) {
+  if (!collection) return null;
+
+  const itemListElement = (products || []).map((product, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "url": typeof window !== 'undefined' 
+      ? `${window.location.origin}/product/${product.handle}` 
+      : `https://myplantora.com/product/${product.handle}`,
+    "name": product.title,
+    "image": product.featuredImage?.url || product.gallery?.[0]?.url
+  }));
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": collection.title,
+    "description": collection.description || `Browse the ${collection.title} collection at Plantora.`,
+    "url": typeof window !== 'undefined' ? window.location.href : '',
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": products?.length || 0,
+      "itemListElement": itemListElement
+    }
+  };
+}
