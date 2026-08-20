@@ -19,6 +19,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { triggerHaptic } from "@/utils/haptics";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
 import { posthogService } from "@/lib/analytics/posthog";
+import { StructuredData, getProductSchema } from "@/components/seo/SEOProvider";
+
 
 const productQuery = (handle: string) =>
   queryOptions({ queryKey: ["product", handle], queryFn: () => getProduct(handle) });
@@ -100,10 +102,13 @@ function ProductPage() {
     "fresh": "#C3E8E8"
   };
   const bgColor = bgColors[data.product.promoLabel || ""] || "#F8F8F8";
+  const productSchema = getProductSchema(data.product);
 
   return (
     <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: bgColor }}>
+      {productSchema && <StructuredData data={productSchema} />}
       <ProductView product={data.product} />
+
       <ProductRecommendations currentProductHandle={handle} />
       <SelfWateringSection />
     </div>

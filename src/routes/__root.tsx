@@ -21,6 +21,8 @@ import { useRouterState } from "@tanstack/react-router";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 import { Footer } from "@/components/layout/Footer";
 import { GoogleAnalyticsProvider } from "@/components/analytics/GoogleAnalyticsProvider";
+import { StructuredData, getOrganizationSchema } from "@/components/seo/SEOProvider";
+
 
 
 
@@ -164,6 +166,8 @@ function ShopifyAnalytics() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const state = useRouterState();
+  const orgSchema = getOrganizationSchema();
+
 
   useEffect(() => {
     posthogService.trackPageView({
@@ -174,7 +178,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <StructuredData data={orgSchema} />
       <ShopifyAnalytics />
+
       <MetaPixelProvider />
       <GoogleAnalyticsProvider />
 
