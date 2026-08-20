@@ -21,8 +21,10 @@
       "enabled": true,
       "apiKey": "phc_tqmKxGXtW8NJZQsZkUR7nC3XCNbuHEwtAtpSvoR3uroi",
       "apiHost": "https://us.i.posthog.com"
-    }
+    },
+    "googleMeasurementId": "G-XXXXXXXXXX"
   },
+
   "pagination": {
     "collectionPageSize": 12,
     "searchPageSize": 24

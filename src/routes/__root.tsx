@@ -20,6 +20,8 @@ import { posthogService } from "@/lib/analytics/posthog";
 import { useRouterState } from "@tanstack/react-router";
 import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 import { Footer } from "@/components/layout/Footer";
+import { GoogleAnalyticsProvider } from "@/components/analytics/GoogleAnalyticsProvider";
+
 
 
 import appCss from "../styles.css?url";
@@ -174,6 +176,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ShopifyAnalytics />
       <MetaPixelProvider />
+      <GoogleAnalyticsProvider />
+
       <AnnouncementBar />
       <Header />
       <CartDrawer />
