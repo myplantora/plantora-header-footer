@@ -74,7 +74,7 @@ export function ProductCard({
           price: Number(currentVariant.price.amount),
           quantity: 1,
           item_brand: "Plantora",
-          item_category: product.tags?.join(", "),
+          item_category: product.tags?.join(", ") || "",
         }]
       });
       const ok = await addLineAndOpen(currentVariant.id, 1);
@@ -99,7 +99,7 @@ export function ProductCard({
         item_name: product.title,
         price: Number(currentVariant.price.amount),
         item_brand: "Plantora",
-        item_category: product.tags?.join(", "),
+        item_category: product.tags?.join(", ") || "",
       }]
     });
 
