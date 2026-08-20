@@ -24,6 +24,7 @@ import { Route as CollectionsIndexRouteImport } from './routes/collections/index
 import { Route as CollectionsHandleRouteImport } from './routes/collections/$handle'
 import { Route as CollectionsBigSavingsCombosRouteImport } from './routes/collections/big-savings-combos'
 import { Route as ProductHandleRouteImport } from './routes/product/$handle'
+import { Route as ApiPublicGooglePurchaseRouteImport } from './routes/api/public/google-purchase'
 import { Route as ApiPublicSitemapRouteImport } from './routes/api/public/sitemap'
 import { Route as ApiPublicSitemapIndexRouteImport } from './routes/api/public/sitemap-index'
 
@@ -103,6 +104,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicGooglePurchaseRoute = ApiPublicGooglePurchaseRouteImport.update({
+  id: '/api/public/google-purchase',
+  path: '/api/public/google-purchase',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSitemapRoute = ApiPublicSitemapRouteImport.update({
   id: '/api/public/sitemap',
   path: '/api/public/sitemap',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
+  '/api/public/google-purchase': typeof ApiPublicGooglePurchaseRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
   '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections': typeof CollectionsIndexRoute
+  '/api/public/google-purchase': typeof ApiPublicGooglePurchaseRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
   '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/collections/big-savings-combos': typeof CollectionsBigSavingsCombosRoute
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
+  '/api/public/google-purchase': typeof ApiPublicGooglePurchaseRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
   '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections/'
+    | '/api/public/google-purchase'
     | '/api/public/sitemap'
     | '/api/public/sitemap-index'
   fileRoutesByTo: FileRoutesByTo
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections'
+    | '/api/public/google-purchase'
     | '/api/public/sitemap'
     | '/api/public/sitemap-index'
   id:
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/collections/big-savings-combos'
     | '/product/$handle'
     | '/collections/'
+    | '/api/public/google-purchase'
     | '/api/public/sitemap'
     | '/api/public/sitemap-index'
   fileRoutesById: FileRoutesById
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   CollectionsBigSavingsCombosRoute: typeof CollectionsBigSavingsCombosRoute
   ProductHandleRoute: typeof ProductHandleRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
+  ApiPublicGooglePurchaseRoute: typeof ApiPublicGooglePurchaseRoute
   ApiPublicSitemapRoute: typeof ApiPublicSitemapRoute
   ApiPublicSitemapIndexRoute: typeof ApiPublicSitemapIndexRoute
 }
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/google-purchase': {
+      id: '/api/public/google-purchase'
+      path: '/api/public/google-purchase'
+      fullPath: '/api/public/google-purchase'
+      preLoaderRoute: typeof ApiPublicGooglePurchaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/sitemap': {
       id: '/api/public/sitemap'
       path: '/api/public/sitemap'
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollectionsBigSavingsCombosRoute: CollectionsBigSavingsCombosRoute,
   ProductHandleRoute: ProductHandleRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
+  ApiPublicGooglePurchaseRoute: ApiPublicGooglePurchaseRoute,
   ApiPublicSitemapRoute: ApiPublicSitemapRoute,
   ApiPublicSitemapIndexRoute: ApiPublicSitemapIndexRoute,
 }
