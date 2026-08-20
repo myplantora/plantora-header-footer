@@ -9,6 +9,7 @@ import type {
   ShopifyPageViewPayload,
 } from "@shopify/hydrogen-react";
 import { trackMetaEvent } from "@/lib/analytics/meta.events";
+import { trackGoogleEvent } from "@/lib/analytics/google";
 import {
   getClientId as getVisitorId,
   getSessionToken as getVisitToken,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/analytics/identity";
 export { posthogService } from "@/lib/analytics/posthog";
 import { posthogService } from "@/lib/analytics/posthog";
+
 
 const MONORAIL_ENDPOINT = "https://monorail-edge.shopifysvc.com/v1/produce";
 
@@ -309,7 +311,20 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
         num_items: item?.quantity ?? addedProduct.quantity ?? 1,
       });
     }
-  }
+      trackGoogleEvent("add_to_cart", {
+        currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+        value: Number(addedProduct.price) * (item?.quantity ?? addedProduct.quantity ?? 1),
+        items: [{
+          item_id: addedProduct.variantGid,
+          item_name: addedProduct.name,
+          price: Number(addedProduct.price),
+          quantity: item?.quantity ?? addedProduct.quantity ?? 1,
+          item_brand: addedProduct.brand,
+          item_category: addedProduct.category,
+        }]
+      });
+    }
+
   
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('plantora:cart:updated', {
@@ -344,7 +359,21 @@ export const trackCheckoutStarted = (cart: any) => {
       quantity: p.quantity
     }))
   });
+
+  trackGoogleEvent("begin_checkout", {
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    items: products.map(p => ({
+      item_id: p.variantGid,
+      item_name: p.name,
+      price: Number(p.price),
+      quantity: p.quantity,
+      item_brand: p.brand,
+      item_category: p.category,
+    }))
+  });
 };
+
 
 export const trackPurchase = (cart: any, orderId: string) => {
   const products = getAnalyticsProducts(cart).map((p: any) => ({
@@ -374,4 +403,19 @@ export const trackPurchase = (cart: any, orderId: string) => {
     currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
     item_count: cart?.totalQuantity ?? 0
   });
+
+  trackGoogleEvent("purchase", {
+    transaction_id: orderId,
+    currency: cart?.cost?.totalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    value: Number(cart?.cost?.totalAmount?.amount ?? 0),
+    items: products.map(p => ({
+      item_id: p.variant_id,
+      item_name: p.product_title,
+      price: p.price,
+      quantity: p.quantity,
+      item_brand: p.vendor,
+      item_category: p.product_type,
+    }))
+  });
 };
+
