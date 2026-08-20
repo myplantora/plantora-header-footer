@@ -22,12 +22,11 @@ import { MarqueeBanner } from "@/components/home/MarqueeBanner";
 import { Footer } from "@/components/layout/Footer";
 import { GoogleAnalyticsProvider } from "@/components/analytics/GoogleAnalyticsProvider";
 import { StructuredData, getOrganizationSchema } from "@/components/seo/SEOProvider";
-
-
-
+import { SEODebugger } from "@/components/seo/SEODebugger";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
