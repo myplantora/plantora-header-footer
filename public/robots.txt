@@ -1,14 +1,3 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 User-agent: *
 Allow: /
+Sitemap: https://id-preview--8a8f4dd9-bb2e-4d69-b35b-b1ec738016d3.lovable.app/sitemap.xml
