@@ -191,8 +191,9 @@ function RootComponent() {
       <Footer />
       <Analytics />
       <Toaster position="bottom-right" />
-      {process.env.NODE_ENV === "development" && <SEODebugger />}
+      {process.env["NODE_ENV"] === "development" && <SEODebugger />}
     </QueryClientProvider>
+
 
   );
 }
