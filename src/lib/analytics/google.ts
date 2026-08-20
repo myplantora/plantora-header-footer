@@ -74,6 +74,7 @@ export const trackGooglePageView = (path: string, title?: string) => {
   const measurementId = getGaMeasurementId();
   if (!measurementId || typeof window.gtag !== "function") return;
 
+
   window.gtag("event", "page_view", {
     page_path: path,
     page_title: title || document.title,
