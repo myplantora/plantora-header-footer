@@ -5,7 +5,7 @@ import { CartProvider, useCart } from "@/components/layout/CartContext";
 
 import { BannerSection } from "@/components/home/BannerSection";
 import { CollectionScroller, collectionByIdQuery } from "@/components/home/CollectionScroller";
-import { WhyChooseKyari } from "@/components/home/WhyChooseKyari";
+import { WhyChoosePlantora } from "@/components/home/WhyChoosePlantora";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 import { BrandMission } from "@/components/home/BrandMission";
 
@@ -52,7 +52,7 @@ function Index() {
         <CollectionScroller collectionId={XL_PLANTS_COLLECTION_ID} />
         <CollectionScroller collectionId={BIG_SAVINGS_COMBO_ID} />
         <CollectionScroller collectionId={HOME_COLLECTION_ID} />
-        <WhyChooseKyari />
+        <WhyChoosePlantora />
         <SelfWateringSection />
         <BrandMission />
         

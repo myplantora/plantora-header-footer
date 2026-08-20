@@ -10,7 +10,7 @@ export const BrandMission = () => {
           {/* Inner Image (GIF) - Full Render without cropping */}
           <div className="w-40 h-40 lg:w-56 lg:h-56 rounded-full overflow-hidden flex items-center justify-center bg-[#F8F8F8]">
             <img 
-              src="https://kyari.co/cdn/shop/files/Greenery.webp?v=1762848088" 
+              src="https://plantora.co/cdn/shop/files/Greenery.webp?v=1762848088" 
               alt="Greenery Thrives"
               className="w-full h-full object-contain scale-110"
               loading="lazy"
