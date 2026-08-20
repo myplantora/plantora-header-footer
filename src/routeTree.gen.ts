@@ -25,6 +25,7 @@ import { Route as CollectionsHandleRouteImport } from './routes/collections/$han
 import { Route as CollectionsBigSavingsCombosRouteImport } from './routes/collections/big-savings-combos'
 import { Route as ProductHandleRouteImport } from './routes/product/$handle'
 import { Route as ApiPublicSitemapRouteImport } from './routes/api/public/sitemap'
+import { Route as ApiPublicSitemapIndexRouteImport } from './routes/api/public/sitemap-index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -107,6 +108,11 @@ const ApiPublicSitemapRoute = ApiPublicSitemapRouteImport.update({
   path: '/api/public/sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSitemapIndexRoute = ApiPublicSitemapIndexRouteImport.update({
+  id: '/api/public/sitemap-index',
+  path: '/api/public/sitemap-index',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
+  '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/product/$handle': typeof ProductHandleRoute
   '/collections': typeof CollectionsIndexRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
+  '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/product/$handle': typeof ProductHandleRoute
   '/collections/': typeof CollectionsIndexRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
+  '/api/public/sitemap-index': typeof ApiPublicSitemapIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/collections/'
     | '/api/public/sitemap'
+    | '/api/public/sitemap-index'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/collections'
     | '/api/public/sitemap'
+    | '/api/public/sitemap-index'
   id:
     | '__root__'
     | '/'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/collections/'
     | '/api/public/sitemap'
+    | '/api/public/sitemap-index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
   ApiPublicSitemapRoute: typeof ApiPublicSitemapRoute
+  ApiPublicSitemapIndexRoute: typeof ApiPublicSitemapIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -353,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/sitemap-index': {
+      id: '/api/public/sitemap-index'
+      path: '/api/public/sitemap-index'
+      fullPath: '/api/public/sitemap-index'
+      preLoaderRoute: typeof ApiPublicSitemapIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -373,6 +393,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
   ApiPublicSitemapRoute: ApiPublicSitemapRoute,
+  ApiPublicSitemapIndexRoute: ApiPublicSitemapIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
