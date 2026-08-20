@@ -100,3 +100,18 @@ export function getCollectionSchema(collection: any, products: any[]) {
     }
   };
 }
+
+export function getBreadcrumbSchema(items: { name: string; item: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.item.startsWith('http') 
+        ? item.item 
+        : (typeof window !== 'undefined' ? `${window.location.origin}${item.item}` : `https://myplantora.com${item.item}`)
+    }))
+  };
+}
