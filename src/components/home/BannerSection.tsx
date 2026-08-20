@@ -8,7 +8,7 @@ const MOBILE_BANNER =
 
 export function BannerSection() {
   return (
-    <SectionContainer noPadding>
+    <SectionContainer noPadding maxWidth="max-w-none">
       <Link
         to="/collections/big-savings-combos"
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
