@@ -10,6 +10,7 @@ import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
 import { DynamicInternalLinks } from "@/components/seo/DynamicInternalLinks";
+import { StructuredData, getCollectionSchema, getBreadcrumbSchema } from "@/components/seo/SEOProvider";
 
 
 
@@ -79,6 +80,15 @@ function CollectionPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
+      {collection && <StructuredData data={getCollectionSchema(collection, collection.products || []) as any} />}
+      {collection && (
+        <StructuredData 
+          data={getBreadcrumbSchema([
+            { name: 'Home', item: '/' },
+            { name: collection.title, item: `/collections/${handle}` }
+          ]) as any} 
+        />
+      )}
       <main className="mx-auto max-w-[1400px] px-2.5 pb-10 lg:pb-16">
         <header className="mb-6 flex flex-col items-center gap-6 pt-[3px]">
           <h1 className="w-full text-center font-serif text-[28px] font-bold text-primary sm:text-4xl">{collection.title}</h1>
