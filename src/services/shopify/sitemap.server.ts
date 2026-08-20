@@ -1,5 +1,4 @@
-import { storefrontFetch } from "../../lib/shopify";
-import { STOREFRONT_CONTEXT } from "../queries/collection.query";
+import { storefrontFetch, STOREFRONT_CONTEXT } from "../../lib/shopify";
 
 export async function getAllProductHandles(): Promise<string[]> {
   let allHandles: string[] = [];
@@ -58,3 +57,4 @@ export async function getAllCollectionHandles(): Promise<string[]> {
 
   return allHandles;
 }
+
