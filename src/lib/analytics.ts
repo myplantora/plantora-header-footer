@@ -310,7 +310,6 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
         currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
         num_items: item?.quantity ?? addedProduct.quantity ?? 1,
       });
-    }
       trackGoogleEvent("add_to_cart", {
         currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
         value: Number(addedProduct.price) * (item?.quantity ?? addedProduct.quantity ?? 1),
@@ -324,6 +323,8 @@ export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_f
         }]
       });
     }
+  }
+
 
   
   if (typeof window !== 'undefined') {
