@@ -32,6 +32,11 @@ export function ProductCard({
     });
   };
   const addLineAndOpen = useCartStore((s) => s.addLineAndOpen);
+  const trackGoogleEvent = useMemo(() => {
+    let fn: any;
+    import("@/lib/analytics/google").then(m => { fn = m.trackGoogleEvent; });
+    return (name: string, data?: any) => fn?.(name, data);
+  }, []);
   const navigate = useNavigate();
   
   const [pending, setPending] = useState(false);
@@ -60,6 +65,18 @@ export function ProductCard({
     setPending(true);
 
     try {
+      trackGoogleEvent("add_to_cart", {
+        currency: currentVariant.price.currency,
+        value: Number(currentVariant.price.amount),
+        items: [{
+          item_id: currentVariant.id,
+          item_name: product.title,
+          price: Number(currentVariant.price.amount),
+          quantity: 1,
+          item_brand: "Plantora",
+          item_category: product.tags?.join(", "),
+        }]
+      });
       const ok = await addLineAndOpen(currentVariant.id, 1);
 
       if (!ok) return;
@@ -74,6 +91,18 @@ export function ProductCard({
     // Only navigate if we didn't click a variant button or Add to Basket
     if ((e.target as HTMLElement).closest('button')) return;
     
+    trackGoogleEvent("select_item", {
+      item_list_id: "collection_grid",
+      item_list_name: "Collection Grid",
+      items: [{
+        item_id: currentVariant.id,
+        item_name: product.title,
+        price: Number(currentVariant.price.amount),
+        item_brand: "Plantora",
+        item_category: product.tags?.join(", "),
+      }]
+    });
+
     const params: Record<string, string> = { variant: currentVariant.id };
     Object.entries(selectedOptions).forEach(([name, value]) => {
       params[name.toLowerCase()] = value;
