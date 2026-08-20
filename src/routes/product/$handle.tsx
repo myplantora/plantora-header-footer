@@ -235,11 +235,27 @@ function ProductView({ product }: { product: NonNullable<Awaited<ReturnType<type
       product_type: "", // Not available on normalized PlantoraProduct yet
       vendor: "Plantora",
     });
-    // Track monorail/posthog page view
+    // Track monorail/posthog page view and Google view_item
     import("@/lib/analytics").then(({ trackShopifyPageView }) => {
       trackShopifyPageView("product", product.id);
     });
-  }, [product.id]);
+
+    import("@/lib/analytics/google").then(({ trackGoogleEvent }) => {
+      const v = product.variants.find(v => v.id === variantId) || product.variants[0];
+      trackGoogleEvent("view_item", {
+        currency: v.price.currency,
+        value: Number(v.price.amount),
+        items: [{
+          item_id: v.id,
+          item_name: product.title,
+          price: Number(v.price.amount),
+          quantity: 1,
+          item_brand: "Plantora",
+          item_category: product.tags?.join(", "),
+        }]
+      });
+    });
+  }, [product.id, variantId]);
 
 
   const variant = (product.variants.find((v) => v.id === variantId) ?? product.variants[0])!;
