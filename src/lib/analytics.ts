@@ -274,6 +274,20 @@ export const trackCartViewed = (cart: any) => {
     cart_value: Number(cart?.cost?.subtotalAmount?.amount ?? 0),
     currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
   });
+
+  const products = getAnalyticsProducts(cart);
+  trackGoogleEvent("view_cart", {
+    currency: cart?.cost?.subtotalAmount?.currencyCode ?? globalConfig.analytics.currency,
+    value: Number(cart?.cost?.subtotalAmount?.amount ?? 0),
+    items: products.map(p => ({
+      item_id: p.variantGid,
+      item_name: p.name,
+      price: Number(p.price),
+      quantity: p.quantity,
+      item_brand: p.brand,
+      item_category: p.category,
+    }))
+  });
 };
 
 export const trackCartUpdated = (cart: any, eventType: 'add_to_cart' | 'remove_from_cart' | 'update_cart', item?: { merchandiseId: string; quantity: number }) => {
