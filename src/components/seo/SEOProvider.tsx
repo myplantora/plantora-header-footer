@@ -84,15 +84,15 @@ export function getCollectionSchema(collection: any, products: any[]) {
       ? `${window.location.origin}/product/${product.handle}` 
       : `https://myplantora.com/product/${product.handle}`,
     "name": product.title,
-    "image": product.featuredImage?.url || product.gallery?.[0]?.url
+    "image": product.featuredImage?.url || (product.gallery && product.gallery[0]?.url) || ""
   }));
 
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": collection.title,
-    "description": collection.description || `Browse the ${collection.title} collection at Plantora.`,
-    "url": typeof window !== 'undefined' ? window.location.href : '',
+    "description": collection.seo?.description || collection.description || `Browse the ${collection.title} collection at Plantora.`,
+    "url": typeof window !== 'undefined' ? window.location.href : `https://myplantora.com/collections/${collection.handle}`,
     "mainEntity": {
       "@type": "ItemList",
       "numberOfItems": products?.length || 0,
