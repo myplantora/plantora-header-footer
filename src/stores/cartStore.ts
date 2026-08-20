@@ -303,6 +303,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     set(deriveCartState(optimisticCart));
 
+    set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_UPDATE, {
         cartId,
@@ -334,6 +335,8 @@ export const useCartStore = create<CartState>((set, get) => ({
       });
       set(previousState);
       toast.error(e.message || "Failed to update quantity");
+    } finally {
+      set({ isLoading: false });
     }
   },
 
@@ -364,6 +367,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     set(deriveCartState(optimisticCart));
 
+    set({ isLoading: true });
     try {
       const data = await storefrontFetch<any>(queries.CART_LINES_REMOVE, {
         cartId,
@@ -396,6 +400,8 @@ export const useCartStore = create<CartState>((set, get) => ({
       });
       set(previousState);
       toast.error(e.message || "Failed to remove item");
+    } finally {
+      set({ isLoading: false });
     }
   }
 }));
