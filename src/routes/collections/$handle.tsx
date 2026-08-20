@@ -9,6 +9,8 @@ import { getCollection } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
 import { SelfWateringSection } from "@/components/home/SelfWateringSection";
+import { DynamicInternalLinks } from "@/components/seo/DynamicInternalLinks";
+
 
 
 const collectionQuery = (handle: string) =>
@@ -90,7 +92,14 @@ function CollectionPage() {
         ) : (
           <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
+
+        <DynamicInternalLinks 
+          currentHandle={handle} 
+          type="collection" 
+          className="mt-12"
+        />
       </main>
+
       
       <SelfWateringSection />
     </div>
