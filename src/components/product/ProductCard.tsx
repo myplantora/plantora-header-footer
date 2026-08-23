@@ -236,7 +236,7 @@ export function ProductCard({
               <span className="text-[11px] md:text-[13px] text-[#707070] line-through font-normal whitespace-nowrap">
                 {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
               </span>
-              <span className="bg-[#F4C439] text-[#254838] text-[8px] md:text-[10px] px-1 md:px-1.5 py-0.5 md:py-1 rounded-[10px] leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
+              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[11px] px-2 md:px-2.5 py-1 md:py-1.5 rounded-[10px] leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0 font-medium">
                 SAVE {formatMoney(Math.round(currentVariant.compareAtPrice.amount - currentVariant.price.amount), currentVariant.price.currency)}
               </span>
             </>
