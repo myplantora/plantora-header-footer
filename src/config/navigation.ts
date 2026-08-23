@@ -20,7 +20,7 @@ export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   {
     label: "Indoor Plants",
-    href: "/collections/indoor-plants",
+    href: "/collections/659339542821",
     mega: [
       {
         title: "Shop Indoor",
@@ -55,8 +55,8 @@ export const navItems: NavItem[] = [
 ];
 
 export const shopLinks = [
-  { label: "Indoor Plants", href: "/collections/indoor-plants" },
-  { label: "Outdoor Plants", href: "/collections/outdoor-plants" },
+  { label: "Indoor Plants", href: "/collections/659339542821" },
+  { label: "Outdoor Plants", href: "/collections/659679805733" },
   { label: "Planters", href: "/collections/planters" },
   { label: "Best Sellers", href: "/collections/best-sellers" },
   { label: "New Arrivals", href: "/collections/new-arrivals" },
