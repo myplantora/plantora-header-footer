@@ -174,13 +174,7 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
-          <button
-            type="button"
-            aria-label="Search"
-            className="relative z-[60] grid h-11 w-11 place-items-center rounded-full text-[#254838] transition-colors duration-300 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <Search className="pointer-events-none h-5 w-5" aria-hidden="true" />
-          </button>
+          {/* Search button removed as per request */}
           <CartButton key="cart-button" />
         </div>
       </div>
