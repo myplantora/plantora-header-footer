@@ -119,60 +119,7 @@ export function MobileNav({ open, onClose }: Props) {
             })}
           </ul>
 
-          <div className="mt-10 space-y-6">
-            <div>
-              <p className="text-[11px]  uppercase tracking-[0.2em] text-muted-foreground mb-4">
-                SUPPORT
-              </p>
-              <ul className="space-y-4">
-                {helpLinks.slice(0, 3).map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.href as any}
-                      onClick={onClose}
-                      className="text-[15px] text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
-                SETTINGS
-              </p>
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-[15px] text-foreground">Haptic feedback</span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={hapticsOn}
-                  aria-label="Haptic feedback"
-                  onClick={() => {
-                    if (!hapticsOn) triggerHaptic("light");
-                    toggleHaptics();
-                  }}
-                  className={cn(
-                    "relative h-6 w-11 shrink-0 rounded-full transition-colors",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    hapticsOn ? "bg-primary" : "bg-muted-foreground/30",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow transition-transform",
-                      hapticsOn && "translate-x-5",
-                    )}
-                  />
-                </button>
-              </div>
-              <p className="mt-2 text-[12px] text-muted-foreground">
-                Vibration on add to basket and cart actions (supported devices only).
-              </p>
-            </div>
-          </div>
+          {/* Extra links or settings removed as per request */}
 
         </nav>
       </div>
