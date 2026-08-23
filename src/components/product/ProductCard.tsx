@@ -167,13 +167,13 @@ export function ProductCard({
 
       {/* Combo Offer Banner - Rendered below image, not overlapping */}
       {product.tags?.includes("Combo") && (
-        <div className="flex h-[32px] md:h-[38px] items-center justify-center gap-1.5 bg-[#8CD4DC] px-2.5 -mx-px rounded-b-[20px]">
+        <div className="flex h-[32px] md:h-[38px] items-center justify-center gap-1.5 bg-[#8CD4DC] px-1 md:px-2.5 -mx-px rounded-b-[20px]">
           <img 
             src="https://cdn.shopify.com/s/files/1/1014/6267/1653/files/Offer.svg?v=1786442588" 
             alt="" 
-            className="size-3.5 object-contain md:size-4 shrink-0 opacity-80"
+            className="size-3 object-contain md:size-4 shrink-0 opacity-80"
           />
-          <span className="text-[11px] font-normal text-[#1D4D44] md:text-[13px] whitespace-nowrap">
+          <span className="text-[10px] font-normal text-[#1D4D44] md:text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">
             Grab it for just {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
         </div>
@@ -227,16 +227,16 @@ export function ProductCard({
         </h3>
 
         {/* Price Row - Updated colours and font to match reference */}
-        <div className="flex flex-nowrap items-center gap-x-1.5 gap-y-1 mt-auto min-h-6 overflow-hidden">
-          <span className="text-[15px] md:text-[18px]  text-[#1D4D44] whitespace-nowrap">
+        <div className="flex flex-nowrap items-center gap-x-1 mt-auto min-h-6 overflow-hidden">
+          <span className="text-[14px] md:text-[18px] text-[#1D4D44] font-medium whitespace-nowrap">
             {formatMoney(currentVariant.price.amount, currentVariant.price.currency)}
           </span>
           {currentVariant.compareAtPrice && currentVariant.compareAtPrice.amount > currentVariant.price.amount && (
             <>
-              <span className="text-[13px] text-[#707070] line-through font-normal whitespace-nowrap">
+              <span className="text-[11px] md:text-[13px] text-[#707070] line-through font-normal whitespace-nowrap">
                 {formatMoney(currentVariant.compareAtPrice.amount, currentVariant.compareAtPrice.currency)}
               </span>
-              <span className="bg-[#F4C439] text-[#254838] text-[9px] md:text-[10px] px-1.5 py-1 rounded-[10px]  leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
+              <span className="bg-[#F4C439] text-[#254838] text-[8px] md:text-[10px] px-1 md:px-1.5 py-0.5 md:py-1 rounded-[10px] leading-tight inline-flex items-center justify-center whitespace-nowrap ml-auto shrink-0">
                 SAVE {formatMoney(Math.round(currentVariant.compareAtPrice.amount - currentVariant.price.amount), currentVariant.price.currency)}
               </span>
             </>
