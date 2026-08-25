@@ -95,6 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "p:domain_verify", content: "b96d302f73742f5f780e75d6c9daad05" },
       { title: "Plantora — Premium Indoor & Outdoor Plants" },
       {
         name: "description",
