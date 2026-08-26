@@ -54,7 +54,7 @@ export function DynamicInternalLinks({
   return (
     <nav 
       aria-label="Contextual navigation" 
-      className={cn("mt-8 border-t border-brand/10 pt-6", className)}
+      className={cn("sr-only", className)}
     >
       <h3 className="text-xs font-bold uppercase tracking-wider text-brand/60 mb-3">
         Continue Exploring
