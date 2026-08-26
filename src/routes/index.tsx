@@ -52,7 +52,7 @@ function Index() {
         <CollectionScroller collectionId={XL_PLANTS_COLLECTION_ID} />
         <CollectionScroller collectionId={BIG_SAVINGS_COMBO_ID} />
         <CollectionScroller collectionId={HOME_COLLECTION_ID} />
-        <WhyChoosePlantora />
+        {/* <WhyChoosePlantora /> */}
         <SelfWateringSection />
         <BrandMission />
         
