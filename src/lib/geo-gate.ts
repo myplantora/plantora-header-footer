@@ -45,7 +45,7 @@ function isExemptPath(pathname: string): boolean {
   );
 }
 
-type EdgeGeo = { country?: string; region?: string };
+type EdgeGeo = { country?: string | undefined; region?: string | undefined };
 
 function readEdgeGeo(request: Request): EdgeGeo {
   const cf = (request as Request & { cf?: Record<string, unknown> }).cf;
