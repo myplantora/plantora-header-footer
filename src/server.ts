@@ -48,6 +48,10 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      // Edge geo gate: runs before the app / any route handler.
+      const geoBlock = enforceGeoAccess(request);
+      if (geoBlock) return geoBlock;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
