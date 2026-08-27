@@ -3,10 +3,8 @@ import { formatMoney } from "@/lib/money";
 import { resolveRewardState } from "@/lib/rewards";
 import { useCartStore } from "@/stores/cartStore";
 
-const LOCKED_GIF =
-  "https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Locked.gif?v=1721738691";
-const UNLOCKED_GIF =
-  "https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Unlocked.gif?v=1721738691";
+const LOCKED_GIF = "https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Locked.gif?v=1721738691";
+const UNLOCKED_GIF = "https://cdn.shopify.com/s/files/1/0646/8327/8550/files/Unlocked.gif?v=1721738691";
 
 /** Appends the best earned coupon to the Shopify checkout URL.
  * Format: https://checkout.myplantora.com/cart/c/{cartToken}?discount=CODE&key=...
@@ -20,9 +18,9 @@ export function buildCheckoutUrl(checkoutUrl: string | null, code: string | null
       return checkoutUrl;
     }
     url.searchParams.set("channel", "online_store");
-    if (code) {
-      url.searchParams.set("discount", code.toUpperCase());
-    }
+    // if (code) {
+    //   url.searchParams.set("discount", code.toUpperCase());
+    // }
     const finalUrl = url.toString();
     console.log(code ? `[Checkout URL with Discount] ${finalUrl}` : `[Checkout URL] ${finalUrl}`);
     return finalUrl;
@@ -80,27 +78,28 @@ export function CartRewards() {
 
   const fill = useMemo(() => {
     if (state.tiers.length === 0) return 0;
-    
-    const unlockedCount = state.tiers.filter(t => t.unlocked).length;
+
+    const unlockedCount = state.tiers.filter((t) => t.unlocked).length;
     const currentTierIndex = unlockedCount - 1;
     const segmentWidth = 100 / state.tiers.length;
-    
+
     let baseFill = unlockedCount === 0 ? 0 : (currentTierIndex + 0.5) * segmentWidth;
-    
+
     const nextTier = state.nextTier;
     if (nextTier) {
-      const currentThreshold = currentTierIndex >= 0 && state.tiers[currentTierIndex] ? state.tiers[currentTierIndex].threshold : 0;
+      const currentThreshold =
+        currentTierIndex >= 0 && state.tiers[currentTierIndex] ? state.tiers[currentTierIndex].threshold : 0;
       const nextThreshold = nextTier.threshold;
       const range = nextThreshold - currentThreshold;
       const progressInRange = (amount - currentThreshold) / range;
-      
+
       if (unlockedCount === 0) {
         return Math.min(Math.max(progressInRange, 0), 1) * (0.5 * segmentWidth);
       }
-      
+
       return baseFill + Math.min(Math.max(progressInRange, 0), 1) * segmentWidth;
     }
-    
+
     return baseFill;
   }, [state, amount]);
 
@@ -111,44 +110,33 @@ export function CartRewards() {
       <p aria-live="polite" className="text-center text-sm text-primary">
         {state.nextTier ? (
           <>
-            You are{" "}
-            <span className=" text-[#A8622A]">{formatMoney(state.remaining)}</span> away
-            from <span className="">{state.nextTier?.label}</span> above{" "}
-            {formatMoney(state.nextTier?.threshold ?? 0)}
+            You are <span className=" text-[#A8622A]">{formatMoney(state.remaining)}</span> away from{" "}
+            <span className="">{state.nextTier?.label}</span> above {formatMoney(state.nextTier?.threshold ?? 0)}
           </>
         ) : (
           <>
-            You&apos;ve unlocked <span className="">{state.currentTier?.label}</span> —
-            the best reward available.
+            You&apos;ve unlocked <span className="">{state.currentTier?.label}</span> — the best reward available.
           </>
         )}
       </p>
 
-      <div 
-        className="relative flex items-start justify-between px-2"
-        role="list"
-        aria-label="Reward milestones"
-      >
+      <div className="relative flex items-start justify-between px-2" role="list" aria-label="Reward milestones">
         <div className="absolute left-[calc(100%/8)] right-[calc(100%/8)] top-5 h-1.5 -translate-y-1/2 rounded-full bg-secondary" />
         <div
           className="absolute left-[calc(100%/8)] top-5 h-1.5 -translate-y-1/2 rounded-full transition-[width,background-color] duration-500 ease-in-out motion-reduce:transition-none"
-          style={{ 
+          style={{
             width: `calc((${Math.min(fill, 100)} / 100 * (100% - 100%/4)))`,
             backgroundColor: `var(--brand)`,
-            maxWidth: 'calc(100% - 100%/4)'
+            maxWidth: "calc(100% - 100%/4)",
           }}
         />
 
         {state.tiers.map((tier, index) => {
           const isCurrent = state.currentTier?.id === tier.id;
           const isNext = state.nextTier?.id === tier.id;
-          
+
           return (
-            <div 
-              key={tier.id} 
-              className="relative z-10 flex flex-1 flex-col items-center"
-              role="listitem"
-            >
+            <div key={tier.id} className="relative z-10 flex flex-1 flex-col items-center" role="listitem">
               <div className="flex flex-col items-center min-w-[64px]">
                 <span
                   className={`relative flex size-9 sm:size-10 items-center justify-center overflow-hidden rounded-full ring-4 ring-background transition-colors duration-300 motion-reduce:transition-none ${
@@ -170,7 +158,7 @@ export function CartRewards() {
                   className={`mt-1.5 text-center text-[10px] sm:text-[11px] font-medium leading-tight px-1 ${
                     tier.unlocked ? "text-primary" : "text-muted-foreground"
                   } ${isCurrent || isNext ? "" : ""}`}
-                  aria-label={`${tier.label}: ${tier.unlocked ? 'Unlocked' : 'Locked'}${isCurrent ? ' (Current Reward)' : ''}${isNext ? ' (Next Goal)' : ''}`}
+                  aria-label={`${tier.label}: ${tier.unlocked ? "Unlocked" : "Locked"}${isCurrent ? " (Current Reward)" : ""}${isNext ? " (Next Goal)" : ""}`}
                 >
                   {tier.label}
                 </p>
