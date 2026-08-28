@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useMetaTracking } from "@/hooks/analytics/useMetaTracking";
@@ -21,8 +21,14 @@ const collectionQuery = (handle: string) =>
   });
 
 export const Route = createFileRoute("/collections/$handle")({
-  loader: ({ context, params }) => {
-    context.queryClient.ensureQueryData(collectionQuery(params.handle));
+  loader: async ({ context, params }) => {
+    if (params.handle === "big-savings-combos") return;
+    const collection = await context.queryClient
+      .ensureQueryData(collectionQuery(params.handle))
+      .catch(() => null);
+    if (!collection) {
+      throw redirect({ to: "/collections/big-savings-combos" });
+    }
   },
   head: ({ params }) => {
     const name = params.handle
@@ -76,7 +82,7 @@ function CollectionPage() {
     }
   }, [collection]);
 
-  if (!collection) throw notFound();
+  if (!collection) return null;
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
