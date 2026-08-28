@@ -21,8 +21,14 @@ const collectionQuery = (handle: string) =>
   });
 
 export const Route = createFileRoute("/collections/$handle")({
-  loader: ({ context, params }) => {
-    context.queryClient.ensureQueryData(collectionQuery(params.handle));
+  loader: async ({ context, params }) => {
+    if (params.handle === "big-savings-combos") return;
+    const collection = await context.queryClient
+      .ensureQueryData(collectionQuery(params.handle))
+      .catch(() => null);
+    if (!collection) {
+      throw redirect({ to: "/collections/big-savings-combos" });
+    }
   },
   head: ({ params }) => {
     const name = params.handle
