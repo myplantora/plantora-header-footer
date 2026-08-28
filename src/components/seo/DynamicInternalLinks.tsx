@@ -29,20 +29,18 @@ export function DynamicInternalLinks({
     
     // Add primary category links based on tags
     if (tags.some(t => t.toLowerCase().includes('indoor'))) {
-      links.push({ label: 'Browse Indoor Plants', href: '/collections/indoor-plants', type: 'collection' });
+      links.push({ label: 'Browse Indoor Plants', href: '/collections/659339542821', type: 'collection' });
     }
     if (tags.some(t => t.toLowerCase().includes('outdoor'))) {
-      links.push({ label: 'Explore Outdoor Collection', href: '/collections/outdoor-plants', type: 'collection' });
+      links.push({ label: 'Explore Outdoor Collection', href: '/collections/659679805733', type: 'collection' });
     }
-    
+
     // Add utility/educational links
-    links.push({ label: 'Plant Care Guide', href: '/pages/about', type: 'page' });
-    links.push({ label: 'Shipping & Delivery', href: '/pages/contact', type: 'page' });
-    
+    links.push({ label: 'Plant Care Guide', href: '/plant-care', type: 'page' });
+    links.push({ label: 'Shipping & Delivery', href: '/shipping', type: 'page' });
+
     // Cross-sell collections
-    if (type === 'product') {
-      links.push({ label: 'Big Savings Combos', href: '/collections/big-savings-combos', type: 'collection' });
-    }
+    links.push({ label: 'Big Savings Combos', href: '/collections/big-savings-combos', type: 'collection' });
 
     return links.filter(link => !link.href.includes(currentHandle || ''));
   };
