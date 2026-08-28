@@ -82,7 +82,7 @@ function CollectionPage() {
     }
   }, [collection]);
 
-  if (!collection) throw notFound();
+  if (!collection) return null;
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
