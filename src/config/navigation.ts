@@ -16,36 +16,36 @@ export const announcements = [
   "★★★★★ Thousands of Happy Plant Parents",
 ];
 
+const INDOOR = "/collections/659339542821";
+const OUTDOOR = "/collections/659679805733";
+const COMBOS = "/collections/big-savings-combos";
+
 export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   {
     label: "Indoor Plants",
-    href: "/collections/659339542821",
+    href: INDOOR,
     mega: [
       {
         title: "Shop Indoor",
         links: [
-          { label: "Low Light", href: "/collections/low-light" },
-          { label: "Pet Friendly", href: "/collections/pet-friendly" },
-          { label: "Air Purifying", href: "/collections/air-purifying" },
-          { label: "Easy Care", href: "/collections/easy-care" },
-          { label: "Large Plants", href: "/collections/large-plants" },
+          { label: "All Indoor Plants", href: INDOOR },
+          { label: "Big Savings Combos", href: COMBOS },
+          { label: "Shop All Products", href: "/collections" },
         ],
       },
     ],
   },
   {
     label: "Outdoor Plants",
-    href: "/collections/659679805733",
+    href: OUTDOOR,
     mega: [
       {
         title: "Shop Outdoor",
         links: [
-          { label: "XL Plants", href: "/collections/659679805733" },
-          { label: "Flowering", href: "/collections/flowering" },
-          { label: "Shrubs", href: "/collections/shrubs" },
-          { label: "Balcony", href: "/collections/balcony" },
-          { label: "Garden", href: "/collections/garden" },
+          { label: "XL Plants", href: OUTDOOR },
+          { label: "Big Savings Combos", href: COMBOS },
+          { label: "Shop All Products", href: "/collections" },
         ],
       },
     ],
@@ -55,13 +55,10 @@ export const navItems: NavItem[] = [
 ];
 
 export const shopLinks = [
-  { label: "Indoor Plants", href: "/collections/659339542821" },
-  { label: "Outdoor Plants", href: "/collections/659679805733" },
-  { label: "Planters", href: "/collections/planters" },
-  { label: "Best Sellers", href: "/collections/best-sellers" },
-  { label: "New Arrivals", href: "/collections/new-arrivals" },
-  { label: "Gift Cards", href: "/products/gift-card" },
-  { label: "Sale", href: "/collections/sale" },
+  { label: "Indoor Plants", href: INDOOR },
+  { label: "Outdoor Plants", href: OUTDOOR },
+  { label: "Big Savings Combos", href: COMBOS },
+  { label: "All Products", href: "/collections" },
 ];
 
 export const helpLinks = [
