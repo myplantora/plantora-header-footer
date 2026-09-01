@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
-import { Footer } from '@/components/layout/Footer';
 
 export const Route = createFileRoute('/returns')({
   head: () => ({
@@ -171,7 +170,6 @@ function ReturnsPage() {
           </div>
         </div>
       </SectionContainer>
-      <Footer />
     </div>
   );
 }
