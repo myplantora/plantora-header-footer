@@ -13,13 +13,11 @@ export const Route = createFileRoute('/returns')({
 });
 
 function ReplacementRequestForm() {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailOrPhone.trim()) return;
-    window.location.href = `mailto:care@myplantora.com?subject=Replacement Request&body=Email/Phone: ${encodeURIComponent(emailOrPhone)}`;
+    window.location.href = 'mailto:care@myplantora.com?subject=Replacement Request';
   };
 
   return (
@@ -29,23 +27,6 @@ function ReplacementRequestForm() {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="replacement-email"
-            className="mb-1 block text-sm font-medium text-[#1D4D44]"
-          >
-            Email or Phone
-          </label>
-          <input
-            id="replacement-email"
-            type="text"
-            value={emailOrPhone}
-            onChange={(e) => setEmailOrPhone(e.target.value)}
-            placeholder="Enter the email address used for placing the order"
-            className="w-full rounded-lg border border-[#1D4D44]/20 bg-white px-4 py-3 text-sm text-[#1D4D44] placeholder:text-[#1D4D44]/50 focus:border-[#74A84A] focus:outline-none focus:ring-1 focus:ring-[#74A84A]"
-          />
-        </div>
-
         <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-[#4A4A4A]">
           <li>
             Record a continuous unboxing video starting before the package is opened and continuing through plant inspection.
@@ -84,7 +65,7 @@ function ReplacementRequestForm() {
 
         <button
           type="submit"
-          disabled={!emailOrPhone.trim() || !acceptedTerms}
+          disabled={!acceptedTerms}
           className="h-11 w-full rounded-lg bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Submit Request
