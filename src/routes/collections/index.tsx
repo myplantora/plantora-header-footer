@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { Footer } from "@/components/layout/Footer";
 import { getProductCards } from "@/services/shopify/collection.service";
 import { CollectionSort } from "@/components/collection/CollectionSort";
 import { PaginationGrid } from "@/components/collection/PaginationGrid";
@@ -64,7 +63,6 @@ function AllProducts() {
           <PaginationGrid products={sortedProducts} pageSize={20} />
         )}
       </main>
-      <Footer />
     </div>
   );
 }
