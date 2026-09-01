@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
-import { Footer } from '@/components/layout/Footer';
 import { Search } from 'lucide-react';
 
 export const Route = createFileRoute('/track-order')({
@@ -96,7 +95,6 @@ function TrackOrderPage() {
           </div>
         </div>
       </SectionContainer>
-      <Footer />
     </div>
   );
 }
