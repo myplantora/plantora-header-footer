@@ -6,7 +6,7 @@ export const Route = createFileRoute('/shipping')({
   head: () => ({
     meta: [
       { title: 'Shipping and Return Policy | Plantora' },
-      { name: 'description', content: 'Learn about Plantora\'s shipping rates, delivery times, and return policy for plants and non-plant products.' }
+      { name: 'description', content: 'Learn about Plantora\'s shipping rates, delivery times, plant handling, and return policy.' }
     ]
   }),
   component: ShippingPage,
@@ -34,12 +34,35 @@ function ShippingPage() {
             </section>
 
             <section className="bg-[#F8F8F8] p-6 rounded-lg">
-              <h2 className="font-serif text-2xl text-primary mb-4">Can you return plants? No.</h2>
+              <h2 className="font-serif text-2xl text-primary mb-4">Live Plant Shipping & Handling</h2>
               <p className="mb-4">
                 Plantora does not accept returns on plants as the poor plants will perish due to both way transit stress. But we do guarantee every plant will arrive at your doorstep in great condition.
               </p>
+              <p className="mb-4">
+                Please note that the plant might look a little dull or yellowish due to transit stress. We recommend placing the plant in direct sunlight for 2 to 3 days to help it recover to its natural healthy state.
+              </p>
               <p className="italic">
-                Please note that the plant might look a little dull due to transit stress. But be assured that exposure to sunlight and proper watering will revive the plant to its natural healthy state.
+                Plantora is not responsible for any damage to plants that occurs during shipping. For customers in cold regions, we recommend availing cold protection during shipping to help safeguard live plants from temperature stress.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="font-serif text-2xl text-primary mb-4">Damaged-on-Arrival Replacement</h2>
+              <p className="mb-4">
+                Live plants are perishable, living goods and are sold as final sale. We do not accept returns, exchanges, cancellations, or refunds for live plants due to change of mind, incorrect selection, or normal transit/handling stress.
+              </p>
+              <p className="mb-4">
+                If a live plant arrives dead or materially damaged, MyPlantora may provide a replacement after reviewing the claim. To qualify:
+              </p>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>Record a continuous unboxing video beginning before the package is opened and continuing through the inspection of the plant.</li>
+                <li>The damage must be clearly visible in the unboxing video.</li>
+                <li>Contact <a href="mailto:care@myplantora.com" className="text-accent underline">care@myplantora.com</a> within 24 hours of delivery.</li>
+                <li>Include your MyPlantora order ID, the unboxing video, and clear photographs of the plant and packaging.</li>
+                <li>Claims submitted without the required unboxing evidence may not qualify for a replacement.</li>
+              </ul>
+              <p className="mt-4">
+                If approved, MyPlantora will provide a replacement plant rather than a cash refund, subject to availability.
               </p>
             </section>
 
@@ -67,7 +90,7 @@ function ShippingPage() {
                 If you dislike the product received, you can follow below steps to send the product to us:
               </p>
               <ul className="list-disc pl-5 space-y-2">
-                <li>What if you are not happy with the non-plant product? You can Self Return the item to us within seven days from the delivery date</li>
+                <li>Self Return the item to us within seven days from the delivery date</li>
                 <li>We will send a replacement or initiate refund for the products to your source account once we receive the product</li>
                 <li>You will bear the shipping charges to return the products.</li>
               </ul>
@@ -81,6 +104,12 @@ function ShippingPage() {
                 Houston, TX 77031<br /><br />
                 <strong>Telephone:</strong> +1(281) 800-9057
               </address>
+            </section>
+
+            <section>
+              <p className="text-sm">
+                This policy does not limit any rights or remedies that cannot legally be excluded under applicable consumer-protection law.
+              </p>
             </section>
           </div>
         </div>
